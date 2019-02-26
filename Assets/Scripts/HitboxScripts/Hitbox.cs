@@ -11,7 +11,6 @@ public class Hitbox : MonoBehaviour, IHitbox
     public EventManager eventManager;
     public Collider2D hitbox;
     List<GameObject> collisions;
-    List<GameObject> victims;
 
     public float damage;
     public bool hitStun;
@@ -33,11 +32,12 @@ public class Hitbox : MonoBehaviour, IHitbox
         manager = GetComponentInParent<HitboxManager>();
         eventManager = (EventManager) GameObject.FindObjectOfType(typeof(EventManager));
         hitbox = GetComponent<Collider2D>();
+        //hitbox.enabled = false;
         collisions = new List<GameObject>();
-        victims = new List<GameObject>();
     }
 
     void CheckCollision() {
+        //hitbox.enabled = true;
         ContactFilter2D contactFilter = new ContactFilter2D();
         mask = Physics2D.GetLayerCollisionMask (gameObject.layer);
         contactFilter.SetLayerMask(mask);
@@ -49,7 +49,7 @@ public class Hitbox : MonoBehaviour, IHitbox
         for(int i = 0; i < numResults; i++) {
             GameObject fighter = result[i].gameObject.transform.root.gameObject;
             //Debug.Log(fighter.name);
-            if (fighter.Equals(owner) || victims.Contains(fighter) || collisions.Contains(fighter)) {
+            if (fighter.Equals(owner) || collisions.Contains(fighter)) {
                 continue;
             }
             else {
@@ -62,8 +62,6 @@ public class Hitbox : MonoBehaviour, IHitbox
     }
 
     public void Hit(GameObject target) {
-        if (victims.Contains(target)) return;
-        victims.Add(target);
             IDamageable damageable = target.GetComponent<IDamageable>();
             eventManager.InvokeOnDamageEvent(this, damageable, damage);
             damageable.TakeDamage(damage);
@@ -100,7 +98,7 @@ public class Hitbox : MonoBehaviour, IHitbox
 
     public void Reset() {
         collisions.Clear();
-        victims.Clear();
+        //hitbox.enabled = false;
     }
 
     public int GetID() {
@@ -125,7 +123,7 @@ public class Hitbox : MonoBehaviour, IHitbox
     }
 
     public void Ignore(GameObject fighter) {
-        victims.Add(fighter);
+        collisions.Add(fighter);
     }
 
     public void ClearCollisionList() {

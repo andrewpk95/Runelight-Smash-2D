@@ -15,14 +15,12 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
     public Vector2 storedVelocity;
 
     Animator animator;
-    Rigidbody2D rb;
     ICharacter character;
     
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
         character = GetComponent<ICharacter>();
     }
 
@@ -40,7 +38,7 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
             freezeFrameLeft--;
             if (freezeFrameLeft < 0) {
                 character.EnableMovement();
-                rb.velocity = storedVelocity;
+                character.SetVelocity(storedVelocity);
                 isFrozen = false;
             }
         }
@@ -71,18 +69,18 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
 
     public void Launch(int angle, float baseKnockback, float knockbackGrowth) {
         Debug.Log(SmashCalculator.LaunchVector(angle, percentage, baseKnockback, knockbackGrowth, weight));
-        rb.velocity = SmashCalculator.LaunchVector(angle, percentage, baseKnockback, knockbackGrowth, weight);
+        character.SetVelocity(SmashCalculator.LaunchVector(angle, percentage, baseKnockback, knockbackGrowth, weight));
     }
 
     public void LaunchAndHitStun(int angle, float baseKnockback, float knockbackGrowth) {
         Debug.Log(SmashCalculator.LaunchVector(angle, percentage, baseKnockback, knockbackGrowth, weight));
-        rb.velocity = SmashCalculator.LaunchVector(angle, percentage, baseKnockback, knockbackGrowth, weight);
+        character.SetVelocity(SmashCalculator.LaunchVector(angle, percentage, baseKnockback, knockbackGrowth, weight));
         HitStun(SmashCalculator.HitStunDuration(percentage, baseKnockback, knockbackGrowth, weight));
     }
 
     public void Freeze(int freezeFrameDuration) {
         freezeFrameLeft = freezeFrameDuration;
-        storedVelocity = rb.velocity;
+        storedVelocity = character.GetVelocity();
         character.DisableMovement();
         isFrozen = true;
     }

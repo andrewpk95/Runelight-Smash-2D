@@ -6,6 +6,7 @@ public class HitboxManager : MonoBehaviour
 {
     protected IHitbox[] list;
     protected Dictionary<GameObject, List<IHitbox>> collisionDictionary;
+    List<GameObject> victims;
 
     public bool activated;
     
@@ -14,6 +15,7 @@ public class HitboxManager : MonoBehaviour
     {
         list = GetComponentsInChildren<IHitbox>();
         collisionDictionary = new Dictionary<GameObject, List<IHitbox>>();
+        victims = new List<GameObject>();
     }
 
     void FixedUpdate() {
@@ -55,6 +57,9 @@ public class HitboxManager : MonoBehaviour
                 }
             }
             Debug.Log("Fighter: " + p.Key.name + ", Hitbox Chosen: " + topID);
+            //Add to the victims list to prevent hitting again
+            if (victims.Contains(p.Key)) continue;
+            victims.Add(p.Key);
             topIDHitbox.Hit(p.Key);
         }
     }
@@ -62,6 +67,7 @@ public class HitboxManager : MonoBehaviour
     public virtual void DeactivateHitboxes() {
         activated = false;
         collisionDictionary.Clear();
+        victims.Clear();
         foreach(IHitbox hitbox in list) {
             hitbox.Reset();
         }

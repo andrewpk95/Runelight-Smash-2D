@@ -117,10 +117,14 @@ MonoBehaviour:
     m_Bits: 768
   mainJoystick: {x: 0, y: 0}
   ignoreInput: 0
+  velocity: {x: 0, y: 0}
   overrideVelocity: 0
   overridingVelocity: {x: 0, y: 0}
   isBusy: 0
   isFacingRight: 0
+  flipTargets:
+  - {fileID: 6020248681221139530}
+  - {fileID: 3781560266059834644}
   isGrounded: 0
   maxWalkSpeed: 5
   walkAccelerationRate: 15

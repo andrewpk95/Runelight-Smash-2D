@@ -27,7 +27,7 @@ public class CameraFollow : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void LateUpdate()
     {
         float screenHeightInUnits = Camera.main.orthographicSize * 2;
         float screenWidthInUnits = screenHeightInUnits * Screen.width / Screen.height;
@@ -61,7 +61,7 @@ public class CameraFollow : MonoBehaviour
     }
 
     public void MoveCameraTo(Vector2 position) {
-        mainCameraRB.position = Vector3.Lerp(mainCamera.transform.position, 
+        mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, 
             new Vector3(position.x, position.y, mainCamera.transform.position.z), lerpStrength);
     }
 

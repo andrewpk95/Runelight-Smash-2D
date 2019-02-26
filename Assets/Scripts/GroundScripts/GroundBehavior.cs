@@ -42,14 +42,14 @@ public class GroundBehavior : MonoBehaviour, IPlatform
 
     void OnCollisionEnter2D(Collision2D collided) {
         if (collided.gameObject.tag == "Entity") {
-            Debug.Log(collided.gameObject.name + " landed on " + this.gameObject.name);
+            //Debug.Log(collided.gameObject.name + " landed on " + this.gameObject.name);
             Collider2D fighter = collided.collider;
         }
     }
 
     void OnCollisionExit2D(Collision2D collided) {
         if (collided.gameObject.tag == "Entity") {
-            Debug.Log(collided.gameObject.name + " left " + this.gameObject.name);
+            //Debug.Log(collided.gameObject.name + " left " + this.gameObject.name);
             Collider2D fighter = collided.collider;
             IgnoreEdgeCollision(fighter, true);
             IgnorePlatformCollision(fighter, false);

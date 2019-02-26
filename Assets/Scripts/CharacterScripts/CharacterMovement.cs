@@ -21,6 +21,7 @@ public class CharacterMovement : MonoBehaviour
     
     public bool isBusy;
     public bool isFacingRight;
+    public GameObject[] flipTargets;
     public bool isGrounded;
 
     //Ground Movement Variables
@@ -336,11 +337,17 @@ public class CharacterMovement : MonoBehaviour
 
     protected void FlipCheck() {
         if (isFacingRight) {
-            trans.rotation = Quaternion.Euler(0, 0, 0);
+            foreach(GameObject target in flipTargets) {
+                target.transform.localScale = new Vector3(1, 1, 1);
+            }
+            //trans.rotation = Quaternion.Euler(0, 0, 0);
             //Debug.Log("Right");
         }
         else {
-            trans.rotation = Quaternion.Euler(0, 180, 0);
+            foreach(GameObject target in flipTargets) {
+                target.transform.localScale = new Vector3(-1, 1, 1);
+            }
+            //trans.rotation = Quaternion.Euler(0, 180, 0);
             //Debug.Log("Left");
         }
     }

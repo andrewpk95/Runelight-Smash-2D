@@ -98,7 +98,7 @@ public class RonController : CharacterMovement, ICharacter
                 animator.SetBool("isWalking", isWalking);
                 animator.SetBool("isDashing", isDashing);
                 animator.SetBool("isCrouching", isCrouching);
-                animator.SetFloat("WalkSpeed", rb.velocity.x);
+                animator.SetFloat("WalkSpeed", velocity.x);
             }
             else {
                 
