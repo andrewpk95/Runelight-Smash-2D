@@ -1,0 +1,897 @@
+fileFormatVersion: 2
+guid: 172097887ce74fd4aa4754ba9160565d
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Ron_Spritemap1_0
+    21300002: Ron_Spritemap1_1
+    21300004: Ron_Spritemap1_2
+    21300006: Ron_Spritemap1_3
+    21300008: Ron_Spritemap1_4
+    21300010: Ron_Spritemap1_5
+    21300012: Ron_Spritemap1_6
+    21300014: Ron_Spritemap1_7
+    21300016: Ron_Spritemap1_8
+    21300018: Ron_Spritemap1_9
+    21300020: Ron_Spritemap1_10
+    21300022: Ron_Spritemap1_11
+    21300024: Ron_Spritemap1_12
+    21300026: Ron_Spritemap1_13
+    21300028: Ron_Spritemap1_14
+    21300030: Ron_Spritemap1_15
+    21300032: Ron_Spritemap1_16
+    21300034: Ron_Spritemap1_17
+    21300036: Ron_Spritemap1_18
+    21300038: Ron_Spritemap1_19
+    21300040: Ron_Spritemap1_20
+    21300042: Ron_Spritemap1_21
+    21300044: Ron_Spritemap1_22
+    21300046: Ron_Spritemap1_23
+    21300048: Ron_Spritemap1_24
+    21300050: Ron_Spritemap1_25
+    21300052: Ron_Spritemap1_26
+    21300054: Ron_Spritemap1_27
+    21300056: Ron_Spritemap1_28
+    21300058: Ron_Spritemap1_29
+    21300060: Ron_Spritemap1_30
+    21300062: Ron_Spritemap1_31
+    21300064: Ron_Spritemap1_32
+    21300066: Ron_Spritemap1_33
+    21300068: Ron_Spritemap1_34
+    21300070: Ron_Spritemap1_35
+    21300072: Ron_Spritemap1_36
+    21300074: Ron_Spritemap1_37
+  externalObjects: {}
+  serializedVersion: 7
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 800
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Ron_Spritemap1_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 2036
+        width: 51
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99389f562c90ace42b12d59f32c47e41
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_1
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 2036
+        width: 38
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b16875ad8d9c694cbffbb98f6879660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_2
+      rect:
+        serializedVersion: 2
+        x: 121
+        y: 1880
+        width: 51
+        height: 166
+      alignment: 9
+      pivot: {x: 0.27450982, y: 0.9096385}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2450dce6c08930843853d36e3f20b4fd
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_3
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 1996
+        width: 30
+        height: 50
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 843da1f0b389ac949b21956df7012d2c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_4
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 1956
+        width: 160
+        height: 90
+      alignment: 9
+      pivot: {x: 0.7, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ccf887961ec4b1a41870098dcc839169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_5
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 1863
+        width: 131
+        height: 183
+      alignment: 9
+      pivot: {x: 0.55725193, y: 0.89617485}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd2c5dc76ef033f4d8a668e094fb9baa
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_6
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 1934
+        width: 188
+        height: 112
+      alignment: 9
+      pivot: {x: 0.17021276, y: 0.30357143}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f79f8e211d98b78438e47fc2b5c376c0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_7
+      rect:
+        serializedVersion: 2
+        x: 691
+        y: 1877
+        width: 69
+        height: 169
+      alignment: 9
+      pivot: {x: 0.6086957, y: 0.83431953}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 893068232ce91434eafcc9cde3c1773c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_8
+      rect:
+        serializedVersion: 2
+        x: 762
+        y: 1847
+        width: 157
+        height: 199
+      alignment: 9
+      pivot: {x: 0.77070063, y: 0.07035176}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55345ab0365633a48b76a7fa6f7d7222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_9
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 1646
+        width: 158
+        height: 199
+      alignment: 9
+      pivot: {x: 0.19620253, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6b0e96f798ff904fa6d316daf3f8566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_10
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 1644
+        width: 160
+        height: 201
+      alignment: 9
+      pivot: {x: 0.19375, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2000f5c32c7153f498a9287b74534929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_11
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 1644
+        width: 157
+        height: 201
+      alignment: 9
+      pivot: {x: 0.19745223, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7633fc8581359b54faa61936caa1feae
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_12
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 1646
+        width: 160
+        height: 199
+      alignment: 9
+      pivot: {x: 0.19375, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a5c7105bf25c6f46b1b796fed16d5ad
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_13
+      rect:
+        serializedVersion: 2
+        x: 644
+        y: 1682
+        width: 30
+        height: 163
+      alignment: 9
+      pivot: {x: 0.40000004, y: 0.9141104}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf121917e8c86e741915ec5316a8dfa4
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_14
+      rect:
+        serializedVersion: 2
+        x: 676
+        y: 1609
+        width: 89
+        height: 236
+      alignment: 9
+      pivot: {x: 0.752809, y: 0.8940678}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8b4a0a61d422d345953617f258ba343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_15
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 1629
+        width: 92
+        height: 216
+      alignment: 9
+      pivot: {x: 0.7826087, y: 0.9166667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b8eb2b316b6c6c43b8e881ed877a63e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_16
+      rect:
+        serializedVersion: 2
+        x: 861
+        y: 1779
+        width: 61
+        height: 66
+      alignment: 9
+      pivot: {x: 0.68852454, y: 0.8636364}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6ce4206fa3a92945a5e1c04836085d9
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_17
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 1725
+        width: 62
+        height: 123
+      alignment: 9
+      pivot: {x: 0.7419355, y: 0.8617886}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ca3878c4dff10d4f81f1dee1e3a4545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_18
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 1312
+        width: 210
+        height: 295
+      alignment: 9
+      pivot: {x: 0.42857143, y: 0.13559322}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a187729f6c07eb4f967f7366bc656dc
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_19
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 1312
+        width: 210
+        height: 295
+      alignment: 9
+      pivot: {x: 0.6960349, y: 0.14224254}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff49bf4774e4d3547b332f309d9db7a2
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_20
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 1393
+        width: 247
+        height: 214
+      alignment: 9
+      pivot: {x: 0.32793522, y: 0.8037383}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21e957817a0cf04478fa2a5dffa84939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_21
+      rect:
+        serializedVersion: 2
+        x: 675
+        y: 1235
+        width: 189
+        height: 372
+      alignment: 9
+      pivot: {x: 0.5132275, y: 0.8951613}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e799d4d80a4f720428de50c592b4d42c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_22
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 875
+        width: 162
+        height: 358
+      alignment: 9
+      pivot: {x: 0.6666667, y: 0.9106145}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b33c7306671fa33438e4e6044467d380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_23
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 904
+        width: 110
+        height: 329
+      alignment: 9
+      pivot: {x: 0.25454545, y: 0.89969605}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0748a6495db6cc41beec7e2b1157143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_24
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 1165
+        width: 123
+        height: 68
+      alignment: 9
+      pivot: {x: 0.7723577, y: 0.6911765}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75d50b7a0ae3ace4d8a32d9f8950f2af
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_25
+      rect:
+        serializedVersion: 2
+        x: 401
+        y: 895
+        width: 110
+        height: 338
+      alignment: 9
+      pivot: {x: 0.58181816, y: 0.8846154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79547395651fe854ca7794d50a6678af
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_26
+      rect:
+        serializedVersion: 2
+        x: 513
+        y: 1094
+        width: 147
+        height: 142
+      alignment: 9
+      pivot: {x: 0.21088435, y: 0.6690141}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34b0650b66af2504cae96685f44b74da
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_27
+      rect:
+        serializedVersion: 2
+        x: 662
+        y: 875
+        width: 162
+        height: 358
+      alignment: 9
+      pivot: {x: 0.21604939, y: 0.91899437}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cacfb115bfc31ad4f9de936888957fb0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_28
+      rect:
+        serializedVersion: 2
+        x: 826
+        y: 861
+        width: 189
+        height: 372
+      alignment: 9
+      pivot: {x: 0.2962963, y: 0.8548387}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd7806a165181e940887820f94893085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_29
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 536
+        width: 77
+        height: 323
+      alignment: 9
+      pivot: {x: 0.58441556, y: 0.9318885}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 027a2e526ac30af4e85368049d261c42
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_30
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 784
+        width: 116
+        height: 75
+      alignment: 9
+      pivot: {x: 0.8965517, y: 0.65333337}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd8da223cce92ae4d858eb57aa1503c4
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_31
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 536
+        width: 85
+        height: 323
+      alignment: 9
+      pivot: {x: 0.3647059, y: 0.9040247}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6906c638068541841ada2f3b88d77689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_32
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 748
+        width: 144
+        height: 111
+      alignment: 9
+      pivot: {x: 0.17361112, y: 0.7747748}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a0fe16013d40ab4495f251a02379be3
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_33
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 633
+        width: 85
+        height: 226
+      alignment: 9
+      pivot: {x: 0.22352941, y: 0.8982301}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 397c0b6560c749c4588483ccd52edb3f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_34
+      rect:
+        serializedVersion: 2
+        x: 519
+        y: 644
+        width: 96
+        height: 215
+      alignment: 9
+      pivot: {x: 0.21875, y: 0.88372093}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e02ea81135d8f6f49951667f1e07ec7e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_35
+      rect:
+        serializedVersion: 2
+        x: 617
+        y: 786
+        width: 58
+        height: 73
+      alignment: 9
+      pivot: {x: 0.25862068, y: 0.8356164}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f575cb3965449d48a3f05d6476495fe
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_36
+      rect:
+        serializedVersion: 2
+        x: 677
+        y: 744
+        width: 60
+        height: 115
+      alignment: 9
+      pivot: {x: 0.3, y: 0.87826085}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e03e1863d3a99943b7ef3df94bb7e8f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ron_Spritemap1_37
+      rect:
+        serializedVersion: 2
+        x: 739
+        y: 776
+        width: 61
+        height: 83
+      alignment: 9
+      pivot: {x: 0.4754098, y: 0.1566265}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc652e12162985643b4899b2bc04e1cc
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 9b2eb20ce95940a448fffade35f1e548
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

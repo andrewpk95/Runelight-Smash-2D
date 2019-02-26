@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Hitbox
+  - Hurtbox
+  - Shield
+  - Projectile
+  - Platform
+  - Ground
+  - Entity
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Ground
+  - OneWayPlatform
+  - TranscendentEntity
+  - FallingThroughEntity
+  - Entity
+  - IntangibleEntity
+  - GroundHitbox
+  - AerialHitbox
+  - ProjectileHitbox
+  - GrabHitbox
+  - Hurtbox
+  - IntangibleHurtbox
+  - Ledge
+  - GroundAndAerialHitbox
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Background
+    uniqueID: 1905269405
+    locked: 0
+  - name: Stage
+    uniqueID: 1760428015
+    locked: 0
+  - name: Fighters
+    uniqueID: 33631923
+    locked: 0
+  - name: UI
+    uniqueID: 1810044217
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
