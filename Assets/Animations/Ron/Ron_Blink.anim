@@ -26,7 +26,7 @@ AnimationClip:
     - time: 0.5
       value: {fileID: 21300022, guid: 172097887ce74fd4aa4754ba9160565d, type: 3}
     attribute: m_Sprite
-    path: SpriteGroup/UpperBody/Neck/Face
+    path: SpriteParent/SpriteGroup/UpperBody/Neck/Face
     classID: 212
     script: {fileID: 0}
   m_SampleRate: 60
@@ -37,7 +37,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 3190613079
+      path: 3869150383
       attribute: 0
       script: {fileID: 0}
       typeID: 212
