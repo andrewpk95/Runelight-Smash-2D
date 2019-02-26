@@ -14,6 +14,12 @@ public interface IHitbox
 
     GameObject GetOwner();
 
+    void SetOwner(GameObject newOwner);
+
+    float GetDamage();
+
+    void SetDamage(float newDamage);
+
     List<GameObject> GetCollisionList();
     
     void Reset();

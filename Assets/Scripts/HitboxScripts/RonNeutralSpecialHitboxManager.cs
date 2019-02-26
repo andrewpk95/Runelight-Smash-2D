@@ -14,6 +14,7 @@ public class RonNeutralSpecialHitboxManager : HitboxManager
     {
         list = GetComponentsInChildren<IHitbox>();
         collisionDictionary = new Dictionary<GameObject, List<IHitbox>>();
+        victims = new List<GameObject>();
 
         passive = GetComponentInParent<RonPassive>();
     }
@@ -42,6 +43,7 @@ public class RonNeutralSpecialHitboxManager : HitboxManager
 
     public override void DeactivateHitboxes() {
         collisionDictionary.Clear();
+        victims.Clear();
         foreach(IHitbox hitbox in list) {
             hitbox.SetHitStun(false);
             hitbox.Reset();

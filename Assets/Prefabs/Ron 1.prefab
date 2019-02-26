@@ -160,6 +160,14 @@ MonoBehaviour:
   isGrabbed: 0
   grabbingFighter: {fileID: 0}
   actionBufferWindow: 0.1
+  sideSpecialSpeed: 7
+  isSideSpecial: 0
+  upSpecialHorizontalSpeed: 3
+  upSpecialVerticalAcceleration: 50
+  isUpSpecial: 0
+  isUpSpecialStop: 0
+  downSpecialFallSpeed: 15
+  isDownSpecial: 0
 --- !u!114 &3883178279339629315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2429,7 +2437,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2482599344133156937}
-  - component: {fileID: 7876163875981589062}
+  - component: {fileID: 7432090962412359210}
   m_Layer: 0
   m_Name: SideSpecial1
   m_TagString: Hitbox
@@ -2452,7 +2460,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7876163875981589062
+--- !u!114 &7432090962412359210
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2461,10 +2469,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2229837200185760555}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: cda74904da44ffa4d8c84b87bf33a47f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   activated: 0
+  passive: {fileID: 0}
 --- !u!1 &2242837185661948772
 GameObject:
   m_ObjectHideFlags: 0
@@ -2872,10 +2881,10 @@ MonoBehaviour:
   manager: {fileID: 0}
   eventManager: {fileID: 0}
   hitbox: {fileID: 0}
-  damage: 1.5
+  damage: 1
   hitStun: 1
   angle: 10
-  flipAngle: 0
+  flipAngle: 1
   baseKnockback: 20
   knockbackGrowth: 0
   freezeFrame: 2
@@ -4507,6 +4516,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2143564591857699592}
+  - component: {fileID: 7203400013756243938}
   m_Layer: 0
   m_Name: SideSpecial2
   m_TagString: Hitbox
@@ -4524,10 +4534,25 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 2970248417045025999}
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7203400013756243938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4509124371347885407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cda74904da44ffa4d8c84b87bf33a47f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activated: 0
+  passive: {fileID: 0}
 --- !u!1 &4552858976711801243
 GameObject:
   m_ObjectHideFlags: 0
@@ -6909,6 +6934,81 @@ CapsuleCollider2D:
   m_Offset: {x: -0.01875, y: -0.055624995}
   m_Size: {x: 0.0775, y: 0.15375}
   m_Direction: 0
+--- !u!1 &6952658418331554665
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2970248417045025999}
+  - component: {fileID: 5095719727951590140}
+  - component: {fileID: 5285649673523726167}
+  m_Layer: 21
+  m_Name: SideSpecial2
+  m_TagString: Hitbox
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2970248417045025999
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6952658418331554665}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.107, y: -0.091, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2143564591857699592}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &5095719727951590140
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6952658418331554665}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1.5, y: 1.2}
+  m_Direction: 1
+--- !u!114 &5285649673523726167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6952658418331554665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be3229d0281b6d84791786c4e318b053, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 0}
+  manager: {fileID: 0}
+  eventManager: {fileID: 0}
+  hitbox: {fileID: 0}
+  damage: 7
+  hitStun: 1
+  angle: 55
+  flipAngle: 1
+  baseKnockback: 40
+  knockbackGrowth: 100
+  freezeFrame: 12
+  id: 0
+  mask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &7036609117114035519
 GameObject:
   m_ObjectHideFlags: 0

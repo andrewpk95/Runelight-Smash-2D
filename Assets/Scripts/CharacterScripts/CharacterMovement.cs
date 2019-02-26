@@ -93,7 +93,6 @@ public class CharacterMovement : MonoBehaviour
             if (overrideVelocity) {
                 velocity = overridingVelocity;
                 rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
-                overrideVelocity = false;
             }
             else {
                 UpdatePhysics();
@@ -121,19 +120,20 @@ public class CharacterMovement : MonoBehaviour
         if (isGrounded) {
             //Restore Double Jumps
             doubleJumpLeft = doubleJumpCount;
-
             isFastFalling = false;
         }
 
         //Falling Speed Update
+        UpdateFallSpeed();
+    }
+
+    protected virtual void UpdateFallSpeed() {
         if (isFastFalling) {
             velocity = new Vector2 (velocity.x, -maxFastFallSpeed);
         }
         else {
             velocity = new Vector2 (velocity.x, Mathf.Max(velocity.y - gravity * Time.fixedDeltaTime, -maxFallSpeed));
         }
-        
-        
     }
 
     protected void UpdateMovement() {
@@ -194,7 +194,7 @@ public class CharacterMovement : MonoBehaviour
                     : GetTargetVelocity(mainJoystick.x * maxAirSpeed, airAccelerationRate);
             }
             else {
-                targetAirVelocity = rb.velocity.x;
+                targetAirVelocity = velocity.x;
             }
             velocity = new Vector2 (targetAirVelocity, velocity.y);
             
@@ -242,11 +242,19 @@ public class CharacterMovement : MonoBehaviour
         return velocity;
     }
 
-    public void SetVelocity(Vector2 velocity) {
+    public void SetVelocity(Vector2 targetVelocity) {
+        velocity = targetVelocity;
+    }
+
+    public void OverrideVelocity(Vector2 targetVelocity) {
         overrideVelocity = true;
-        overridingVelocity = velocity;
+        overridingVelocity = targetVelocity;
     }
     
+    public void StopOverride() {
+        overrideVelocity = false;
+    }
+
     public void Move(Vector2 input) {
         mainJoystick = input;
     }

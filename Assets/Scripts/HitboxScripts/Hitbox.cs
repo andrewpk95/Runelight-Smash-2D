@@ -32,12 +32,12 @@ public class Hitbox : MonoBehaviour, IHitbox
         manager = GetComponentInParent<HitboxManager>();
         eventManager = (EventManager) GameObject.FindObjectOfType(typeof(EventManager));
         hitbox = GetComponent<Collider2D>();
-        //hitbox.enabled = false;
+        hitbox.enabled = false;
         collisions = new List<GameObject>();
     }
 
     void CheckCollision() {
-        //hitbox.enabled = true;
+        hitbox.enabled = true;
         ContactFilter2D contactFilter = new ContactFilter2D();
         mask = Physics2D.GetLayerCollisionMask (gameObject.layer);
         contactFilter.SetLayerMask(mask);
@@ -98,7 +98,7 @@ public class Hitbox : MonoBehaviour, IHitbox
 
     public void Reset() {
         collisions.Clear();
-        //hitbox.enabled = false;
+        hitbox.enabled = false;
     }
 
     public int GetID() {
@@ -111,6 +111,18 @@ public class Hitbox : MonoBehaviour, IHitbox
 
     public GameObject GetOwner() {
         return owner;
+    }
+
+    public void SetOwner(GameObject newOwner) {
+        owner = newOwner;
+    }
+
+    public float GetDamage() {
+        return damage;
+    }
+
+    public void SetDamage(float newDamage) {
+        damage = newDamage;
     }
 
     public void SetHitStun(bool hit) {

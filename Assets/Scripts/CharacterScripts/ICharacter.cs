@@ -11,6 +11,10 @@ public interface ICharacter
      Vector2 GetVelocity();
 
      void SetVelocity(Vector2 velocity);
+
+     void OverrideVelocity(Vector2 velocity);
+
+     void StopOverride();
      
      void Move(Vector2 input);
 

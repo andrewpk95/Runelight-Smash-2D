@@ -6,7 +6,7 @@ public class HitboxManager : MonoBehaviour
 {
     protected IHitbox[] list;
     protected Dictionary<GameObject, List<IHitbox>> collisionDictionary;
-    List<GameObject> victims;
+    protected List<GameObject> victims;
 
     public bool activated;
     
