@@ -8,6 +8,9 @@ public class FighterController : CharacterMovement
     
     public bool isJabbing;
     public bool canJab;
+
+    public bool isTumbling;
+    public bool isTumbled;
     
     public bool isGrabbing;
     public bool isGrabbed;
@@ -21,17 +24,16 @@ public class FighterController : CharacterMovement
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        trans = GetComponent<Transform>();
-        col = GetComponent<CapsuleCollider2D>();
+        Initialize();
+    }
+
+    protected override void InitializeComponents() {
+        base.InitializeComponents();
         animator = GetComponent<Animator>();
+    }
 
-        movementEnabled = true;
-        enableAirDeceleration = true;
-        jumpFrameLeft = jumpSquatFrame;
-        jumpBufferFrameLeft = jumpBufferFrame;
-        doubleJumpLeft = doubleJumpCount;
-
+    protected override void InitializeVariables() {
+        base.InitializeVariables();
         actionBufferTimeLeft = actionBufferWindow;
     }
 
@@ -43,19 +45,7 @@ public class FighterController : CharacterMovement
     }
 
     void FixedUpdate() {
-        if (movementEnabled) {
-            if (overrideVelocity) {
-                velocity = overridingVelocity;
-                rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
-            }
-            else {
-                UpdatePhysics();
-                UpdateMovement();
-            }
-            PlatformCheck();
-            UpdateFacingDirection();
-            FlipCheck();
-        }
+        Tick();
     }
 
     protected override void UpdateInput() {

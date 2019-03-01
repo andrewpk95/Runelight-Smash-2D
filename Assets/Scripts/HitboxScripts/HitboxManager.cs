@@ -51,9 +51,9 @@ public class HitboxManager : MonoBehaviour
             IHitbox topIDHitbox = p.Value[0];
             int topID = 10;
             foreach(IHitbox hitbox in p.Value) {
-                if(hitbox.GetID() < topID) {
+                if(hitbox.ID < topID) {
                     topIDHitbox = hitbox;
-                    topID = hitbox.GetID();
+                    topID = hitbox.ID;
                 }
             }
             Debug.Log("Fighter: " + p.Key.name + ", Hitbox Chosen: " + topID);

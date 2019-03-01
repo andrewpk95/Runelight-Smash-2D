@@ -35,7 +35,7 @@ public class RonNeutralSpecialHitboxManager : HitboxManager
         numberOfHits = passive.ConsumeCharge();
         if (numberOfHits >= passive.maxStaticCharge) {
             foreach(IHitbox hitbox in list) {
-                hitbox.SetHitStun(true);
+                hitbox.HitStun = true;
             }
         }
         hitsLeft = numberOfHits;
@@ -45,7 +45,7 @@ public class RonNeutralSpecialHitboxManager : HitboxManager
         collisionDictionary.Clear();
         victims.Clear();
         foreach(IHitbox hitbox in list) {
-            hitbox.SetHitStun(false);
+            hitbox.HitStun = false;
             hitbox.Reset();
         }
     }

@@ -44,5 +44,7 @@ public interface ICharacter
 
      void IgnoreInput(bool ignore);
 
+     void SetPreventWalkOffLedge(bool prevent);
+
      void ActionInput(ActionInput actionInput);
 }

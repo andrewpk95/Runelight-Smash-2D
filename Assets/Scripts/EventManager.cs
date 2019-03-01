@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [System.Serializable]
-public class OnDamageEvent : UnityEvent<IHitbox, IDamageable, float>
+public class OnDamageEvent : UnityEvent<IHitbox, IDamageable>
 {
 }
 
@@ -24,13 +24,18 @@ public class EventManager : MonoBehaviour
         
     }
 
-    public void InvokeOnDamageEvent(IHitbox hitbox, IDamageable damageable, float damage) {
+    public void InvokeOnDamageEvent(IHitbox hitbox, IDamageable damageable) {
         Debug.Log("OnDamageEvent Invoked");
-        onDamageEvent.Invoke(hitbox, damageable, damage);
+        onDamageEvent.Invoke(hitbox, damageable);
     }
 
-    public void SubscribeToOnDamageEvent(UnityAction<IHitbox, IDamageable, float> unityAction) {
-        Debug.Log("Subscribed to OnDamageEvent");
-        onDamageEvent.AddListener(unityAction);
+    public void StartListeningToOnDamageEvent(UnityAction<IHitbox, IDamageable> listener) {
+        Debug.Log(listener.Method.Name + " Subscribed to OnDamageEvent");
+        onDamageEvent.AddListener(listener);
+    }
+
+    public void StopListeningToOnDamageEvent(UnityAction<IHitbox, IDamageable> listener) {
+        Debug.Log(listener.Method.Name + " Unsubscribed to OnDamageEvent");
+        onDamageEvent.RemoveListener(listener);
     }
 }

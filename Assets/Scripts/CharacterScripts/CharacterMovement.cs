@@ -7,6 +7,7 @@ public class CharacterMovement : MonoBehaviour
     protected Rigidbody2D rb;
     protected Transform trans;
     protected CapsuleCollider2D col;
+    public CharacterStats Stats;
     public bool movementEnabled;
     public Color debugColor;
     public LayerMask groundLayerMask;
@@ -33,6 +34,7 @@ public class CharacterMovement : MonoBehaviour
     public float dashAccelerationRate;
     public float decelerateAxisThreshold;
     public bool preventWalkOffLedge;
+    public float preventWalkOffLedgeThreshold;
     public float ledgeDetectionRatio;
     public bool isOnLeftLedge;
     public bool isOnRightLedge;
@@ -71,10 +73,41 @@ public class CharacterMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Initialize();
+    }
+
+    protected virtual void Initialize() {
+        InitializeComponents();
+        InitializeStats();
+        InitializeVariables();
+    }
+
+    protected virtual void InitializeComponents() {
         rb = GetComponent<Rigidbody2D>();
         trans = GetComponent<Transform>();
         col = GetComponent<CapsuleCollider2D>();
+        Stats = GetComponent<CharacterStats>();
+    }
 
+    protected virtual void InitializeStats() {
+        Stats.MaxWalkSpeed = maxWalkSpeed;
+        Stats.WalkAccelerationRate = walkAccelerationRate;
+        Stats.GroundDecelerationRate = groundDecelerationRate;
+        Stats.InitialDashSpeed = initialDashSpeed;
+        Stats.MaxDashSpeed = maxDashSpeed;
+        Stats.DashAccelerationRate = dashAccelerationRate;
+        Stats.MaxAirSpeed = maxAirSpeed;
+        Stats.AirAccelerationRate = airAccelerationRate;
+        Stats.AirDecelerationRate = airDecelerationRate;
+        Stats.Gravity = gravity;
+        Stats.MaxFallSpeed = maxFallSpeed;
+        Stats.MaxFastFallSpeed = maxFastFallSpeed;
+        Stats.ShortHopHeight = shortHopHeight;
+        Stats.FullHopHeight = fullHopHeight;
+        Stats.DoubleJumpHeight = doubleJumpHeight;
+    }
+
+    protected virtual void InitializeVariables() {
         movementEnabled = true;
         enableAirDeceleration = true;
         jumpFrameLeft = jumpSquatFrame;
@@ -88,7 +121,21 @@ public class CharacterMovement : MonoBehaviour
         UpdateInput();
     }
 
+    protected virtual void UpdateInput() {
+        if (jumpBuffered) {
+            jumpBufferFrameLeft--;
+            if (jumpBufferFrameLeft < 0) {
+                jumpBufferFrameLeft = jumpBufferFrame;
+                jumpBuffered = false;
+            }
+        }
+    }
+
     void FixedUpdate() {
+        Tick();
+    }
+
+    protected virtual void Tick() {
         if (movementEnabled) {
             if (overrideVelocity) {
                 velocity = overridingVelocity;
@@ -101,16 +148,6 @@ public class CharacterMovement : MonoBehaviour
             PlatformCheck();
             UpdateFacingDirection();
             FlipCheck();
-        }
-    }
-
-    protected virtual void UpdateInput() {
-        if (jumpBuffered) {
-            jumpBufferFrameLeft--;
-            if (jumpBufferFrameLeft < 0) {
-                jumpBufferFrameLeft = jumpBufferFrame;
-                jumpBuffered = false;
-            }
         }
     }
 
@@ -129,10 +166,10 @@ public class CharacterMovement : MonoBehaviour
 
     protected virtual void UpdateFallSpeed() {
         if (isFastFalling) {
-            velocity = new Vector2 (velocity.x, -maxFastFallSpeed);
+            velocity = new Vector2 (velocity.x, -Stats.MaxFastFallSpeed);
         }
         else {
-            velocity = new Vector2 (velocity.x, Mathf.Max(velocity.y - gravity * Time.fixedDeltaTime, -maxFallSpeed));
+            velocity = new Vector2 (velocity.x, Mathf.Max(GetTargetVelocity(velocity.y, -Stats.MaxFallSpeed, Stats.Gravity)));
         }
     }
 
@@ -142,78 +179,102 @@ public class CharacterMovement : MonoBehaviour
         }
         //Ground Movement
         if (isGrounded) {
-            //Ignore Joystick Input if busy
-            if (isBusy) {
-                mainJoystick = Vector2.zero;
-            }
-            //Horizontal Ground Movement
-            float targetGroundVelocity;
-            isWalking = Mathf.Abs(mainJoystick.x) > 0 && !isDashing && !isCrouching;
-            isDashing = Mathf.Abs(mainJoystick.x) > 0 && !isWalking && !isCrouching;
-            if (isCrouching) { //Crouching
-                targetGroundVelocity = GetTargetVelocity(0.0f, groundDecelerationRate);
-            }
-            else {
-                if (isDashing) { //Dashing
-                    targetGroundVelocity = mainJoystick.x > 0 ? 
-                    Mathf.Max(initialDashSpeed, GetTargetVelocity(mainJoystick.x * maxDashSpeed, dashAccelerationRate)) : 
-                    Mathf.Min(-initialDashSpeed, GetTargetVelocity(mainJoystick.x * maxDashSpeed, dashAccelerationRate));
-                }
-                else { //Walking
-                    targetGroundVelocity = Mathf.Abs(mainJoystick.x) < decelerateAxisThreshold ? 
-                        GetTargetVelocity(0.0f, groundDecelerationRate) 
-                        : GetTargetVelocity(mainJoystick.x * maxWalkSpeed, walkAccelerationRate);
-                }
-            }
-            
-            
-            velocity = new Vector2 (targetGroundVelocity, velocity.y);
-            
-            //Jump
-            if (jumpBuffered && !isBusy) {
-                isJumpSquatting = true;
-                jumpBufferFrameLeft = jumpBufferFrame;
-                jumpBuffered = false;
-            }
-            if (isJumpSquatting) {
-                jumpFrameLeft--;
-                if (jumpFrameLeft < 0) {
-                    Jump(jumpButtonHeld ? fullHopHeight : shortHopHeight);
-                    jumpFrameLeft = jumpSquatFrame;
-                    isJumpSquatting = false;
-                }
-            }
+            UpdateGroundMovement();
+            UpdateGroundJumpMovement();
         }
         //Air Movement
         else {
-            //Horizontal Air Movement
-            float targetAirVelocity;
-            if (enableAirDeceleration) {
-                targetAirVelocity = Mathf.Abs(mainJoystick.x) < decelerateAxisThreshold ?
-                    GetTargetVelocity(0.0f, airDecelerationRate)
-                    : GetTargetVelocity(mainJoystick.x * maxAirSpeed, airAccelerationRate);
-            }
-            else {
-                targetAirVelocity = velocity.x;
-            }
-            velocity = new Vector2 (targetAirVelocity, velocity.y);
-            
-            //Double Jump
-            if (jumpBuffered && !isBusy) {
-                if (doubleJumpLeft > 0) {
-                    DoubleJump(doubleJumpHeight);
-                    doubleJumpLeft--;
-                    jumpBufferFrameLeft = jumpBufferFrame;
-                    jumpBuffered = false;
-                }
-            }
-
-            //Falling Through
-            if (isFallingThrough) {
-                fallingThroughFrameLeft--;
-            }
+            UpdateAirMovement();
+            UpdateAirJumpMovement();
+            UpdateFallThroughMovement();
         }
         rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
+    }
+
+    protected virtual void UpdateGroundMovement() {
+        //Ignore Joystick Input if busy
+        if (isBusy) {
+            mainJoystick = Vector2.zero;
+        }
+        //Horizontal Ground Movement
+        float targetGroundVelocity;
+        isWalking = Mathf.Abs(mainJoystick.x) > 0 && !isDashing && !isCrouching;
+        isDashing = Mathf.Abs(mainJoystick.x) > 0 && !isWalking && !isCrouching;
+        if (isCrouching) { //Crouching
+            targetGroundVelocity = GetTargetVelocity(velocity.x, 0.0f, Stats.GroundDecelerationRate);
+        }
+        else {
+            if (isDashing) { //Dashing
+                targetGroundVelocity = mainJoystick.x > 0 ?
+                Mathf.Max(Stats.InitialDashSpeed, GetTargetVelocity(velocity.x, mainJoystick.x * Stats.MaxDashSpeed, Stats.DashAccelerationRate)) :
+                Mathf.Min(-Stats.InitialDashSpeed, GetTargetVelocity(velocity.x, mainJoystick.x * Stats.MaxDashSpeed, Stats.DashAccelerationRate));
+            }
+            else { //Walking
+                targetGroundVelocity = Mathf.Abs(mainJoystick.x) < decelerateAxisThreshold ?
+                    GetTargetVelocity(velocity.x, 0.0f, Stats.GroundDecelerationRate)
+                    : GetTargetVelocity(velocity.x, mainJoystick.x * Stats.MaxWalkSpeed, Stats.WalkAccelerationRate);
+
+                //Prevent Walk Off Ledge Update
+                if (Mathf.Abs(mainJoystick.x) >= preventWalkOffLedgeThreshold) {
+                    SetPreventWalkOffLedge(false);
+                }
+                else {
+                    SetPreventWalkOffLedge(true);
+                }
+            }
+        }
+        velocity = new Vector2 (targetGroundVelocity, velocity.y);
+    }
+
+    protected virtual void UpdateGroundJumpMovement() {
+        //Jump
+        if (jumpBuffered && !isBusy) {
+            isJumpSquatting = true;
+            jumpBufferFrameLeft = jumpBufferFrame;
+            jumpBuffered = false;
+        }
+        if (isJumpSquatting) {
+            jumpFrameLeft--;
+            if (jumpFrameLeft < 0) {
+                Jump(jumpButtonHeld ? Stats.FullHopHeight : Stats.ShortHopHeight);
+                jumpFrameLeft = jumpSquatFrame;
+                isJumpSquatting = false;
+            }
+        }
+    }
+
+    protected virtual void UpdateAirMovement() {
+        //Horizontal Air Movement
+        float targetAirVelocity;
+        if (enableAirDeceleration) {
+            targetAirVelocity = Mathf.Abs(mainJoystick.x) < decelerateAxisThreshold ?
+                GetTargetVelocity(velocity.x, 0.0f, Stats.AirDecelerationRate)
+                : GetTargetVelocity(velocity.x, mainJoystick.x * Stats.MaxAirSpeed, Stats.AirAccelerationRate);
+        }
+        else {
+            targetAirVelocity = velocity.x;
+        }
+        velocity = new Vector2(targetAirVelocity, velocity.y);
+        SetPreventWalkOffLedge(false);
+    }
+
+    protected virtual void UpdateAirJumpMovement() {
+        //Double Jump
+        if (jumpBuffered && !isBusy) {
+            if (doubleJumpLeft > 0) {
+                DoubleJump(Stats.DoubleJumpHeight);
+                doubleJumpLeft--;
+                jumpBufferFrameLeft = jumpBufferFrame;
+                jumpBuffered = false;
+            }
+        }
+    }
+
+    protected virtual void UpdateFallThroughMovement() {
+        //Falling Through
+        if (isFallingThrough) {
+            fallingThroughFrameLeft--;
+        }
     }
 
     protected void UpdateFacingDirection() {
@@ -340,6 +401,10 @@ public class CharacterMovement : MonoBehaviour
         ignoreInput = ignore;
     }
 
+    public void SetPreventWalkOffLedge(bool prevent) {
+        preventWalkOffLedge = prevent;
+    }
+
 
     //Character Movement Functions
 
@@ -365,11 +430,11 @@ public class CharacterMovement : MonoBehaviour
         FlipCheck();
     }
 
-    protected float GetTargetVelocity(float targetVelocity, float accelerationRate) {
-        int modifier = velocity.x > targetVelocity ? -1 : 1;
+    protected float GetTargetVelocity(float currentVelocity, float targetVelocity, float accelerationRate) {
+        int modifier = currentVelocity > targetVelocity ? -1 : 1;
         float acceleration = accelerationRate * Time.fixedDeltaTime;
-        if (Mathf.Abs(velocity.x + acceleration * modifier - targetVelocity) > acceleration) {
-            return velocity.x + acceleration * modifier;
+        if (Mathf.Abs(currentVelocity + acceleration * modifier - targetVelocity) > acceleration) {
+            return currentVelocity + acceleration * modifier;
         }
         else {
             return targetVelocity;
@@ -382,8 +447,8 @@ public class CharacterMovement : MonoBehaviour
         RaycastHit2D centerRay = Physics2D.Raycast(GetFeetPosition(), -Vector2.up, 0.1f, groundLayerMask);
         RaycastHit2D leftRay = Physics2D.Raycast(GetFeetPosition(-col.size.x / 2.0f, 0), -Vector2.up, 0.1f, groundLayerMask);
         RaycastHit2D rightRay = Physics2D.Raycast(GetFeetPosition(col.size.x / 2.0f, 0), -Vector2.up, 0.1f, groundLayerMask);
-        //return centerRay && leftRay && rightRay;
-        return centerRay;
+        return centerRay && leftRay && rightRay;
+        //return centerRay;
     }
 
     protected void PlatformCheck() {
@@ -449,11 +514,12 @@ public class CharacterMovement : MonoBehaviour
 
     protected virtual void Jump(float jumpHeight) {
         isGrounded = false;
+        SetPreventWalkOffLedge(false);
         if (canJumpChangeDirection) {
-            velocity = new Vector2 (mainJoystick.x * maxAirSpeed, Mathf.Sqrt(2.0f * gravity * jumpHeight));
+            velocity = new Vector2 (mainJoystick.x * Stats.MaxAirSpeed, Mathf.Sqrt(2.0f * Stats.Gravity * jumpHeight));
         }
         else {
-            velocity = new Vector2 (rb.velocity.x, Mathf.Sqrt(2.0f * gravity * jumpHeight));
+            velocity = new Vector2 (velocity.x, Mathf.Sqrt(2.0f * Stats.Gravity * jumpHeight));
         }
         if (mainJoystick.x > 0) isFacingRight = true;
         if (mainJoystick.x < 0) isFacingRight = false;
@@ -462,12 +528,13 @@ public class CharacterMovement : MonoBehaviour
 
     protected virtual void DoubleJump(float jumpHeight) {
         isGrounded = false;
+        SetPreventWalkOffLedge(false);
         isFastFalling = false;
         if (canJumpChangeDirection) {
-            velocity = new Vector2 (mainJoystick.x * maxAirSpeed, Mathf.Sqrt(2.0f * gravity * jumpHeight));
+            velocity = new Vector2 (mainJoystick.x * Stats.MaxAirSpeed, Mathf.Sqrt(2.0f * Stats.Gravity * jumpHeight));
         }
         else {
-            velocity = new Vector2 (rb.velocity.x, Mathf.Sqrt(2.0f * gravity * jumpHeight));
+            velocity = new Vector2 (velocity.x, Mathf.Sqrt(2.0f * Stats.Gravity * jumpHeight));
         }
     }
 

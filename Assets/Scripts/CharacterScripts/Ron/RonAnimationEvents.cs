@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class RonAnimationEvents : MonoBehaviour
 {
-    HitboxManager[] hitboxes;
-    HitboxManager hitboxCache;
+    Dictionary<string, HitboxManager> hitboxes;
+    List<HitboxManager> activatedHitboxes;
 
     ICharacter character;
 
@@ -14,13 +14,14 @@ public class RonAnimationEvents : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        hitboxes = GetComponentsInChildren<HitboxManager>();
-        if (hitboxes.Length > 0) {
-            hitboxCache = hitboxes[0];
-        }
-        foreach (HitboxManager hitbox in hitboxes) {
+        hitboxes = new Dictionary<string, HitboxManager>();
+        HitboxManager[] list = GetComponentsInChildren<HitboxManager>();
+        foreach (HitboxManager hitbox in list) {
+            hitboxes.Add(hitbox.name, hitbox);
             Debug.Log(hitbox.name);
         }
+        activatedHitboxes = new List<HitboxManager>();
+
         character = GetComponent<ICharacter>();
         passive = GetComponent<RonPassive>();
     }
@@ -37,44 +38,25 @@ public class RonAnimationEvents : MonoBehaviour
     }
 
     public void ActivateHitboxGroup(string hitboxGroupName) {
-        if (hitboxes.Length <= 0) {
+        if (hitboxes.Count <= 0) {
             return;
         }
-        if (hitboxCache.name == hitboxGroupName) {
-            hitboxCache.ActivateHitboxes();
-            return;
-        }
-        foreach(HitboxManager hitboxGroup in hitboxes) {
-            if (hitboxGroup.name == hitboxGroupName) {
-                hitboxGroup.ActivateHitboxes();
-                return;
-            }
-        }
+        hitboxes[hitboxGroupName].ActivateHitboxes();
+        activatedHitboxes.Add(hitboxes[hitboxGroupName]);
     }
 
     public void DeactivateHitboxGroup(string hitboxGroupName) {
-        if (hitboxes.Length <= 0) {
+        if (hitboxes.Count <= 0) {
             return;
         }
-        if (hitboxCache.name == hitboxGroupName) {
-            hitboxCache.DeactivateHitboxes();
-            return;
-        }
-        foreach(HitboxManager hitboxGroup in hitboxes) {
-            if (hitboxGroup.name == hitboxGroupName) {
-                hitboxGroup.DeactivateHitboxes();
-                break;
-            }
-        }
+        hitboxes[hitboxGroupName].DeactivateHitboxes();
+        activatedHitboxes.Remove(hitboxes[hitboxGroupName]);
     }
 
     public void DeactivateAllHitbox() {
-        foreach(HitboxManager hitboxGroup in hitboxes) {
+        foreach(HitboxManager hitboxGroup in activatedHitboxes) {
             hitboxGroup.DeactivateHitboxes();
         }
-    }
-
-    public void StartSideSpecial() {
-        character.SetVelocity(new Vector2(20, 0));
+        activatedHitboxes.Clear();
     }
 }

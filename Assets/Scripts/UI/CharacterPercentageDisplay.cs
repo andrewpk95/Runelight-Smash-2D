@@ -18,6 +18,6 @@ public class CharacterPercentageDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        textMesh.text = damageable.GetDamage().ToString() + "%";
+        textMesh.text = damageable.Percentage.ToString() + "%";
     }
 }

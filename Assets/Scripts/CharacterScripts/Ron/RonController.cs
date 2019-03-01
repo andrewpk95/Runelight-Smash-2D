@@ -16,22 +16,16 @@ public class RonController : FighterController, ICharacter
     public float downSpecialFallSpeed;
     public bool isDownSpecial;
 
+    public bool isMetalForm;
+
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        trans = GetComponent<Transform>();
-        col = GetComponent<CapsuleCollider2D>();
-        animator = GetComponent<Animator>();
+        Initialize();
+    }
 
-        movementEnabled = true;
-        enableAirDeceleration = true;
-        jumpFrameLeft = jumpSquatFrame;
-        jumpBufferFrameLeft = jumpBufferFrame;
-        doubleJumpLeft = doubleJumpCount;
-
-        actionBufferTimeLeft = actionBufferWindow;
-
+    protected override void InitializeComponents() {
+        base.InitializeComponents();
         passive = GetComponent<RonPassive>();
     }
 
@@ -43,20 +37,27 @@ public class RonController : FighterController, ICharacter
     }
 
     void FixedUpdate() {
+        Tick();
+    }
+
+    protected override void Tick() {
+        if (isSideSpecial) {
+            float speedMultiplier = 1.0f + 0.5f * passive.GetStaticCharge() / passive.maxStaticCharge;
+            overridingVelocity = new Vector2(isFacingRight ? sideSpecialSpeed * speedMultiplier : -sideSpecialSpeed * speedMultiplier, 0);
+        }
+        if (isUpSpecial) {
+            overridingVelocity = new Vector2(isFacingRight ? upSpecialHorizontalSpeed : -upSpecialHorizontalSpeed, 
+                                                GetTargetVelocity(velocity.y, 50.0f, upSpecialVerticalAcceleration));
+        }
+        if (isUpSpecialStop) {
+            overridingVelocity = new Vector2(GetTargetVelocity(velocity.x, 0.0f, 50.0f), 
+                                                GetTargetVelocity(velocity.y, 0.0f, 50.0f));
+        }
+        if (isDownSpecial) {
+            overridingVelocity = new Vector2(0, -downSpecialFallSpeed);
+        }
+
         if (movementEnabled) {
-            if (isSideSpecial) {
-                float speedMultiplier = 1.0f + 0.5f * passive.GetStaticCharge() / passive.maxStaticCharge;
-                overridingVelocity = new Vector2(isFacingRight? sideSpecialSpeed * speedMultiplier : -sideSpecialSpeed * speedMultiplier, 0);
-            }
-            if (isUpSpecial) {
-                overridingVelocity = new Vector2(isFacingRight? upSpecialHorizontalSpeed : -upSpecialHorizontalSpeed, overridingVelocity.y + upSpecialVerticalAcceleration * Time.fixedDeltaTime);
-            }
-            if (isUpSpecialStop) {
-                overridingVelocity = new Vector2(isFacingRight? upSpecialHorizontalSpeed : -upSpecialHorizontalSpeed, overridingVelocity.y - upSpecialVerticalAcceleration * Time.fixedDeltaTime);
-            }
-            if (isDownSpecial) {
-                overridingVelocity = new Vector2(0, -downSpecialFallSpeed);
-            }
             if (overrideVelocity) {
                 velocity = overridingVelocity;
                 rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
@@ -125,6 +126,7 @@ public class RonController : FighterController, ICharacter
 
     public void DownSpecialEnd() {
         isDownSpecial = false;
+        OverrideVelocity(Vector2.zero);
         StopOverride();
     }
 

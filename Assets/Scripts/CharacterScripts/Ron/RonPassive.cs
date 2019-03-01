@@ -11,12 +11,18 @@ public class RonPassive : MonoBehaviour, IPassive
     public int maxStaticCharge;
 
     public EventManager eventManager;
+    public StatusManager statusManager;
+    public IStatus staticSpeedBuff;
     
     // Start is called before the first frame update
     void Start()
     {
         eventManager = (EventManager) GameObject.FindObjectOfType(typeof(EventManager));
-        eventManager.SubscribeToOnDamageEvent(new UnityAction<IHitbox, IDamageable, float>(SaveDamage));
+        eventManager.StartListeningToOnDamageEvent(new UnityAction<IHitbox, IDamageable>(SaveDamage));
+
+        statusManager = GetComponent<StatusManager>();
+        staticSpeedBuff = new RonPassiveBuffStatus(1.5f, this);
+        statusManager.AddStatus(staticSpeedBuff);
     }
 
     // Update is called once per frame
@@ -25,15 +31,15 @@ public class RonPassive : MonoBehaviour, IPassive
         
     }
 
-    public void SaveDamage(IHitbox hitbox, IDamageable damageable, float damage) {
+    public void SaveDamage(IHitbox hitbox, IDamageable damageable) {
         if (hitbox.GetOwner().Equals(this.gameObject)) {
-            if (hitbox.GetName() == "NeutralSpecial") return;
-        if (staticCharge >= maxStaticCharge) {
-            Clamp();
-            return;
-        }
-        damageDealt += damage;
-        ConvertDamageToStaticCharge();
+            if (hitbox.GetName() == "NeutralSpecial" || hitbox.GetName() == "SideSpecial1" || hitbox.GetName() == "SideSpecial2") return;
+            if (staticCharge >= maxStaticCharge) {
+                Clamp();
+                return;
+            }
+            damageDealt += hitbox.Damage;
+            ConvertDamageToStaticCharge();
         }
         
     }
