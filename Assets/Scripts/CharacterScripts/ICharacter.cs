@@ -47,4 +47,8 @@ public interface ICharacter
      void SetPreventWalkOffLedge(bool prevent);
 
      void ActionInput(ActionInput actionInput);
+
+     void ShieldHold(bool holdingShield);
+
+     void Tumble();
 }

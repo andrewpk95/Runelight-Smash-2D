@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface IStatus
 {
+    bool EndStatus {get; set;}
+    
     void OnStatusEnter(GameObject entity);
 
     void OnStatusStay(GameObject entity);

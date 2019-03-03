@@ -141,10 +141,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a7209355e1e9d04ba8f8f61e350d35d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHitEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: OnHitEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   onDamageEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: OnDamageEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  onHitStunEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: OnHitStunEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
 --- !u!4 &202746833
 Transform:
@@ -405,8 +414,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fighter: {fileID: 2022135583}
+  mainJoystick: {x: 0, y: 0}
   dashInputWindow: 0.2
   fallThroughInputWindow: 0.2
+  dodgeInputThreshold: 0.5
   mouseInputWindow: 0.5
   mouseMaxDragLength: 50
   mouseWeakDragMinLength: 10
@@ -602,12 +613,12 @@ PrefabInstance:
     - target: {fileID: 179608326160442946, guid: 57c4225fbd47e8a47972a10c7e91ff2b,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.024
+      value: 2.36
       objectReference: {fileID: 0}
     - target: {fileID: 179608326160442946, guid: 57c4225fbd47e8a47972a10c7e91ff2b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.463
+      value: -1.547
       objectReference: {fileID: 0}
     - target: {fileID: 179608326160442946, guid: 57c4225fbd47e8a47972a10c7e91ff2b,
         type: 3}
@@ -667,6 +678,11 @@ PrefabInstance:
     - target: {fileID: 8173704457983657151, guid: 57c4225fbd47e8a47972a10c7e91ff2b,
         type: 3}
       propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8942577092732779746, guid: 57c4225fbd47e8a47972a10c7e91ff2b,
+        type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

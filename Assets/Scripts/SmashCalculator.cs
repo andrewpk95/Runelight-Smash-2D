@@ -6,7 +6,8 @@ public static class SmashCalculator
 {
     //Knockback Ratios
     public const float KNOCKBACK_TO_UNIT_RATIO = 0.1f;
-    public const float KNOCKBACK_TO_HITSTUN_RATIO = 0.04f;
+    public const float KNOCKBACK_TO_HITSTUN_RATIO = 2.0f;
+    public const float KNOCKBACK_TO_SHIELDSTUN_RATIO = 4.0f;
     public const float MINIMUM_KNOCKBACK_TO_TUMBLE = 80.0f;
     
     //Sakurai Angle Constants
@@ -14,8 +15,8 @@ public static class SmashCalculator
     public const float HIGH_KNOCKBACK_VALUE = 88f;
     public const int MAXIMUM_SAKURAI_ANGLE = 45;
     
-    public static float HitStunDuration(IHitbox hitbox, IDamageable damageable) {
-        return LaunchStrength(hitbox, damageable) * KNOCKBACK_TO_HITSTUN_RATIO;
+    public static int HitStunDuration(IHitbox hitbox, IDamageable damageable) {
+        return Mathf.RoundToInt(LaunchStrength(hitbox, damageable) * KNOCKBACK_TO_HITSTUN_RATIO);
     }
 
     public static Vector2 LaunchVector(IHitbox hitbox, IDamageable damageable) {
@@ -60,11 +61,11 @@ public static class SmashCalculator
     }
 
     public static float KnockbackValue(IHitbox hitbox, IDamageable damageable) {
-        return (hitbox.BaseKnockback + damageable.Percentage * hitbox.KnockbackGrowth * 0.01f) * (200 / (100 + damageable.Weight));
+        return (((damageable.Percentage / 10.0f + damageable.Percentage * hitbox.Damage / 20) * (200 / (100 + damageable.Weight)) * 1.4f) + 18.0f) * hitbox.KnockbackGrowth * 0.01f + hitbox.BaseKnockback;
     }
 
     public static bool Tumble(IHitbox hitbox, IDamageable damageable) {
-        return KnockbackValue(hitbox, damageable) >= MINIMUM_KNOCKBACK_TO_TUMBLE;
+        return hitbox.HitStun && KnockbackValue(hitbox, damageable) >= MINIMUM_KNOCKBACK_TO_TUMBLE;
     }
 
     public static float FlipAngle(float angle, GameObject attacker, GameObject victim) {
@@ -74,6 +75,24 @@ public static class SmashCalculator
         else { //Victim is on the left side of the attacker
             return 180 - angle;
         }
+    }
+
+    public static int ShieldStunFrame(IHitbox hitbox, IShield shield) {
+        return Mathf.RoundToInt(hitbox.Damage * 0.8f * hitbox.ShieldStunMultiplier) + 2;
+    }
+
+    public static Vector2 ShieldKnockbackVector(IHitbox hitbox, IShield shield) {
+        float pushAngle = FlipAngle(0.0f, hitbox.GetOwner(), shield.GetOwner());
+        Vector2 dir = (Vector2)(Quaternion.Euler(0, 0, pushAngle) * Vector2.right);
+        return dir * ShieldKnockbackStrength(hitbox, shield);
+    }
+
+    public static float ShieldKnockbackStrength(IHitbox hitbox, IShield shield) {
+        return ShieldKnockbackValue(hitbox, shield) * KNOCKBACK_TO_UNIT_RATIO;
+    }
+
+    public static float ShieldKnockbackValue(IHitbox hitbox, IShield shield) {
+        return (((hitbox.Damage / 10.0f + hitbox.Damage * hitbox.Damage / 20) * 1.4f) + 18.0f) * hitbox.KnockbackGrowth * 0.01f + hitbox.BaseKnockback;
     }
     /* 
     public static Vector2 PredictPositionAfterLaunch(IHitbox hitbox, IDamageable damageable) {

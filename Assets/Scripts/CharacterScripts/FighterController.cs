@@ -11,6 +11,11 @@ public class FighterController : CharacterMovement
 
     public bool isTumbling;
     public bool isTumbled;
+
+    public bool isShielding;
+    public bool isRollingForward;
+    public bool isRollingBackward;
+    public float rollSpeed;
     
     public bool isGrabbing;
     public bool isGrabbed;
@@ -48,6 +53,16 @@ public class FighterController : CharacterMovement
         Tick();
     }
 
+    protected override void Tick() {
+        if (isRollingForward) {
+            overridingVelocity = new Vector2(isFacingRight ? rollSpeed : -rollSpeed, 0);
+        }
+        if (isRollingBackward) {
+            overridingVelocity = new Vector2(isFacingRight ? -rollSpeed : rollSpeed, 0);
+        }
+        base.Tick();
+    }
+
     protected override void UpdateInput() {
         base.UpdateInput();
         //Update Action Buffer
@@ -80,6 +95,7 @@ public class FighterController : CharacterMovement
         animator.SetBool("isBusy", isBusy);
         animator.SetBool("isGrounded", isGrounded);
         animator.SetBool("isJabbing", isJabbing);
+        animator.SetBool("isShielding", isShielding);
         if (!isBusy) {
             animator.SetBool("isJumpSquatting", isJumpSquatting);
             if (isGrounded) {
@@ -173,18 +189,25 @@ public class FighterController : CharacterMovement
                 switch (actionInputQueue.inputStrength) {
                 //Shield
                 case InputStrength.None:
-                    break;
+                    isShielding = true;
+                    return;
                 //Dodge Movements
                 default:
                     switch (actionInputQueue.inputDirection) {
                     case InputDirection.Right:
-                        break;
+                        if (isFacingRight) animator.SetTrigger("RollForward");
+                        else animator.SetTrigger("RollBackward");
+                        return;
                     case InputDirection.Left:
-                        break;
+                        if (isFacingRight) animator.SetTrigger("RollBackward");
+                        else animator.SetTrigger("RollForward");
+                        return;
                     case InputDirection.Up:
-                        break;
+                        Jump();
+                        return;
                     case InputDirection.Down:
-                        break;
+                        animator.SetTrigger("SpotDodge");
+                        return;
                     }
                     break;
                 }
@@ -315,6 +338,36 @@ public class FighterController : CharacterMovement
         actionInputQueue = null;
     }
 
+    public void ForwardRollStart() {
+        OverrideVelocity(Vector2.zero);
+    }
+
+    public void ForwardRollMovement() {
+        isRollingForward = true;
+        Vector2 direction = new Vector2(isFacingRight ? rollSpeed : -rollSpeed, 0);
+        OverrideVelocity(direction);
+    }
+
+    public void ForwardRollEnd() {
+        isRollingForward = false;
+        StopOverride();
+    }
+
+    public void BackwardRollStart() {
+        OverrideVelocity(Vector2.zero);
+    }
+
+    public void BackwardRollMovement() {
+        isRollingBackward = true;
+        Vector2 direction = new Vector2(isFacingRight ? -rollSpeed : rollSpeed, 0);
+        OverrideVelocity(direction);
+    }
+
+    public void BackwardRollEnd() {
+        isRollingBackward = false;
+        StopOverride();
+    }
+
     //ICharacter Implement Functions
 
     public override void DisableMovement() {
@@ -329,6 +382,14 @@ public class FighterController : CharacterMovement
 
     public void ActionInput(ActionInput actionInput) {
         actionInputQueue = actionInput;
+    }
+
+    public void ShieldHold(bool holdingShield) {
+        isShielding = holdingShield;
+    }
+
+    public void Tumble() {
+        isTumbling = true;
     }
 
     //Overrides

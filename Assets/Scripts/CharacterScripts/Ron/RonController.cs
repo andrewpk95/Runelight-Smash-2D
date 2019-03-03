@@ -57,19 +57,7 @@ public class RonController : FighterController, ICharacter
             overridingVelocity = new Vector2(0, -downSpecialFallSpeed);
         }
 
-        if (movementEnabled) {
-            if (overrideVelocity) {
-                velocity = overridingVelocity;
-                rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
-            }
-            else {
-                UpdatePhysics();
-                UpdateMovement();
-            }
-            PlatformCheck();
-            UpdateFacingDirection();
-            FlipCheck();
-        }
+        base.Tick();
     }
 
     public void InterruptMovement() {

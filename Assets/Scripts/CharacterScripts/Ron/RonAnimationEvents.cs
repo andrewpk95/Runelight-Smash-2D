@@ -6,6 +6,7 @@ public class RonAnimationEvents : MonoBehaviour
 {
     Dictionary<string, HitboxManager> hitboxes;
     List<HitboxManager> activatedHitboxes;
+    IShield shield;
 
     ICharacter character;
 
@@ -18,9 +19,11 @@ public class RonAnimationEvents : MonoBehaviour
         HitboxManager[] list = GetComponentsInChildren<HitboxManager>();
         foreach (HitboxManager hitbox in list) {
             hitboxes.Add(hitbox.name, hitbox);
-            Debug.Log(hitbox.name);
+            //Debug.Log(hitbox.name);
         }
         activatedHitboxes = new List<HitboxManager>();
+
+        shield = GetComponentInChildren<IShield>();
 
         character = GetComponent<ICharacter>();
         passive = GetComponent<RonPassive>();
@@ -58,5 +61,21 @@ public class RonAnimationEvents : MonoBehaviour
             hitboxGroup.DeactivateHitboxes();
         }
         activatedHitboxes.Clear();
+    }
+
+    public void ActivateShield() {
+        shield.ActivateShield();
+    }
+
+    public void DeactivateShield() {
+        shield.DeactivateShield();
+    }
+
+    public void OnShieldBreakStart() {
+        shield.OnShieldBreakStart();
+    }
+
+    public void OnShieldBreakOver() {
+        shield.OnShieldBreakOver();
     }
 }

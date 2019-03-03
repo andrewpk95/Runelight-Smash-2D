@@ -9,8 +9,9 @@ public interface IDamageable
     bool IsHitStunned {get; set;}
     bool IsFrozen {get; set;}
     bool IsInvulnerable {get; set;}
+    bool IsIntangible {get; set;}
     
-    void OnHit(IHitbox hitbox, IDamageable damageable);
+    void OnHit(IHitbox hitbox, GameObject entity);
 
     void TakeDamage(float damage);
 
@@ -23,4 +24,8 @@ public interface IDamageable
     void Launch(IHitbox hitbox);
 
     void Freeze(int freezeFrameDuration);
+
+    void SetIntangible();
+
+    void SetTangible();
 }

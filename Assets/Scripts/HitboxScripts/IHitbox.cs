@@ -11,6 +11,7 @@ public interface IHitbox
     float KnockbackGrowth {get; set;}
     int FreezeFrame {get; set;}
     int ID {get; set;}
+    float ShieldStunMultiplier {get; set;}
     
     void Hit(GameObject target);
 

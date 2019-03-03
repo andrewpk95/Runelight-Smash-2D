@@ -11,6 +11,7 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
     [SerializeField] protected bool isLaunched;
     [SerializeField] protected bool isFrozen;
     [SerializeField] protected bool isInvulnerable;
+    [SerializeField] protected bool isIntangible;
 
     public int Weight {get {return weight;} set {weight = value;}}
     public float Percentage {get {return percentage;} set {percentage = value;}}
@@ -18,24 +19,32 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
     public bool IsLaunched {get {return isLaunched;} set {isLaunched = value;}}
     public bool IsFrozen {get {return isFrozen;} set {isFrozen = value;}}
     public bool IsInvulnerable {get {return isInvulnerable;} set {isInvulnerable = value;}}
+    public bool IsIntangible {get {return isIntangible;} set {isIntangible = value;}}
 
-    protected float hitStunDurationLeft;
+    protected int hitStunFrameLeft;
     protected int freezeFrameLeft;
     protected Vector2 storedVelocity;
 
     Animator animator;
     ICharacter character;
+    HurtboxManager hurtbox;
 
     public EventManager eventManager;
+    public StatusManager statusManager;
+    protected IStatus launchStatus;
     
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
         character = GetComponent<ICharacter>();
+        hurtbox = GetComponentInChildren<HurtboxManager>();
 
         eventManager = (EventManager) GameObject.FindObjectOfType(typeof(EventManager));
-        eventManager.StartListeningToOnDamageEvent(new UnityAction<IHitbox, IDamageable>(OnHit));
+        eventManager.StartListeningToOnHitEvent(new UnityAction<IHitbox, GameObject>(OnHit));
+
+        statusManager = GetComponent<StatusManager>();
+        launchStatus = new LaunchStatus();
     }
 
     // Update is called once per frame
@@ -48,34 +57,48 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
     //Hitstun and Freeze Frame duration update
     void FixedUpdate()
     {
+        Tick();
+    }
+
+    void Tick() {
         if (IsFrozen) {
-            freezeFrameLeft--;
-            if (freezeFrameLeft < 0) { //FreezeFrame Over
-                character.EnableMovement();
-                character.SetVelocity(storedVelocity);
-                IsFrozen = false;
-            }
+            UpdateFreezeFrame();
         }
         else {
-            if (IsHitStunned) {
-                hitStunDurationLeft -= Time.fixedDeltaTime;
-            }
-            if (hitStunDurationLeft < 0) { //Hitstun Over
-                IsHitStunned = false;
-                IsLaunched = false;
-                hitStunDurationLeft = 0.0f;
-                character.IgnoreInput(false);
-                character.EnableAirDeceleration(true);
-            }
+            UpdateHitStunFrame();
         }
     }
 
-    public void OnHit(IHitbox hitbox, IDamageable damageable) {
+    void UpdateFreezeFrame() {
+		freezeFrameLeft--;
+		if (freezeFrameLeft < 0){ //FreezeFrame Over
+			character.EnableMovement();
+			character.SetVelocity(storedVelocity);
+			IsFrozen = false;
+		}
+    }
+
+    void UpdateHitStunFrame() {
+		if (IsHitStunned) {
+			hitStunFrameLeft -= 1;
+		}
+		if (hitStunFrameLeft < 0) { //Hitstun Over
+			IsHitStunned = false;
+            if (IsLaunched) character.Tumble();
+			IsLaunched = false;
+			hitStunFrameLeft = 0;
+			character.IgnoreInput(false);
+			character.EnableAirDeceleration(true);
+		}
+    }
+
+    public void OnHit(IHitbox hitbox, GameObject entity) {
         if (IsInvulnerable) return;
-        if (damageable.GetOwner().Equals(this.gameObject)) {
+        if (entity.Equals(this.gameObject)) {
             TakeDamage(hitbox.Damage);
-            Launch(hitbox);
+            eventManager.InvokeOnDamageEvent(hitbox, this);
             HitStun(hitbox);
+            Launch(hitbox);
             Freeze(hitbox.FreezeFrame);
         }
     }
@@ -94,8 +117,9 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
 
     public void HitStun(IHitbox hitbox) {
         if (!hitbox.HitStun) return;
+        eventManager.InvokeOnHitStunEvent(hitbox, this.gameObject);
         IsHitStunned = true;
-        hitStunDurationLeft = SmashCalculator.HitStunDuration(hitbox, this);
+        hitStunFrameLeft = SmashCalculator.HitStunDuration(hitbox, this);
         character.IgnoreInput(true);
         character.EnableAirDeceleration(false);
         character.SetPreventWalkOffLedge(false);
@@ -104,6 +128,7 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
     public void Launch(IHitbox hitbox) {
         Vector2 launchVector = SmashCalculator.LaunchVector(hitbox, this);
         IsLaunched = SmashCalculator.Tumble(hitbox, this);
+        if (IsLaunched) statusManager.AddStatus(launchStatus);
         Debug.Log(launchVector);
         character.SetVelocity(launchVector);
     }
@@ -113,6 +138,16 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
         storedVelocity = character.GetVelocity();
         character.DisableMovement();
         IsFrozen = true;
+    }
+
+    public void SetIntangible() {
+        IsIntangible = true;
+        hurtbox.SetIntangible(true);
+    }
+
+    public void SetTangible() {
+        IsIntangible = false;
+        hurtbox.SetIntangible(false);
     }
     /*
     public void HitStun(float duration) {

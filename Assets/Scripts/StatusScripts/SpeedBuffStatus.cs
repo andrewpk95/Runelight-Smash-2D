@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class SpeedBuffStatus : IStatus
 {
+    protected bool endStatus;
+    public bool EndStatus {get {return endStatus;} set {endStatus = value;}}
+    
     protected CharacterStats character;
     protected List<IModifier> modifiers;
     protected float modifyValue;

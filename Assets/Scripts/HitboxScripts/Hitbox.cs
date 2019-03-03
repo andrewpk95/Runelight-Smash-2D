@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ public class Hitbox : MonoBehaviour, IHitbox
     [SerializeField] protected float knockbackGrowth;
     [SerializeField] protected int freezeFrame;
     [SerializeField] protected int id;
+    [SerializeField] protected float shieldStunMultiplier;
     
     public float Damage {get {return damage;} set {damage = value;}}
     public bool HitStun {get {return hitStun;} set {hitStun = value;}}
@@ -27,8 +29,12 @@ public class Hitbox : MonoBehaviour, IHitbox
     public float KnockbackGrowth {get {return knockbackGrowth;} set {knockbackGrowth = value;}}
     public int FreezeFrame {get {return freezeFrame;} set {freezeFrame = value;}}
     public int ID {get {return id;} set {id = value;}}
+    public float ShieldStunMultiplier {get {return shieldStunMultiplier;} set {shieldStunMultiplier = value;}}
 
     public LayerMask mask;
+
+    Collider2D[] result;
+    int numResults;
     
     // Start is called before the first frame update
     void Start()
@@ -41,6 +47,11 @@ public class Hitbox : MonoBehaviour, IHitbox
         hitbox = GetComponent<Collider2D>();
         hitbox.enabled = false;
         collisions = new List<GameObject>();
+        result = new Collider2D[100];
+        numResults = 0;
+        if (ShieldStunMultiplier == 0.0f) {
+            ShieldStunMultiplier = 1.0f;
+        }
     }
 
     void CheckCollision() {
@@ -49,28 +60,42 @@ public class Hitbox : MonoBehaviour, IHitbox
         mask = Physics2D.GetLayerCollisionMask (gameObject.layer);
         contactFilter.SetLayerMask(mask);
         contactFilter.useLayerMask = true;
-        Collider2D[] result = new Collider2D[500];
-        int numResults = Physics2D.OverlapCollider(hitbox, contactFilter, result);
+        Array.Clear(result, 0, numResults);
+        numResults = Physics2D.OverlapCollider(hitbox, contactFilter, result);
         //Debug.Log(numResults);
         
         for(int i = 0; i < numResults; i++) {
             GameObject fighter = result[i].gameObject.transform.root.gameObject;
-            //Debug.Log(fighter.name);
-            if (fighter.Equals(owner) || collisions.Contains(fighter)) {
-                continue;
+            if (result[i].gameObject.tag == "Shield") {
+                if (collisions.Contains(result[i].gameObject)) {
+					continue;
+				}
+                else {
+                    Debug.Log(this.gameObject.name + " hit " + fighter.name + "'s Shield!");
+                    collisions.Add(result[i].gameObject);
+                }
             }
-            else {
-                Debug.Log(this.gameObject.name + " hit " + fighter.name + "!");
-                collisions.Add(fighter);
+            else if (result[i].gameObject.tag == "Hurtbox") {
+				if (fighter.Equals(owner) || collisions.Contains(fighter)) {
+					continue;
+				}
+				else {
+					Debug.Log(this.gameObject.name + " hit " + fighter.name + "!");
+					collisions.Add(fighter);
+				}
             }
         }
     }
 
     public void Hit(GameObject target) {
-        IDamageable damageable = target.GetComponent<IDamageable>();
-        eventManager.InvokeOnDamageEvent(this, damageable);
-        
-        ownerDamageable.Freeze(FreezeFrame);
+        eventManager.InvokeOnHitEvent(this, target);
+        if (target.tag == "Shield") {
+            Debug.Log("Shielded");
+            ownerDamageable.Freeze(FreezeFrame);
+        }
+        else if (target.tag == "Entity") {
+            ownerDamageable.Freeze(FreezeFrame);
+        }
     }
 
     public void Reset() {

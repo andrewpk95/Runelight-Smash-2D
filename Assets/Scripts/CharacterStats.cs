@@ -38,12 +38,6 @@ public class CharacterStats : MonoBehaviour
         stats = new Dictionary<Stat, float>();
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        
-    }
-
     public float GetStat(Stat stat) {
         float result = stats[stat];
         if (!modifiers.ContainsKey(stat)) return result;

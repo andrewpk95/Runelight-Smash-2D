@@ -32,7 +32,7 @@ public class HitboxManager : MonoBehaviour
     protected void CheckHitboxes() {
         collisionDictionary.Clear();
         //Create dictionary of hitboxes that hit fighters to sort them with hitbox id
-        foreach(IHitbox hitbox in list) {
+        foreach (IHitbox hitbox in list) {
             List<GameObject> collisions = hitbox.GetCollisionList();
             foreach(GameObject collider in collisions) {
                 if (collisionDictionary.ContainsKey(collider)) {
@@ -45,8 +45,19 @@ public class HitboxManager : MonoBehaviour
                 }
             }
         }
+        //Remove Fighters who have shield collision
+        List<GameObject> shieldingFighters = new List<GameObject>();
+        foreach (KeyValuePair<GameObject, List<IHitbox>> p in collisionDictionary) {
+            if (p.Key.tag == "Shield") {
+                shieldingFighters.Add(p.Key.transform.root.gameObject);
+                victims.Add(p.Key.transform.root.gameObject);
+            }
+        }
+        foreach (GameObject fighter in shieldingFighters) {
+            collisionDictionary.Remove(fighter);
+        }
         //Remove all but Hitbox with lowest ID for each fighter and process the highest ID hitbox
-        foreach(KeyValuePair<GameObject, List<IHitbox>> p in collisionDictionary) {
+        foreach (KeyValuePair<GameObject, List<IHitbox>> p in collisionDictionary) {
             //Find hitbox with lowest ID
             IHitbox topIDHitbox = p.Value[0];
             int topID = 10;
@@ -56,7 +67,7 @@ public class HitboxManager : MonoBehaviour
                     topID = hitbox.ID;
                 }
             }
-            Debug.Log("Fighter: " + p.Key.name + ", Hitbox Chosen: " + topID);
+            //Debug.Log("Fighter: " + p.Key.name + ", Hitbox Chosen: " + topID);
             //Add to the victims list to prevent hitting again
             if (victims.Contains(p.Key)) continue;
             victims.Add(p.Key);

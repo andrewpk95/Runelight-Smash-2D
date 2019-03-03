@@ -6,6 +6,8 @@ public class KeyboardController : MonoBehaviour, IController
 {
     public GameObject fighter;
     ICharacter character;
+
+    public Vector2 mainJoystick;
     
     //Variables to control keyboard dash input
     public float dashInputWindow;
@@ -18,6 +20,10 @@ public class KeyboardController : MonoBehaviour, IController
     public float fallThroughInputWindow;
     float fallThroughInputTimeLeft;
     bool maybeAboutToFallThrough;
+
+    //Variables to control shield action input
+    bool shieldAction;
+    public float dodgeInputThreshold;
 
     //Variables to control mouse attack input
     public float mouseInputWindow;
@@ -36,6 +42,7 @@ public class KeyboardController : MonoBehaviour, IController
         character = fighter.GetComponent<ICharacter>();
         
         //Initialize Input Variables
+        mainJoystick = Vector2.zero;
         dashInputTimeLeft = dashInputWindow;
         fallThroughInputTimeLeft = fallThroughInputWindow;
         mouseInputTimeLeft = mouseInputWindow;
@@ -51,13 +58,14 @@ public class KeyboardController : MonoBehaviour, IController
         UpdateDashInput();
         UpdateDownKeyInput();
         UpdateJumpInput();
-
+        UpdateShieldInput();
         UpdateMouseInput();
     }
     
     //Move given character
     void UpdateMovementInput() {
-        character.Move(new Vector2(Input.GetAxis ("Keyboard_MainHorizontal"), Input.GetAxis ("Keyboard_MainVertical")));
+        mainJoystick = new Vector2(Input.GetAxis ("Keyboard_MainHorizontal"), Input.GetAxis ("Keyboard_MainVertical"));
+        character.Move(mainJoystick);
     }
 
     //Process dash input
@@ -143,6 +151,28 @@ public class KeyboardController : MonoBehaviour, IController
         character.JumpHold(Input.GetButton("Keyboard_Jump"));
     }
 
+    void UpdateShieldInput() {
+        //Shield Key pressed
+        if (Input.GetButtonDown("Keyboard_Shield")) {
+            shieldAction = true;
+        }
+        if (Input.GetButtonUp("Keyboard_Shield")) {
+            shieldAction = false;
+        }
+        character.ShieldHold(Input.GetButton("Keyboard_Shield"));
+        if (shieldAction) {
+            if (Input.GetButtonDown("Keyboard_MainVertical") || Input.GetButtonDown("Keyboard_MainHorizontal")) {
+				float angle = Vector2.SignedAngle(Vector2.right, mainJoystick);
+				InputStrength strength = mainJoystick.magnitude >= dodgeInputThreshold ? InputStrength.Strong : InputStrength.None;
+				if (strength != InputStrength.None) {
+					ActionInput actionInput = new ActionInput(InputType.Shield, angle, strength);
+					character.ActionInput(actionInput);
+				}
+            }
+            
+        }
+    }
+
     void UpdateMouseInput() {
         //Esc to unlock cursor
         if (Input.GetButton("Escape")) {
@@ -175,7 +205,7 @@ public class KeyboardController : MonoBehaviour, IController
         }
         //Stop mouse input when input time is up
         if (mouseInputTimeLeft < 0) {
-            Debug.Log("Time up");
+            //Debug.Log("Time up");
             ResetMouseInput();
         }
     }
@@ -214,6 +244,6 @@ public class KeyboardController : MonoBehaviour, IController
             return;
         }
         //Debug
-        actionInput.Print();
+        //actionInput.Print();
     }
 }

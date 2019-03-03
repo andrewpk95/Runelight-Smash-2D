@@ -15,6 +15,7 @@ public class CharacterMovement : MonoBehaviour
     public IController controller;
     public Vector2 mainJoystick;
     public bool ignoreInput;
+    public bool ignoreMainJoystick;
 
     public Vector2 velocity;
     public bool overrideVelocity;
@@ -228,7 +229,7 @@ public class CharacterMovement : MonoBehaviour
 
     protected virtual void UpdateGroundJumpMovement() {
         //Jump
-        if (jumpBuffered && !isBusy) {
+        if (jumpBuffered && !isBusy && !ignoreInput) {
             isJumpSquatting = true;
             jumpBufferFrameLeft = jumpBufferFrame;
             jumpBuffered = false;
@@ -260,7 +261,7 @@ public class CharacterMovement : MonoBehaviour
 
     protected virtual void UpdateAirJumpMovement() {
         //Double Jump
-        if (jumpBuffered && !isBusy) {
+        if (jumpBuffered && !isBusy && !ignoreInput) {
             if (doubleJumpLeft > 0) {
                 DoubleJump(Stats.DoubleJumpHeight);
                 doubleJumpLeft--;
@@ -279,11 +280,12 @@ public class CharacterMovement : MonoBehaviour
 
     protected void UpdateFacingDirection() {
         if (isBusy) return;
+        if (ignoreInput) return;
         if (isGrounded) {
-            if (velocity.x > 0) {
+            if (mainJoystick.x > 0) {
                 isFacingRight = true;
             }
-            else if (velocity.x < 0) {
+            else if (mainJoystick.x < 0) {
                 isFacingRight = false;
             }
         }
@@ -321,9 +323,8 @@ public class CharacterMovement : MonoBehaviour
     }
 
     public void Dash() {
-        if (isBusy) {
-            return;
-        }
+        if (isBusy) return;
+        if (ignoreInput) return;
         isDashing = true;
     }
 
@@ -341,9 +342,8 @@ public class CharacterMovement : MonoBehaviour
     }
 
     public void Crouch() {
-        if (isBusy) {
-            return;
-        }
+        if (isBusy) return;
+        if (ignoreInput) return;
         isCrouching = true;
     }
 
@@ -352,9 +352,7 @@ public class CharacterMovement : MonoBehaviour
     }
 
     public void FallThrough() {
-        if (isBusy) {
-            return;
-        }
+        if (isBusy) return;
         if (!isFallingThrough) {
             if (!isGrounded) {
                 fallingThroughFrameLeft = 0;
