@@ -57,6 +57,7 @@ public class KeyboardController : MonoBehaviour, IController
         UpdateMovementInput();
         UpdateDashInput();
         UpdateDownKeyInput();
+        UpdateGrabKeyInput();
         UpdateJumpInput();
         UpdateShieldInput();
         UpdateMouseInput();
@@ -151,10 +152,22 @@ public class KeyboardController : MonoBehaviour, IController
         character.JumpHold(Input.GetButton("Keyboard_Jump"));
     }
 
+    void UpdateGrabKeyInput() {
+        //Grab key pressed
+        if (Input.GetButtonDown ("Keyboard_Grab")) {
+            ActionInput actionInput = new ActionInput(InputType.Grab);
+            character.ActionInput(actionInput);
+        }
+    }
+
     void UpdateShieldInput() {
         //Shield Key pressed
         if (Input.GetButtonDown("Keyboard_Shield")) {
             shieldAction = true;
+            if (!character.IsGrounded()) {
+                ActionInput actionInput = new ActionInput(InputType.Shield);
+                character.ActionInput(actionInput);
+            }
         }
         if (Input.GetButtonUp("Keyboard_Shield")) {
             shieldAction = false;

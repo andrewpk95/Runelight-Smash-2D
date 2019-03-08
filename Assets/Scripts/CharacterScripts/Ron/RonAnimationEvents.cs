@@ -9,7 +9,6 @@ public class RonAnimationEvents : MonoBehaviour
     IShield shield;
 
     ICharacter character;
-
     RonPassive passive;
     
     // Start is called before the first frame update

@@ -22,8 +22,9 @@ public class FighterController : CharacterMovement
     public GameObject grabbingFighter;
 
     //Action Buffer Queue Veriables
-    public float actionBufferWindow;
-    protected float actionBufferTimeLeft;
+    public int actionBufferFrame;
+    protected bool isActionBuffered;
+    protected Coroutine ActionBufferCoroutine;
     protected ActionInput actionInputQueue;
     
     // Start is called before the first frame update
@@ -39,7 +40,6 @@ public class FighterController : CharacterMovement
 
     protected override void InitializeVariables() {
         base.InitializeVariables();
-        actionBufferTimeLeft = actionBufferWindow;
     }
 
     // Update is called once per frame
@@ -81,14 +81,23 @@ public class FighterController : CharacterMovement
             if (!isBusy) {
                 ProcessActionInput();
                 ClearActionBuffer();
-                return;
-            }
-            actionBufferTimeLeft -= Time.deltaTime;
-            if (actionBufferTimeLeft < 0) {
-                ClearActionBuffer();
-                return;
             }
         }
+        //Debug.Log(actionInputQueue);
+    }
+
+    IEnumerator ActionBuffer(int actionBufferFrame) {
+        //Debug.Log("Action Buffer Started");
+        int actionBufferFrameLeft = 0;
+        isActionBuffered = true;
+        while (actionBufferFrameLeft < actionBufferFrame) {
+            actionBufferFrameLeft++;
+            //Debug.Log("Action Buffering: Frame " + actionBufferFrameLeft);
+            yield return null;
+        }
+        isActionBuffered = false;
+        actionInputQueue = null;
+        //Debug.Log("Action Buffer Done");
     }
 
     protected virtual void UpdateAnimation() {
@@ -217,15 +226,23 @@ public class FighterController : CharacterMovement
                 switch (actionInputQueue.inputStrength) {
                 //Grab
                 case InputStrength.None:
+                    animator.SetTrigger("Grab");
                     return;
                 //Directional Grab
                 default:
                     switch (actionInputQueue.inputDirection) {
                     case InputDirection.Right:
-                        break;
+                        isFacingRight = true;
+                        FlipCheck();
+                        animator.SetTrigger("Grab");
+                        return;
                     case InputDirection.Left:
-                        break;
+                        isFacingRight = false;
+                        FlipCheck();
+                        animator.SetTrigger("Grab");
+                        return;
                     default:
+                        animator.SetTrigger("Grab");
                         break;
                     }
                     break;
@@ -279,18 +296,23 @@ public class FighterController : CharacterMovement
                 switch (actionInputQueue.inputStrength) {
                 //Air Dodge
                 case InputStrength.None:
-                    break;
+                    animator.SetTrigger("AirDodge");
+                    return;
                 //Directional Air Dodge
                 default:
                     switch (actionInputQueue.inputDirection) {
                     case InputDirection.Right:
-                        break;
+                        animator.SetTrigger("AirDodge");
+                        return;
                     case InputDirection.Left:
-                        break;
+                        animator.SetTrigger("AirDodge");
+                        return;
                     case InputDirection.Up:
-                        break;
+                        animator.SetTrigger("AirDodge");
+                        return;
                     case InputDirection.Down:
-                        break;
+                        animator.SetTrigger("AirDodge");
+                        return;
                     }
                     break;
                 }
@@ -298,7 +320,8 @@ public class FighterController : CharacterMovement
             //Aerial Grab Actions
             case InputType.Grab:
                 //Zair
-                break;
+                animator.SetTrigger("Zair");
+                return;
             }
         }
     }
@@ -334,8 +357,10 @@ public class FighterController : CharacterMovement
     }
 
     protected virtual void ClearActionBuffer() {
-        actionBufferTimeLeft = actionBufferWindow;
         actionInputQueue = null;
+        isActionBuffered = false;
+        StopCoroutine(ActionBufferCoroutine);
+        //Debug.Log("Action Buffer Interrupted");
     }
 
     public void ForwardRollStart() {
@@ -381,7 +406,11 @@ public class FighterController : CharacterMovement
     }
 
     public void ActionInput(ActionInput actionInput) {
+        if (isActionBuffered) {
+            ClearActionBuffer();
+        }
         actionInputQueue = actionInput;
+        ActionBufferCoroutine = StartCoroutine(ActionBuffer(actionBufferFrame));
     }
 
     public void ShieldHold(bool holdingShield) {

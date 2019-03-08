@@ -5,22 +5,21 @@ using UnityEngine;
 public class HurtboxManager : MonoBehaviour
 {
     public List<GameObject> hurtboxes;
-    public List<SpriteRenderer> sprites;
+    public List<Material> spriteMaterials;
     public int layer;
 
-    public Color color;
-    bool flash;
+    private const string SHADER_COLOR_NAME = "_Color";
     
     // Start is called before the first frame update
     void Start()
     {
         hurtboxes = new List<GameObject>();
-        sprites = new List<SpriteRenderer>();
+        spriteMaterials = new List<Material>();
         Transform[] list = GetComponentsInChildren<Transform>();
         foreach (Transform trans in list) {
             if (trans.gameObject.tag == "Hurtbox") {
                 hurtboxes.Add(trans.gameObject);
-                sprites.Add(trans.gameObject.GetComponent<SpriteRenderer>());
+                spriteMaterials.Add(trans.gameObject.GetComponent<SpriteRenderer>().material);
             }
         }
     }
@@ -28,18 +27,7 @@ public class HurtboxManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateFlashingAnimation();
-    }
-
-    void UpdateFlashingAnimation() {
-        if (flash) {
-            ChangeSpriteColor(color);
-            flash = false;
-        }
-        else {
-            ChangeSpriteColor(Color.white);
-            flash = true;
-        }
+        
     }
 
     public void SetIntangible(bool intangible) {
@@ -53,19 +41,33 @@ public class HurtboxManager : MonoBehaviour
         }
     }
 
-    void SetHurtboxLayer(int layerMask) {
+    public void SetHurtboxLayer(int layerMask) {
         foreach (GameObject hurtbox in hurtboxes) {
             hurtbox.layer = layerMask;
         }
     }
 
-    public void Flash(Color color) {
-        
+    public void ChangeSpriteColor(Color color) {
+        foreach (Material material in spriteMaterials) {
+            material.SetColor(SHADER_COLOR_NAME, color);
+        }
     }
 
-    void ChangeSpriteColor(Color color) {
-        foreach (SpriteRenderer sprite in sprites) {
-            sprite.color = color;
+    public void StartFlashing(Color color1, Color color2, float tick) {
+        StartCoroutine(FlashRoutine(color1, color2, tick));
+    }
+
+    public void StopFlashing() {
+        StopAllCoroutines();
+        ChangeSpriteColor(new Color(1, 1, 1, 0));
+    }
+
+    IEnumerator FlashRoutine(Color color1, Color color2, float tick) {
+        while (true) {
+            ChangeSpriteColor(color1);
+            yield return new WaitForSeconds(tick);
+            ChangeSpriteColor(color2);
+            yield return new WaitForSeconds(tick);
         }
     }
 }

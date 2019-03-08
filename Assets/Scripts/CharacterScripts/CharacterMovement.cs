@@ -42,6 +42,7 @@ public class CharacterMovement : MonoBehaviour
     protected bool isWalking;
     protected bool isDashing;
     protected bool isCrouching;
+    protected GameObject currentPlatform;
 
     //Air Movement Variables
     public float maxAirSpeed;
@@ -58,7 +59,6 @@ public class CharacterMovement : MonoBehaviour
 
     //Jump Variables
     public int jumpSquatFrame;
-    protected int jumpFrameLeft;
     protected bool isJumpSquatting;
     public float shortHopHeight;
     public float fullHopHeight;
@@ -68,7 +68,7 @@ public class CharacterMovement : MonoBehaviour
     protected bool jumpBuffered;
     protected bool jumpButtonHeld;
     public int jumpBufferFrame;
-    protected int jumpBufferFrameLeft;
+    protected Coroutine JumpBufferCoroutine;
     public bool canJumpChangeDirection;
     
     // Start is called before the first frame update
@@ -111,8 +111,6 @@ public class CharacterMovement : MonoBehaviour
     protected virtual void InitializeVariables() {
         movementEnabled = true;
         enableAirDeceleration = true;
-        jumpFrameLeft = jumpSquatFrame;
-        jumpBufferFrameLeft = jumpBufferFrame;
         doubleJumpLeft = doubleJumpCount;
     }
 
@@ -123,13 +121,26 @@ public class CharacterMovement : MonoBehaviour
     }
 
     protected virtual void UpdateInput() {
-        if (jumpBuffered) {
-            jumpBufferFrameLeft--;
-            if (jumpBufferFrameLeft < 0) {
-                jumpBufferFrameLeft = jumpBufferFrame;
-                jumpBuffered = false;
-            }
+        
+    }
+
+    IEnumerator JumpBuffer(int jumpBufferFrame) {
+        int jumpBufferFrameLeft = 0;
+        while (jumpBufferFrameLeft < jumpBufferFrame) {
+            jumpBufferFrameLeft++;
+            yield return null;
         }
+        jumpBuffered = false;
+    }
+
+    IEnumerator JumpSquat(int jumpSquatFrame) {
+        int jumpSquatFrameLeft = 0;
+        while (jumpSquatFrameLeft < jumpSquatFrame) {
+            jumpSquatFrameLeft++;
+            yield return null;
+        }
+        isJumpSquatting = false;
+        Jump(jumpButtonHeld ? Stats.FullHopHeight : Stats.ShortHopHeight);
     }
 
     void FixedUpdate() {
@@ -159,10 +170,12 @@ public class CharacterMovement : MonoBehaviour
             //Restore Double Jumps
             doubleJumpLeft = doubleJumpCount;
             isFastFalling = false;
+            velocity = new Vector2 (velocity.x, 0.0f);
         }
-
-        //Falling Speed Update
-        UpdateFallSpeed();
+        else {
+            //Falling Speed Update
+            UpdateFallSpeed();
+        }
     }
 
     protected virtual void UpdateFallSpeed() {
@@ -215,32 +228,24 @@ public class CharacterMovement : MonoBehaviour
                     GetTargetVelocity(velocity.x, 0.0f, Stats.GroundDecelerationRate)
                     : GetTargetVelocity(velocity.x, mainJoystick.x * Stats.MaxWalkSpeed, Stats.WalkAccelerationRate);
 
-                //Prevent Walk Off Ledge Update
-                if (Mathf.Abs(mainJoystick.x) >= preventWalkOffLedgeThreshold) {
-                    SetPreventWalkOffLedge(false);
-                }
-                else {
-                    SetPreventWalkOffLedge(true);
-                }
+                
             }
         }
         velocity = new Vector2 (targetGroundVelocity, velocity.y);
+        SetPreventWalkOffLedge(true);
+        //Prevent Walk Off Ledge Update
+        
+        if (preventWalkOffLedge) {
+            LedgeCheck();
+        }
     }
 
     protected virtual void UpdateGroundJumpMovement() {
         //Jump
         if (jumpBuffered && !isBusy && !ignoreInput) {
             isJumpSquatting = true;
-            jumpBufferFrameLeft = jumpBufferFrame;
             jumpBuffered = false;
-        }
-        if (isJumpSquatting) {
-            jumpFrameLeft--;
-            if (jumpFrameLeft < 0) {
-                Jump(jumpButtonHeld ? Stats.FullHopHeight : Stats.ShortHopHeight);
-                jumpFrameLeft = jumpSquatFrame;
-                isJumpSquatting = false;
-            }
+            StartCoroutine(JumpSquat(jumpSquatFrame));
         }
     }
 
@@ -265,7 +270,6 @@ public class CharacterMovement : MonoBehaviour
             if (doubleJumpLeft > 0) {
                 DoubleJump(Stats.DoubleJumpHeight);
                 doubleJumpLeft--;
-                jumpBufferFrameLeft = jumpBufferFrame;
                 jumpBuffered = false;
             }
         }
@@ -335,6 +339,7 @@ public class CharacterMovement : MonoBehaviour
     public void Jump() {
         //Buffer jump
         jumpBuffered = true;
+        StartCoroutine(JumpBuffer(jumpBufferFrame));
     }
 
     public void JumpHold(bool holdingJump) {
@@ -443,71 +448,53 @@ public class CharacterMovement : MonoBehaviour
         //Debug.Log(GetFeetPosition());
         if (velocity.y > 0) return false;
         RaycastHit2D centerRay = Physics2D.Raycast(GetFeetPosition(), -Vector2.up, 0.1f, groundLayerMask);
-        RaycastHit2D leftRay = Physics2D.Raycast(GetFeetPosition(-col.size.x / 2.0f, 0), -Vector2.up, 0.1f, groundLayerMask);
-        RaycastHit2D rightRay = Physics2D.Raycast(GetFeetPosition(col.size.x / 2.0f, 0), -Vector2.up, 0.1f, groundLayerMask);
-        return centerRay && leftRay && rightRay;
-        //return centerRay;
+        Debug.DrawRay(GetFeetPosition(), -Vector2.up * 0.1f, debugColor);
+        return centerRay;
     }
 
     protected void PlatformCheck() {
         //if (rb.velocity.y > 0) return;
         RaycastHit2D centerRay = Physics2D.Raycast(GetFeetPosition(), -Vector2.up, 50, groundLayerMask);
-        RaycastHit2D leftRay = Physics2D.Raycast(GetFeetPosition(-col.size.x / 2.0f, 0), -Vector2.up, 50, groundLayerMask);
-        RaycastHit2D rightRay = Physics2D.Raycast(GetFeetPosition(col.size.x / 2.0f, 0), -Vector2.up, 50, groundLayerMask);
-        if (!(centerRay && leftRay && rightRay)) return;
-        if (centerRay.collider.gameObject == leftRay.collider.gameObject && centerRay.collider.gameObject == rightRay.collider.gameObject) {
-            if (centerRay.collider.gameObject.tag == "Platform") {
-                if (isFallingThrough) {
-                    centerRay.collider.gameObject.GetComponent<IPlatform>().IgnorePlatformCollision(col, true);
-                }
-                else {
-                    centerRay.collider.gameObject.GetComponent<IPlatform>().IgnorePlatformCollision(col, false);
-                }
-                if (preventWalkOffLedge && !isDashing && isGrounded) {
-                    centerRay.collider.gameObject.GetComponent<IPlatform>().IgnoreEdgeCollision(col, false);
-                }
-                else {
-                    centerRay.collider.gameObject.GetComponent<IPlatform>().IgnoreEdgeCollision(col, true);
-                }
-            }
-            else if (centerRay.collider.gameObject.tag == "Ground") {
-                centerRay.collider.gameObject.GetComponent<IPlatform>().IgnorePlatformCollision(col, false);
-                if (preventWalkOffLedge && !isDashing && isGrounded) {
-                    centerRay.collider.gameObject.GetComponent<IPlatform>().IgnoreEdgeCollision(col, false);
-                }
-                else {
-                    centerRay.collider.gameObject.GetComponent<IPlatform>().IgnoreEdgeCollision(col, true);
-                }
+        //If the platform the raycast is looking at changes, ignore collision with the old platform and collide with the new one
+        if (!centerRay && currentPlatform != null) {
+            currentPlatform.GetComponent<IGround>().IgnoreCollision(col, true);
+            currentPlatform = null;
+        }
+        else if (centerRay && currentPlatform == null) {
+            centerRay.collider.gameObject.GetComponent<IGround>().IgnoreCollision(col, false);
+            currentPlatform = centerRay.collider.gameObject;
+        }
+        else if (centerRay && currentPlatform != null) {
+            if (!currentPlatform.Equals(centerRay.collider.gameObject)) {
+                currentPlatform.GetComponent<IGround>().IgnoreCollision(col, true);
+                centerRay.collider.gameObject.GetComponent<IGround>().IgnoreCollision(col, false);
+                currentPlatform = centerRay.collider.gameObject;
             }
         }
-        else {
-            if (centerRay.collider.gameObject.tag == "Platform") {
-                centerRay.collider.gameObject.GetComponent<IPlatform>().IgnoreAllCollision(col, true);
-            }
-            if (leftRay.collider.gameObject.tag == "Platform") {
-                leftRay.collider.gameObject.GetComponent<IPlatform>().IgnoreAllCollision(col, true);
-            }
-            if (rightRay.collider.gameObject.tag == "Platform") {
-                rightRay.collider.gameObject.GetComponent<IPlatform>().IgnoreAllCollision(col, true);
-            }
-        }
+        //Debug.Log(currentPlatform != null? currentPlatform.name : "None");
     }
 
-    protected void LedgeCheck(float offset) {
+    protected void LedgeCheck() {
         if (!isGrounded) return;
-        Debug.Log("Ledge Checking");
-        RaycastHit2D leftRay = Physics2D.Raycast(GetFeetPosition((-col.size.x / 2.0f) * ledgeDetectionRatio + offset, 0), -Vector2.up, 0.1f, groundLayerMask);
-        RaycastHit2D rightRay = Physics2D.Raycast(GetFeetPosition((col.size.x / 2.0f) * ledgeDetectionRatio + offset, 0), -Vector2.up, 0.1f, groundLayerMask);
-        isOnLeftLedge = !leftRay;
-        isOnRightLedge = !rightRay;
+        RaycastHit2D centerRay = Physics2D.Raycast(GetFeetPosition(velocity * Time.fixedDeltaTime), -Vector2.up, 0.1f, groundLayerMask);
+        Debug.DrawRay(GetFeetPosition(velocity * Time.fixedDeltaTime), -Vector2.up * 0.1f, debugColor);
+        //If the platform the raycast is looking at is different, stop movement off the ledge
+        if (!centerRay && currentPlatform != null) {
+            velocity = Vector2.zero;
+        }
+        else if (centerRay && currentPlatform != null) {
+            if (!currentPlatform.Equals(centerRay.collider.gameObject)) {
+                velocity = Vector2.zero;
+            }
+        }
     }
 
     protected Vector2 GetFeetPosition() {
         return new Vector2(trans.position.x, trans.position.y + col.offset.y - col.size.y / 2.0f);
     }
 
-    protected Vector2 GetFeetPosition(float offsetX, float offsetY) {
-        return new Vector2(trans.position.x + offsetX, trans.position.y + col.offset.y - col.size.y / 2.0f + offsetY);
+    protected Vector2 GetFeetPosition(Vector2 offset) {
+        return new Vector2(trans.position.x + offset.x, trans.position.y + col.offset.y - col.size.y / 2.0f + offset.y);
     }
 
     protected virtual void Jump(float jumpHeight) {

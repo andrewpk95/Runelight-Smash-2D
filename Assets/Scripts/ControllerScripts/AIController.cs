@@ -20,7 +20,6 @@ public class AIController : MonoBehaviour, IController
     // Update is called once per frame
     void Update()
     {
-        
         character.ActionInput(actionInput);
     }
 }

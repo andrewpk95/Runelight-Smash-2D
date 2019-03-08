@@ -21,6 +21,10 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
     public bool IsInvulnerable {get {return isInvulnerable;} set {isInvulnerable = value;}}
     public bool IsIntangible {get {return isIntangible;} set {isIntangible = value;}}
 
+    public Color intangibleColor1;
+    public Color intangibleColor2;
+    public float flashTick;
+
     protected int hitStunFrameLeft;
     protected int freezeFrameLeft;
     protected Vector2 storedVelocity;
@@ -143,11 +147,13 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
     public void SetIntangible() {
         IsIntangible = true;
         hurtbox.SetIntangible(true);
+        hurtbox.StartFlashing(intangibleColor1, intangibleColor2, flashTick);
     }
 
     public void SetTangible() {
         IsIntangible = false;
         hurtbox.SetIntangible(false);
+        hurtbox.StopFlashing();
     }
     /*
     public void HitStun(float duration) {
