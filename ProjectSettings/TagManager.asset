@@ -11,6 +11,8 @@ TagManager:
   - Platform
   - Ground
   - Entity
+  - Edge
+  - EdgeHitbox
   layers:
   - Default
   - TransparentFX
@@ -34,8 +36,8 @@ TagManager:
   - IntangibleHurtbox
   - Ledge
   - GroundAndAerialHitbox
-  - 
-  - 
+  - ShieldHurtbox
+  - LedgeHitbox
   - 
   - 
   - 

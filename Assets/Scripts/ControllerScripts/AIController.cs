@@ -14,12 +14,14 @@ public class AIController : MonoBehaviour, IController
     {
         //Initialize character
         character = fighter.GetComponent<ICharacter>();
-        actionInput = new ActionInput(InputType.Attack, InputDirection.Up, InputStrength.Strong);
+        //actionInput = new ActionInput(InputType.Grab);
+        actionInput = new ActionInput(InputType.Attack, InputDirection.Left, InputStrength.Strong);
     }
 
     // Update is called once per frame
     void Update()
     {
         character.ActionInput(actionInput);
+        
     }
 }

@@ -1,26 +1,66 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FighterController : CharacterMovement
 {
     protected Animator animator;
+    protected StatusManager statusManager;
+    protected HurtboxManager hurtbox;
+    protected EventManager eventManager;
+
+    public bool isBusy;
     
     public bool isJabbing;
     public bool canJab;
 
-    public bool isTumbling;
-    public bool isTumbled;
+    [SerializeField] protected bool isHelpless;
+    public bool IsHelpless {get {return isHelpless;} set {isHelpless = value;}}
+    protected IStatus helplessStatus;
+    [SerializeField] protected bool isTumbling;
+    public bool IsTumbling {get {return isTumbling;} set {isTumbling = value;}}
+    protected IStatus tumblingStatus;
+    [SerializeField] protected bool isTumbled;
+    public bool IsTumbled {get {return isTumbled;} set {isTumbled = value;}}
+    protected Coroutine TumbleDurationCoroutine;
+    public const int TUMBLE_MAXIMUM_DURATION_FRAME = 180;
+    [SerializeField] protected bool isTeching;
+    public bool IsTeching {get {return isTeching;} set {isTeching = value;}}
+    protected Coroutine TechWindowDurationCoroutine;
+    public const int TECH_WINDOW_FRAME = 11;
 
     public bool isShielding;
     public bool isRollingForward;
     public bool isRollingBackward;
     public float rollSpeed;
+    protected IStatus movementStatus;
     
+    protected BoolStat canBeGrabbed;
+    public bool CanBeGrabbed {get {return canBeGrabbed.stat;} set {canBeGrabbed.Switch(value);}}
     public bool isGrabbing;
     public bool isGrabbed;
     public GameObject grabbingFighter;
+    public GameObject grabber;
+    public Transform grabTransform;
+    protected int grabDurationLeft;
+    protected Coroutine GrabDurationCoroutine;
+    public const int GRAB_MAXIMUM_DURATION_FRAME = 180;
+    protected IStatus grabImmuneStatus;
+    public const int GRAB_IMMUNE_FRAME = 70;
 
+    protected BoolStat canGrabEdge;
+    public bool CanGrabEdge {get {return canGrabEdge.stat;} set {canGrabEdge.Switch(value);}}
+    public bool isGrabbingEdge;
+    public GameObject grabbingEdge;
+    public Transform edgeGrabTransform;
+    public Collider2D edgeHitbox;
+    protected int edgeGrabDurationLeft;
+    protected Coroutine EdgeGrabDurationCoroutine;
+    public const int EDGE_GRAB_MAXIMUM_DURATION_FRAME = 300;
+    protected IStatus edgeGrabImmuneStatus;
+    public const int EDGE_GRAB_IMMUNE_FRAME = 10;
+    
     //Action Buffer Queue Veriables
     public int actionBufferFrame;
     protected bool isActionBuffered;
@@ -36,9 +76,21 @@ public class FighterController : CharacterMovement
     protected override void InitializeComponents() {
         base.InitializeComponents();
         animator = GetComponent<Animator>();
+        statusManager = GetComponent<StatusManager>();
+        hurtbox = GetComponentInChildren<HurtboxManager>();
+        eventManager = (EventManager) GameObject.FindObjectOfType(typeof(EventManager));
+        eventManager.StartListeningToOnHitStunEvent(new UnityAction<IAttackHitbox, GameObject>(OnHitStun));
+        eventManager.StartListeningToOnGrabEvent(new UnityAction<GameObject, GameObject>(OnGrab));
+        eventManager.StartListeningToOnEdgeGrabEvent(new UnityAction<GameObject, GameObject>(OnEdgeGrab));
     }
 
     protected override void InitializeVariables() {
+        canBeGrabbed = new BoolStat(true);
+        grabImmuneStatus = new GrabImmuneStatus(GRAB_IMMUNE_FRAME);
+        canGrabEdge = new BoolStat(true);
+        edgeGrabImmuneStatus = new EdgeGrabImmuneStatus(EDGE_GRAB_IMMUNE_FRAME);
+        tumblingStatus = new TumblingStatus();
+        helplessStatus = new HelplessStatus(0.7f);
         base.InitializeVariables();
     }
 
@@ -54,17 +106,52 @@ public class FighterController : CharacterMovement
     }
 
     protected override void Tick() {
-        if (isRollingForward) {
-            overridingVelocity = new Vector2(isFacingRight ? rollSpeed : -rollSpeed, 0);
-        }
-        if (isRollingBackward) {
-            overridingVelocity = new Vector2(isFacingRight ? -rollSpeed : rollSpeed, 0);
-        }
         base.Tick();
+        edgeHitbox.enabled = !isBusy && !isGrabbingEdge && CanGrabEdge && velocity.y < 0;
+    }
+
+    protected override void UpdatePhysics() {
+        if (isGrabbingEdge) return;
+        base.UpdatePhysics();
+    }
+
+    protected override void UpdateMovement() {
+        if (isGrabbingEdge) return;
+        base.UpdateMovement();
+    }
+
+    protected override void UpdateGroundMovement() {
+        //Ignore Joystick Input if busy
+        if (isBusy) {
+            mainJoystick = Vector2.zero;
+        }
+        base.UpdateGroundMovement();
+    }
+
+    protected override void UpdateGroundJumpMovement() {
+        if (isBusy) return;
+        if (isShielding) return;
+        if (isGrabbing) return;
+        if (isGrabbed) return;
+        base.UpdateGroundJumpMovement();
+    }
+
+    protected override void UpdateAirJumpMovement() {
+        if (isBusy) return;
+        base.UpdateAirJumpMovement();
+    }
+
+    protected override void UpdateFacingDirection() {
+        if (isBusy) return;
+        if (isShielding) return;
+        if (isGrabbing) return;
+        if (isGrabbed) return;
+        base.UpdateFacingDirection();
     }
 
     protected override void UpdateInput() {
         base.UpdateInput();
+        //if (isShielding) IgnoreMainJoystick(true);
         //Update Action Buffer
         if (actionInputQueue != null) {
             //Special case for jab
@@ -102,9 +189,13 @@ public class FighterController : CharacterMovement
 
     protected virtual void UpdateAnimation() {
         animator.SetBool("isBusy", isBusy);
-        animator.SetBool("isGrounded", isGrounded);
+        animator.SetBool("isGrounded", IsGrounded);
         animator.SetBool("isJabbing", isJabbing);
         animator.SetBool("isShielding", isShielding);
+        animator.SetBool("isGrabbing", isGrabbing);
+        animator.SetBool("isGrabbed", isGrabbed);
+        animator.SetBool("isHelpless", IsHelpless);
+        animator.SetBool("isTumbling", IsTumbling);
         if (!isBusy) {
             animator.SetBool("isJumpSquatting", isJumpSquatting);
             if (isGrounded) {
@@ -121,212 +212,193 @@ public class FighterController : CharacterMovement
     }
 
     protected virtual void ProcessActionInput() {
-        if (actionInputQueue.inputType == InputType.Special) {
-            ProcessSpecialInput();
+        //If Ignore Input, return
+        if (ignoreInput.stat) return;
+        //If grabbed, consume action input into mashing
+        if (isGrabbed) {
+            MashFromGrab();
             return;
         }
-        //Grounded Actions
-        if (isGrounded) {
-            //Ground Attack Actions
-            switch (actionInputQueue.inputType) {
-            case InputType.Attack:
-                //Dash Attack
-                if (isDashing) {
-                    animator.SetTrigger("DashAttack");
-                    return;
-                }
-                //Grab Pummel
-                if (isGrabbing) {
-                    animator.SetTrigger("GrabPummel");
-                    return;
-                }
-                switch (actionInputQueue.inputStrength) {
-                //Jab
-                case InputStrength.None:
-                    animator.SetTrigger("Jab");
-                    return;
-                //Tilts
-                case InputStrength.Weak:
-                    switch (actionInputQueue.inputDirection) {
-                    case InputDirection.Right:
-                        isFacingRight = true;
-                        FlipCheck();
-                        animator.SetTrigger("ForwardTilt");
-                        return;
-                    case InputDirection.Left:
-                        isFacingRight = false;
-                        FlipCheck();
-                        animator.SetTrigger("ForwardTilt");
-                        return;
-                    case InputDirection.Up:
-                        animator.SetTrigger("UpTilt");
-                        return;
-                    case InputDirection.Down:
-                        animator.SetTrigger("DownTilt");
-                        return;
-                    }
-                    break;
-                //Smashes
-                case InputStrength.Strong:
-                    switch (actionInputQueue.inputDirection) {
-                    case InputDirection.Right:
-                        isFacingRight = true;
-                        FlipCheck();
-                        animator.SetTrigger("ForwardSmash");
-                        return;
-                    case InputDirection.Left:
-                        isFacingRight = false;
-                        FlipCheck();
-                        animator.SetTrigger("ForwardSmash");
-                        return;
-                    case InputDirection.Up:
-                        animator.SetTrigger("UpSmash");
-                        return;
-                    case InputDirection.Down:
-                        animator.SetTrigger("DownSmash");
-                        return;
-                    }
-                    break;
-                }
-                break;
-            //Ground Special Actions
-            case InputType.Special:
-                ProcessSpecialInput();
-                break;
-            //Ground Shield Actions
-            case InputType.Shield:
-                switch (actionInputQueue.inputStrength) {
-                //Shield
-                case InputStrength.None:
-                    isShielding = true;
-                    return;
-                //Dodge Movements
-                default:
-                    switch (actionInputQueue.inputDirection) {
-                    case InputDirection.Right:
-                        if (isFacingRight) animator.SetTrigger("RollForward");
-                        else animator.SetTrigger("RollBackward");
-                        return;
-                    case InputDirection.Left:
-                        if (isFacingRight) animator.SetTrigger("RollBackward");
-                        else animator.SetTrigger("RollForward");
-                        return;
-                    case InputDirection.Up:
-                        Jump();
-                        return;
-                    case InputDirection.Down:
-                        animator.SetTrigger("SpotDodge");
-                        return;
-                    }
-                    break;
-                }
-                break;
-            //Ground Grab Actions
-            case InputType.Grab:
-                switch (actionInputQueue.inputStrength) {
-                //Grab
-                case InputStrength.None:
-                    animator.SetTrigger("Grab");
-                    return;
-                //Directional Grab
-                default:
-                    switch (actionInputQueue.inputDirection) {
-                    case InputDirection.Right:
-                        isFacingRight = true;
-                        FlipCheck();
-                        animator.SetTrigger("Grab");
-                        return;
-                    case InputDirection.Left:
-                        isFacingRight = false;
-                        FlipCheck();
-                        animator.SetTrigger("Grab");
-                        return;
-                    default:
-                        animator.SetTrigger("Grab");
-                        break;
-                    }
-                    break;
-                }
-                break;
+        //Attack Actions
+        switch (actionInputQueue.inputType) {
+        case InputType.Attack:
+            ProcessAttackInput();
+            break;
+        //Special Actions
+        case InputType.Special:
+            ProcessSpecialInput();
+            break;
+        //Shield Actions
+        case InputType.Shield:
+            ProcessShieldInput();
+            break;
+        //Grab Actions
+        case InputType.Grab:
+            ProcessGrabInput();
+            break;
+        //Direction Input Actions
+        case InputType.Direction:
+            ProcessDirectionInput();
+            break;
+        }
+    }
+
+    protected virtual void IgnoreActionInput() {
+        ClearActionBuffer();
+    }
+
+    protected virtual void ProcessAttackInput() {
+        //Cannot attack out of shield
+        if (isShielding) {
+            IgnoreActionInput();
+            return;
+        }
+        //Grab Pummel
+        if (isGrabbing) {
+            Pummel();
+            return;
+        }
+        //If the fighter is grabbing onto ledge, perform getup attack
+        if (isGrabbingEdge) {
+            animator.SetTrigger("EdgeGetupAttack");
+            StopCoroutine(EdgeGrabDurationCoroutine);
+            return;
+        }
+        //Shake out of tumbling state when performing the attack
+        if (IsTumbling) {
+            statusManager.RemoveStatus(tumblingStatus);
+            IsTumbling = false;
+        }
+        //If the fighter is tumbled on the floor, perform getup attack
+        if (IsTumbled) {
+            animator.SetTrigger("GetupAttack");
+            StopCoroutine(TumbleDurationCoroutine);
+            UnTumble();
+            return;
+        }
+        //Main
+        if (IsGrounded) {
+            ProcessGroundAttackInput();
+        }
+        else {
+            ProcessAerialAttackInput();
+        }
+    }
+
+    protected virtual void Pummel() {
+        animator.SetTrigger("Pummel");
+    }
+
+    protected virtual void ProcessShieldInput() {
+        if (IsTumbling) {
+            if (!IsTeching) {
+                IsTeching = true;
+                TechWindowDurationCoroutine = StartCoroutine(TechWindowDuration(TECH_WINDOW_FRAME));
             }
         }
-        //Aerial Actions
+        if (isGrabbing) {
+            return;
+        }
+        if (isGrabbingEdge) {
+            animator.SetTrigger("EdgeRollGetup");
+            StopCoroutine(EdgeGrabDurationCoroutine);
+        }
+        if (IsTumbling) {
+            statusManager.RemoveStatus(tumblingStatus);
+            IsTumbling = false;
+        }
+        if (IsTumbled) {
+            animator.SetTrigger("NeutralGetup");
+            StopCoroutine(TumbleDurationCoroutine);
+            UnTumble();
+            return;
+        }
+        //Main
+        if (IsGrounded) {
+            ProcessGroundShieldInput();
+        }
         else {
-            //Aerial Attack Actions
-            switch (actionInputQueue.inputType) {
-            case InputType.Attack:
-                switch (actionInputQueue.inputStrength) {
-                //Neutral Air
-                case InputStrength.None:
-                    animator.SetTrigger("NeutralAir");
-                    return;
-                //Directional Air Attacks
-                default:
-                    switch (actionInputQueue.inputDirection) {
-                    case InputDirection.Right:
-                        if (isFacingRight) {
-                            animator.SetTrigger("ForwardAir");
-                            return;
-                        }
-                        animator.SetTrigger("BackAir");
-                        return;
-                    case InputDirection.Left:
-                        if (isFacingRight) {
-                            animator.SetTrigger("BackAir");
-                            return;
-                        }
-                        animator.SetTrigger("ForwardAir");
-                        return;
-                    case InputDirection.Up:
-                        animator.SetTrigger("UpAir");
-                        return;
-                    case InputDirection.Down:
-                        animator.SetTrigger("DownAir");
-                        return;
-                    }
-                    break;
-                }
-                break;
-            //Aerial Special Actions
-            case InputType.Special:
-                ProcessSpecialInput();
-                break;
-            //Aerial Shield Actions
-            case InputType.Shield:
-                switch (actionInputQueue.inputStrength) {
-                //Air Dodge
-                case InputStrength.None:
-                    animator.SetTrigger("AirDodge");
-                    return;
-                //Directional Air Dodge
-                default:
-                    switch (actionInputQueue.inputDirection) {
-                    case InputDirection.Right:
-                        animator.SetTrigger("AirDodge");
-                        return;
-                    case InputDirection.Left:
-                        animator.SetTrigger("AirDodge");
-                        return;
-                    case InputDirection.Up:
-                        animator.SetTrigger("AirDodge");
-                        return;
-                    case InputDirection.Down:
-                        animator.SetTrigger("AirDodge");
-                        return;
-                    }
-                    break;
-                }
-                break;
-            //Aerial Grab Actions
-            case InputType.Grab:
-                //Zair
-                animator.SetTrigger("Zair");
+            ProcessAerialShieldInput();
+        }
+    }
+
+    protected virtual void ProcessGroundAttackInput() {
+        //Dash Attack
+        if (isDashing) {
+            animator.SetTrigger("DashAttack");
+            return;
+        }
+        switch (actionInputQueue.inputStrength) {
+        //Jab
+        case InputStrength.None:
+            animator.SetTrigger("Jab");
+            return;
+        //Tilts
+        case InputStrength.Weak:
+            switch (actionInputQueue.inputDirection) {
+            case InputDirection.Right:
+                isFacingRight = true;
+                FlipCheck();
+                animator.SetTrigger("ForwardTilt");
+                return;
+            case InputDirection.Left:
+                isFacingRight = false;
+                FlipCheck();
+                animator.SetTrigger("ForwardTilt");
+                return;
+            case InputDirection.Up:
+                animator.SetTrigger("UpTilt");
+                return;
+            case InputDirection.Down:
+                animator.SetTrigger("DownTilt");
                 return;
             }
+            break;
+        //Smashes
+        case InputStrength.Strong:
+            switch (actionInputQueue.inputDirection) {
+            case InputDirection.Right:
+                isFacingRight = true;
+                FlipCheck();
+                animator.SetTrigger("ForwardSmash");
+                return;
+            case InputDirection.Left:
+                isFacingRight = false;
+                FlipCheck();
+                animator.SetTrigger("ForwardSmash");
+                return;
+            case InputDirection.Up:
+                animator.SetTrigger("UpSmash");
+                return;
+            case InputDirection.Down:
+                animator.SetTrigger("DownSmash");
+                return;
+            }
+            break;
         }
     }
 
     protected virtual void ProcessSpecialInput() {
+        if (isShielding) {
+            IgnoreActionInput();
+            return;
+        }
+        if (isGrabbingEdge) return;
+        if (IsTumbling) {
+            statusManager.RemoveStatus(tumblingStatus);
+            IsTumbling = false;
+        }
+        if (IsTumbled) {
+            animator.SetTrigger("GetupAttack");
+            StopCoroutine(TumbleDurationCoroutine);
+            UnTumble();
+            return;
+        }
+        //Grab Pummel
+        if (isGrabbing) {
+            animator.SetTrigger("Pummel");
+            return;
+        }
         switch (actionInputQueue.inputStrength) {
         //Neutral Special
         case InputStrength.None:
@@ -338,18 +410,261 @@ public class FighterController : CharacterMovement
             case InputDirection.Right:
                 isFacingRight = true;
                 FlipCheck();
-                animator.SetTrigger("SideSpecial");
+                SideSpecial();
                 return;
             case InputDirection.Left:
                 isFacingRight = false;
                 FlipCheck();
-                animator.SetTrigger("SideSpecial");
+                SideSpecial();
                 return;
             case InputDirection.Up:
                 animator.SetTrigger("UpSpecial");
                 return;
             case InputDirection.Down:
                 animator.SetTrigger("DownSpecial");
+                return;
+            }
+            break;
+        }
+    }
+
+    protected virtual void SideSpecial() {
+        animator.SetTrigger("SideSpecial");
+    }
+
+    protected virtual void ProcessGroundShieldInput() {
+        switch (actionInputQueue.inputStrength) {
+        //Shield
+        case InputStrength.None:
+            isShielding = true;
+            return;
+        //Dodge Movements
+        default:
+            switch (actionInputQueue.inputDirection) {
+            case InputDirection.Right:
+                if (isFacingRight) animator.SetTrigger("RollForward");
+                else animator.SetTrigger("RollBackward");
+                return;
+            case InputDirection.Left:
+                if (isFacingRight) animator.SetTrigger("RollBackward");
+                else animator.SetTrigger("RollForward");
+                return;
+            case InputDirection.Up:
+                Jump();
+                return;
+            case InputDirection.Down:
+                animator.SetTrigger("SpotDodge");
+                return;
+            }
+            break;
+        }
+    }
+
+    protected virtual void ProcessGrabInput() {
+        if (isGrabbingEdge) return;
+        //Grab Pummel
+        if (isGrabbing) {
+            animator.SetTrigger("Pummel");
+            return;
+        }
+        if (IsTumbling) {
+            statusManager.RemoveStatus(tumblingStatus);
+            IsTumbling = false;
+        }
+        if (IsTumbled) {
+            animator.SetTrigger("GetupAttack");
+            StopCoroutine(TumbleDurationCoroutine);
+            UnTumble();
+            return;
+        }
+        if (IsGrounded) {
+            ProcessGroundGrabInput();
+        }
+        else {
+            ProcessAerialGrabInput();
+        }
+    }
+
+    protected virtual void ProcessGroundGrabInput() {
+        switch (actionInputQueue.inputStrength) {
+        //Grab
+        case InputStrength.None:
+            animator.SetTrigger("Grab");
+            return;
+        //Directional Grab
+        default:
+            switch (actionInputQueue.inputDirection) {
+            case InputDirection.Right:
+                isFacingRight = true;
+                FlipCheck();
+                animator.SetTrigger("Grab");
+                return;
+            case InputDirection.Left:
+                isFacingRight = false;
+                FlipCheck();
+                animator.SetTrigger("Grab");
+                return;
+            default:
+                animator.SetTrigger("Grab");
+                break;
+            }
+            break;
+        }
+    }
+
+    protected virtual void ProcessAerialGrabInput() {
+        animator.SetTrigger("Zair");
+    }
+
+    protected virtual void ProcessDirectionInput() {
+        //Roll Actions
+        if (isShielding) {
+            switch (actionInputQueue.inputDirection) {
+            case InputDirection.Right:
+                if (isFacingRight) animator.SetTrigger("RollForward");
+                else animator.SetTrigger("RollBackward");
+                return;
+            case InputDirection.Left:
+                if (isFacingRight) animator.SetTrigger("RollBackward");
+                else animator.SetTrigger("RollForward");
+                return;
+            case InputDirection.Up:
+                Jump();
+                return;
+            case InputDirection.Down:
+                animator.SetTrigger("SpotDodge");
+                return;
+            }
+        }
+        //Throw Actions
+        if (isGrabbing) {
+            switch (actionInputQueue.inputDirection) {
+            case InputDirection.Right:
+                if (isFacingRight) animator.SetTrigger("ForwardThrow");
+                else animator.SetTrigger("BackThrow");
+                StopCoroutine(GrabDurationCoroutine);
+                break;
+            case InputDirection.Left:
+                if (isFacingRight) animator.SetTrigger("BackThrow");
+                else animator.SetTrigger("ForwardThrow");
+                StopCoroutine(GrabDurationCoroutine);
+                break;
+            case InputDirection.Up:
+                animator.SetTrigger("UpThrow");
+                StopCoroutine(GrabDurationCoroutine);
+                break;
+            case InputDirection.Down:
+                animator.SetTrigger("DownThrow");
+                StopCoroutine(GrabDurationCoroutine);
+                break;
+            }
+        }
+        //Edge Getup Actions
+        if (isGrabbingEdge) {
+            switch (actionInputQueue.inputDirection) {
+            case InputDirection.Right:
+                if (isFacingRight) animator.SetTrigger("EdgeNeutralGetup");
+                else ReleaseEdge();
+                StopCoroutine(EdgeGrabDurationCoroutine);
+                break;
+            case InputDirection.Left:
+                if (isFacingRight) ReleaseEdge();
+                else animator.SetTrigger("EdgeNeutralGetup");
+                StopCoroutine(EdgeGrabDurationCoroutine);
+                break;
+            case InputDirection.Up:
+                animator.SetTrigger("EdgeJumpGetup");
+                StopCoroutine(EdgeGrabDurationCoroutine);
+                break;
+            case InputDirection.Down:
+                ReleaseEdge();
+                StopCoroutine(EdgeGrabDurationCoroutine);
+                break;
+            }
+        }
+        //Getup Actions
+        if (IsTumbled) {
+            switch (actionInputQueue.inputDirection) {
+            case InputDirection.Right:
+                if (isFacingRight) animator.SetTrigger("RollForwardGetup");
+                else animator.SetTrigger("RollBackwardGetup");
+                StopCoroutine(TumbleDurationCoroutine);
+                UnTumble();
+                break;
+            case InputDirection.Left:
+                if (isFacingRight) animator.SetTrigger("RollBackwardGetup");
+                else animator.SetTrigger("RollForwardGetup");
+                StopCoroutine(TumbleDurationCoroutine);
+                UnTumble();
+                break;
+            case InputDirection.Up:
+                animator.SetTrigger("NeutralGetup");
+                StopCoroutine(TumbleDurationCoroutine);
+                UnTumble();
+                break;
+            case InputDirection.Down:
+                animator.SetTrigger("NeutralGetup");
+                StopCoroutine(TumbleDurationCoroutine);
+                UnTumble();
+                break;
+            }
+        }
+    }
+
+    protected virtual void ProcessAerialAttackInput() {
+        switch (actionInputQueue.inputStrength) {
+        //Neutral Air
+        case InputStrength.None:
+            animator.SetTrigger("NeutralAir");
+            return;
+        //Directional Air Attacks
+        default:
+            switch (actionInputQueue.inputDirection) {
+            case InputDirection.Right:
+                if (isFacingRight) {
+                    animator.SetTrigger("ForwardAir");
+                    return;
+                }
+                animator.SetTrigger("BackAir");
+                return;
+            case InputDirection.Left:
+                if (isFacingRight) {
+                    animator.SetTrigger("BackAir");
+                    return;
+                }
+                animator.SetTrigger("ForwardAir");
+                return;
+            case InputDirection.Up:
+                animator.SetTrigger("UpAir");
+                return;
+            case InputDirection.Down:
+                animator.SetTrigger("DownAir");
+                return;
+            }
+            break;
+        }
+    }
+
+    protected virtual void ProcessAerialShieldInput() {
+        switch (actionInputQueue.inputStrength) {
+        //Air Dodge
+        case InputStrength.None:
+            animator.SetTrigger("AirDodge");
+            return;
+        //Directional Air Dodge
+        default:
+            switch (actionInputQueue.inputDirection) {
+            case InputDirection.Right:
+                animator.SetTrigger("AirDodge");
+                return;
+            case InputDirection.Left:
+                animator.SetTrigger("AirDodge");
+                return;
+            case InputDirection.Up:
+                animator.SetTrigger("AirDodge");
+                return;
+            case InputDirection.Down:
+                animator.SetTrigger("AirDodge");
                 return;
             }
             break;
@@ -363,44 +678,143 @@ public class FighterController : CharacterMovement
         //Debug.Log("Action Buffer Interrupted");
     }
 
+    //Roll Functions
+
     public void ForwardRollStart() {
-        OverrideVelocity(Vector2.zero);
-    }
-
-    public void ForwardRollMovement() {
-        isRollingForward = true;
-        Vector2 direction = new Vector2(isFacingRight ? rollSpeed : -rollSpeed, 0);
-        OverrideVelocity(direction);
-    }
-
-    public void ForwardRollEnd() {
-        isRollingForward = false;
-        StopOverride();
+        movementStatus = new MovementStatus(new Vector2(isFacingRight ? rollSpeed : -rollSpeed, 0), 20);
+        statusManager.AddStatus(movementStatus);
     }
 
     public void BackwardRollStart() {
-        OverrideVelocity(Vector2.zero);
+        movementStatus = new MovementStatus(new Vector2(isFacingRight ? -rollSpeed : rollSpeed, 0), 20);
+        statusManager.AddStatus(movementStatus);
     }
 
-    public void BackwardRollMovement() {
-        isRollingBackward = true;
-        Vector2 direction = new Vector2(isFacingRight ? -rollSpeed : rollSpeed, 0);
-        OverrideVelocity(direction);
+    //Event Functions
+
+    public virtual void OnHitStun(IAttackHitbox hitbox, GameObject entity) {
+        if (entity.Equals(this.gameObject)) {
+            //Interrupt any movement status
+            if (movementStatus != null) statusManager.RemoveStatus(movementStatus);
+            //Remove Helplessness
+            if (IsHelpless) {
+                IsHelpless = false; 
+                statusManager.RemoveStatus(helplessStatus);
+            }
+            //Interrupt any grabbing state
+            if (isGrabbing) GrabReleasePushed();
+            //Interrupt edge grabbing
+            if (isGrabbingEdge) grabbingEdge.GetComponent<EdgeBehaviour>().ReleaseFighter(this.gameObject);
+        }
     }
 
-    public void BackwardRollEnd() {
-        isRollingBackward = false;
-        StopOverride();
+    public virtual void OnGrab(GameObject entity, GameObject target) {
+        if (entity.Equals(this.gameObject)) {
+            if (!target.GetComponent<ICharacter>().CanBeGrabbed) return;
+            Debug.Log(entity.name + " grabbed " + target.name);
+            Grab(target);
+        }
+    }
+
+    public void OnEdgeGrab(GameObject entity, GameObject edge) {
+        if (entity.Equals(this.gameObject)) {
+            if (!CanGrabEdge) return;
+            Debug.Log(entity.name + " grabbed edge " + edge.name);
+            EdgeGrab(edge);
+        }
+    }
+
+    IEnumerator TechWindowDuration(int duration) {
+        Debug.Log("Tech Window Duration Started");
+        IsTeching = true;
+        int techWindowDurationLeft = 0;
+        while (techWindowDurationLeft < duration) {
+            techWindowDurationLeft++;
+            Debug.Log("Tech Window Counting: Frame " + techWindowDurationLeft);
+            yield return null;
+        }
+        Debug.Log("Tech Window Counting Done...");
+        IsTeching = false;
+    }
+
+    IEnumerator TumbleDuration(int duration) {
+        Debug.Log("Tumble Duration Started");
+        int tumbleDurationLeft = 0;
+        while (tumbleDurationLeft < duration) {
+            tumbleDurationLeft++;
+            Debug.Log("Tumble Counting: Frame " + tumbleDurationLeft);
+            yield return null;
+        }
+        Debug.Log("Tumble Counting Done...");
+        animator.SetTrigger("NeutralGetup");
+        UnTumble();
+    }
+
+    IEnumerator GrabDuration(int duration) {
+        Debug.Log("Grab Duration Started");
+        grabDurationLeft = 0;
+        while (grabDurationLeft < duration) {
+            grabDurationLeft++;
+            Debug.Log("Grab Counting: Frame " + grabDurationLeft);
+            yield return null;
+        }
+        Debug.Log("Grab Counting Done, Releasing...");
+        GrabReleasePushed();
+        animator.SetTrigger("GrabRelease");
+    }
+
+    IEnumerator EdgeGrabDuration(int duration) {
+        Debug.Log("Edge Grab Duration Started");
+        edgeGrabDurationLeft = 0;
+        while (edgeGrabDurationLeft < duration) {
+            edgeGrabDurationLeft++;
+            Debug.Log("Edge Grab Counting: Frame " + edgeGrabDurationLeft);
+            yield return null;
+        }
+        Debug.Log("Edge Grab Counting Done, Releasing...");
+        ReleaseEdge();
     }
 
     //ICharacter Implement Functions
 
-    public override void DisableMovement() {
+    public override void Dash() {
+        if (isBusy) return;
+        if (isTumbled) return;
+        base.Dash();
+    }
+
+    public override void Jump() {
+        if (IsTumbling) {
+            statusManager.RemoveStatus(tumblingStatus);
+            IsTumbling = false;
+        }
+        if (isTumbled) return;
+        if (isGrabbingEdge) {
+            animator.SetTrigger("EdgeJumpGetup");
+            StopCoroutine(EdgeGrabDurationCoroutine);
+            return;
+        }
+        base.Jump();
+    }
+
+    public override void Crouch() {
+        if (isBusy) return;
+        if (isTumbled) return;
+        base.Crouch();
+    }
+
+    public override void FallThrough() {
+        if (isBusy) return;
+        if (isTumbled) return;
+        base.FallThrough();
+    }
+
+    public virtual void Freeze() {
         base.DisableMovement();
         animator.speed = 0;
     }
 
-    public override void EnableMovement() {
+    public virtual void UnFreeze() {
         base.EnableMovement();
         animator.speed = 1;
     }
@@ -414,14 +828,193 @@ public class FighterController : CharacterMovement
     }
 
     public void ShieldHold(bool holdingShield) {
+        if (isTumbled) return;
         isShielding = holdingShield;
     }
 
+    public void Helpless() {
+        Debug.Log("Helpless!");
+        IsHelpless = true;
+        statusManager.AddStatus(helplessStatus);
+    }
+
+    public void StartTumbling() {
+        IsTumbling = true;
+        statusManager.AddStatus(tumblingStatus);
+    }
+
+    public void StopTumbling() {
+        IsTumbling = false;
+        statusManager.RemoveStatus(tumblingStatus);
+    }
+
     public void Tumble() {
-        isTumbling = true;
+        if (IsTumbling) {
+            IsTumbling = false;
+        }
+        animator.SetTrigger("Tumble");
+        IsTumbled = true;
+        CanBeGrabbed = false;
+        IgnoreMainJoystick(true);
+        TumbleDurationCoroutine = StartCoroutine(TumbleDuration(TUMBLE_MAXIMUM_DURATION_FRAME));
+    }
+
+    public void UnTumble() {
+        IsTumbled = false;
+        CanBeGrabbed = true;
+        IgnoreMainJoystick(false);
+    }
+
+    public void Grab(GameObject target) {
+        CanBeGrabbed = false;
+        isGrabbing = true;
+        IgnoreMainJoystick(true);
+        grabbingFighter = target;
+        grabbingFighter.transform.position = grabTransform.position;
+        grabbingFighter.transform.SetParent(grabTransform);
+        
+        grabbingFighter.GetComponent<ICharacter>().GetGrabbedBy(this.gameObject);
+        GrabDurationCoroutine = StartCoroutine(GrabDuration(GRAB_MAXIMUM_DURATION_FRAME));
+    }
+
+    public void GetGrabbedBy(GameObject parent) {
+        if (IsTumbling) {
+            statusManager.RemoveStatus(tumblingStatus);
+            IsTumbling = false;
+        }
+        CanBeGrabbed = false;
+        isGrabbed = true;
+        IgnoreInput(true);
+        grabber = parent;
+        rb.isKinematic = true;
+        Face(parent);
+    }
+
+    public void GrabRelease() {
+        if (grabbingFighter == null) return;
+        StopCoroutine(GrabDurationCoroutine);
+        CanBeGrabbed = true;
+        isGrabbing = false;
+        IgnoreMainJoystick(false);
+        grabbingFighter.transform.SetParent(null);
+        grabbingFighter.GetComponent<ICharacter>().FreeFromGrab(false);
+        grabbingFighter = null;
+    }
+
+    public void GrabReleasePushed() {
+        if (grabbingFighter == null) return;
+        StopCoroutine(GrabDurationCoroutine);
+        CanBeGrabbed = true;
+        isGrabbing = false;
+        IgnoreMainJoystick(false);
+        grabbingFighter.transform.SetParent(null);
+        grabbingFighter.GetComponent<ICharacter>().FreeFromGrab(true);
+        grabbingFighter = null;
+    }
+
+    public void FreeFromGrab(bool pushed) {
+        if (grabber == null) return;
+        CanBeGrabbed = true;
+        isGrabbed = false;
+        IgnoreInput(false);
+        grabber = null;
+        rb.isKinematic = false;
+        this.gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+        this.gameObject.transform.localScale = Vector3.one;
+        statusManager.AddStatus(grabImmuneStatus); //Grab Immunity after being releasing
+        if (pushed) {
+            Velocity = new Vector2(isFacingRight ? -10.0f : 10.0f, 0.0f);
+            Debug.Log("Push from Grab Release");
+        }
+    }
+
+    public void MashFromGrab() {
+        Debug.Log("Mashing!");
+        grabber.GetComponent<ICharacter>().GetMashed(5);
+    }
+
+    public void GetMashed(int mashAmount) {
+        grabDurationLeft += 5;
+        Debug.Log("Grab Counting: Frame " + grabDurationLeft);
+    }
+
+    public GameObject GetGrabbingFighter() {
+        return grabbingFighter;
+    }
+
+    public GameObject GetGrabber() {
+        return grabber;
+    }
+
+    public void EdgeGrab(GameObject edge) {
+        animator.SetTrigger("EdgeGrab");
+        if (IsTumbling) {
+            statusManager.RemoveStatus(tumblingStatus);
+            IsTumbling = false;
+        }
+        CanGrabEdge = false;
+        isGrabbingEdge = true;
+        IgnoreMainJoystick(true);
+        grabbingEdge = edge;
+        OnLand();
+        statusManager.AddStatus(new IntangibilityStatus(40)); //Grant Intangibility based on percentage
+        DisableMovement();
+        Face(edge.transform.parent.gameObject);
+        this.gameObject.transform.position = edge.transform.position - edgeGrabTransform.localPosition;
+
+        EdgeGrabDurationCoroutine = StartCoroutine(EdgeGrabDuration(EDGE_GRAB_MAXIMUM_DURATION_FRAME));
+
+        edge.GetComponent<EdgeBehaviour>().AttachFighter(this.gameObject);
+    }
+
+    public void ReleaseEdge() {
+        if (grabbingEdge == null) return;
+        animator.SetTrigger("EdgeRelease");
+        CanGrabEdge = true;
+        isGrabbingEdge = false;
+        IgnoreMainJoystick(false);
+
+        grabbingEdge.GetComponent<EdgeBehaviour>().ReleaseFighter(this.gameObject);
+        grabbingEdge = null;
+        EnableMovement();
+        this.gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+        this.gameObject.transform.localScale = Vector3.one;
+        statusManager.AddStatus(edgeGrabImmuneStatus); //Edge Grab Immunity after releasing edge
+        
+        StopCoroutine(EdgeGrabDurationCoroutine);
     }
 
     //Overrides
+
+    protected override void OnLand() {
+        base.OnLand();
+        if (IsTeching) {
+            if (mainJoystick.x > 0.5f) { //Tech to the right
+                if (IsFacingRight) animator.SetTrigger("TechRollForward");
+                else animator.SetTrigger("TechRollBackward");
+            }
+            else if (mainJoystick.x < -0.5f) { //Tech to the left
+                if (IsFacingRight) animator.SetTrigger("TechRollBackward");
+                else animator.SetTrigger("TechRollForward");
+            }
+            else { //Tech in place
+                animator.SetTrigger("Tech");
+            }
+            StopCoroutine(TechWindowDurationCoroutine);
+            Debug.Log("Teched!");
+            IsTeching = false;
+        }
+        if (IsHelpless) {
+            Debug.Log("Land From Helplessness!");
+            statusManager.RemoveStatus(helplessStatus);
+            IsHelpless = false;
+        }
+        if (IsTumbling) {
+            Debug.Log("Tumble!");
+            statusManager.RemoveStatus(tumblingStatus);
+            Tumble();
+        }
+    }
 
     protected override void Jump(float jumpHeight) {
         base.Jump(jumpHeight);

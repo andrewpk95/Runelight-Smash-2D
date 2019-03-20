@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StatusManager : MonoBehaviour
+public class StatusManager : FreezeBehaviour
 {
     List<IStatus> statuses;
     List<IStatus> toRemoveStatuses;
@@ -17,6 +17,18 @@ public class StatusManager : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        Tick();
+    }
+
+    //Freeze Behaviour overrides
+
+    protected override void UpdateOtherBehaviour() {
+        UpdateStatus();
+    }
+
+    //Status Functions
+
+    protected void UpdateStatus() {
         //Process each status tick
         foreach(IStatus status in statuses) {
             status.OnStatusStay(this.gameObject);
@@ -36,6 +48,7 @@ public class StatusManager : MonoBehaviour
     }
 
     public void RemoveStatus(IStatus status) {
+        if (status == null) return;
         status.OnStatusExit(this.gameObject);
         statuses.Remove(status);
     }

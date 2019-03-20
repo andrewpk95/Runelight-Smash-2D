@@ -4,16 +4,9 @@ using UnityEngine;
 
 public interface IHitbox
 {   
-    float Damage {get; set;}
-    bool HitStun {get; set;}
-    int Angle {get; set;}
-    float BaseKnockback {get; set;}
-    float KnockbackGrowth {get; set;}
-    int FreezeFrame {get; set;}
     int ID {get; set;}
-    float ShieldStunMultiplier {get; set;}
     
-    void Hit(GameObject target);
+    void OnHit(GameObject target);
 
     string GetName();
 

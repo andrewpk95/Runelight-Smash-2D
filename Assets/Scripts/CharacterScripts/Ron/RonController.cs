@@ -6,17 +6,17 @@ public class RonController : FighterController, ICharacter
 {
     RonPassive passive;
     public float sideSpecialSpeed;
-    public bool isSideSpecial;
+    public bool canUseSideSpecial;
 
     public float upSpecialHorizontalSpeed;
     public float upSpecialVerticalAcceleration;
-    public bool isUpSpecial;
-    public bool isUpSpecialStop;
 
     public float downSpecialFallSpeed;
-    public bool isDownSpecial;
 
     public bool isMetalForm;
+    public Color metalFormColor1;
+    public Color metalFormColor2;
+    public float flashTick;
 
     // Start is called before the first frame update
     void Start()
@@ -41,81 +41,97 @@ public class RonController : FighterController, ICharacter
     }
 
     protected override void Tick() {
-        if (isSideSpecial) {
-            float speedMultiplier = 1.0f + 0.5f * passive.GetStaticCharge() / passive.maxStaticCharge;
-            overridingVelocity = new Vector2(isFacingRight ? sideSpecialSpeed * speedMultiplier : -sideSpecialSpeed * speedMultiplier, 0);
-        }
-        if (isUpSpecial) {
-            overridingVelocity = new Vector2(isFacingRight ? upSpecialHorizontalSpeed : -upSpecialHorizontalSpeed, 
-                                                GetTargetVelocity(velocity.y, 50.0f, upSpecialVerticalAcceleration));
-        }
-        if (isUpSpecialStop) {
-            overridingVelocity = new Vector2(GetTargetVelocity(velocity.x, 0.0f, 50.0f), 
-                                                GetTargetVelocity(velocity.y, 0.0f, 50.0f));
-        }
-        if (isDownSpecial) {
-            overridingVelocity = new Vector2(0, -downSpecialFallSpeed);
-        }
-
         base.Tick();
     }
 
-    public void InterruptMovement() {
-        isSideSpecial = false;
-        isUpSpecial = false;
-        isUpSpecialStop = false;
-        isDownSpecial = false;
-        StopOverride();
+    //Overrides
+
+    protected override void ProcessActionInput() {
+        if (isMetalForm) {
+            if (actionInputQueue.inputType == InputType.Special) {
+                ProcessSpecialInput();
+                return;
+            }
+            else return;
+        }
+        base.ProcessActionInput();
+    }
+
+    protected override void ProcessSpecialInput() {
+        if (isMetalForm) {
+            animator.SetTrigger("DownSpecialEnd");
+            isMetalForm = false;
+            return;
+        }
+        base.ProcessSpecialInput();
+    }
+
+    protected override void SideSpecial() {
+        if (!canUseSideSpecial) return;
+        base.SideSpecial();
+    }
+
+    public override void Jump() {
+        if (isMetalForm) return;
+        base.Jump();
+    }
+
+    public override void Dash() {
+        if (isMetalForm) return;
+        base.Dash();
+    }
+
+    public override void Crouch() {
+        if (isMetalForm) return;
+        base.Crouch();
     }
     
     public void SideSpecialStart() {
-        OverrideVelocity(Vector2.zero);
-    }
-
-    public void SideSpecialMovement() {
-        isSideSpecial = true;
-        float speedMultiplier = 1.0f + 0.5f * passive.GetStaticCharge() / passive.maxStaticCharge;
-        Vector2 direction = new Vector2(isFacingRight? sideSpecialSpeed * speedMultiplier : -sideSpecialSpeed * speedMultiplier, 0);
-        OverrideVelocity(direction);
-    }
-
-    public void SideSpecialEnd() {
-        isSideSpecial = false;
-        StopOverride();
+        Debug.Log("Side Special Start");
+        movementStatus = new RonSideSpecialMovementStatus(sideSpecialSpeed, passive, 1.0f, 16);
+        statusManager.AddStatus(movementStatus);
+        canUseSideSpecial = false;
     }
 
     public void UpSpecialStart() {
-        OverrideVelocity(Vector2.zero);
-    }
-
-    public void UpSpecialMovement() {
-        isUpSpecial = true;
-    }
-
-    public void UpSpecialStopping() {
-        isUpSpecial = false;
-        isUpSpecialStop = true;
-    }
-
-    public void UpSpecialEnd() {
-        isUpSpecial = false;
-        isUpSpecialStop = false;
-        StopOverride();
+        Debug.Log("Up Special Start");
+        movementStatus = new RonUpSpecialMovementStatus(upSpecialHorizontalSpeed, upSpecialVerticalAcceleration, 1.0f, 6);
+        statusManager.AddStatus(movementStatus);
     }
 
     public void DownSpecialStart() {
-        OverrideVelocity(Vector2.zero);
+        movementStatus = new MovementStatus(Vector2.zero, 50);
+        statusManager.AddStatus(movementStatus);
+        hurtbox.StartFlashing(metalFormColor1, metalFormColor2, flashTick);
     }
 
     public void DownSpecialMovement() {
-        isDownSpecial = true;
-        overridingVelocity = new Vector2(0, -downSpecialFallSpeed);
+        isMetalForm = true;
+        statusManager.RemoveStatus(movementStatus);
+        movementStatus = new MovementStatus(new Vector2(0, -downSpecialFallSpeed), 120);
+        statusManager.AddStatus(movementStatus);
+        hurtbox.StopFlashing();
+        hurtbox.ChangeSpriteColor(metalFormColor2);
     }
 
     public void DownSpecialEnd() {
-        isDownSpecial = false;
-        OverrideVelocity(Vector2.zero);
-        StopOverride();
+        isMetalForm = false;
+        statusManager.RemoveStatus(movementStatus);
+        movementStatus = new MovementStatus(Vector2.zero, 20);
+        statusManager.AddStatus(movementStatus);
+        hurtbox.ResetSpriteColor();
     }
 
+    public override void OnHitStun(IAttackHitbox hitbox, GameObject entity) {
+        base.OnHitStun(hitbox, entity);
+        if (entity.Equals(this.gameObject)) {
+            //Allow use of side special again when hitstunned
+            canUseSideSpecial = true;
+        }
+    }
+
+    protected override void GroundCheck() {
+        base.GroundCheck();
+        if (IsGrounded) canUseSideSpecial = true;
+    }
 }

@@ -60,6 +60,7 @@ public class KeyboardController : MonoBehaviour, IController
         UpdateGrabKeyInput();
         UpdateJumpInput();
         UpdateShieldInput();
+        UpdateDirectionInput();
         UpdateMouseInput();
     }
     
@@ -109,7 +110,7 @@ public class KeyboardController : MonoBehaviour, IController
     //Process fall through input
     void UpdateDownKeyInput() {
         if (Input.GetAxis ("Keyboard_MainVertical") < -0.5f) {
-            if (character.IsGrounded()) {
+            if (character.IsGrounded) {
                 character.Crouch();
                 if (Input.GetButtonDown ("Keyboard_MainVertical")) {
                     if (maybeAboutToFallThrough) {
@@ -164,7 +165,7 @@ public class KeyboardController : MonoBehaviour, IController
         //Shield Key pressed
         if (Input.GetButtonDown("Keyboard_Shield")) {
             shieldAction = true;
-            if (!character.IsGrounded()) {
+            if (!character.IsGrounded) {
                 ActionInput actionInput = new ActionInput(InputType.Shield);
                 character.ActionInput(actionInput);
             }
@@ -173,16 +174,25 @@ public class KeyboardController : MonoBehaviour, IController
             shieldAction = false;
         }
         character.ShieldHold(Input.GetButton("Keyboard_Shield"));
-        if (shieldAction) {
-            if (Input.GetButtonDown("Keyboard_MainVertical") || Input.GetButtonDown("Keyboard_MainHorizontal")) {
-				float angle = Vector2.SignedAngle(Vector2.right, mainJoystick);
-				InputStrength strength = mainJoystick.magnitude >= dodgeInputThreshold ? InputStrength.Strong : InputStrength.None;
-				if (strength != InputStrength.None) {
-					ActionInput actionInput = new ActionInput(InputType.Shield, angle, strength);
-					character.ActionInput(actionInput);
-				}
-            }
-            
+    }
+
+    //Apply direction input, such as when the character is shielding or grabbing.
+    void UpdateDirectionInput() {
+        if (Input.GetButtonDown("Keyboard_MainRight")) {
+            ActionInput actionInput = new ActionInput(InputType.Direction, InputDirection.Right, InputStrength.Strong);
+            character.ActionInput(actionInput);
+        }
+        else if (Input.GetButtonDown("Keyboard_MainLeft")) {
+            ActionInput actionInput = new ActionInput(InputType.Direction, InputDirection.Left, InputStrength.Strong);
+            character.ActionInput(actionInput);
+        }
+        else if (Input.GetButtonDown("Keyboard_MainDown")) {
+            ActionInput actionInput = new ActionInput(InputType.Direction, InputDirection.Down, InputStrength.Strong);
+            character.ActionInput(actionInput);
+        }
+        else if (Input.GetButtonDown("Keyboard_MainUp")) {
+            ActionInput actionInput = new ActionInput(InputType.Direction, InputDirection.Up, InputStrength.Strong);
+            character.ActionInput(actionInput);
         }
     }
 

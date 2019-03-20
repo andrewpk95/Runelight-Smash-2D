@@ -7068,6 +7068,13 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0
+    functionName: BackwardRollStart
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0
     functionName: DeactivateShield
     data: 
     objectReferenceParameter: {fileID: 0}
@@ -7075,14 +7082,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0
-    functionName: BackwardRollStart
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.033333335
-    functionName: BackwardRollMovement
+    functionName: PreventWalkOffLedge
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -7102,8 +7102,8 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.33333334
-    functionName: BackwardRollEnd
+  - time: 0.53333336
+    functionName: UnPreventWalkOffLedge
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

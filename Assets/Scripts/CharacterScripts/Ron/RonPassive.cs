@@ -18,7 +18,7 @@ public class RonPassive : MonoBehaviour, IPassive
     void Start()
     {
         eventManager = (EventManager) GameObject.FindObjectOfType(typeof(EventManager));
-        eventManager.StartListeningToOnDamageEvent(new UnityAction<IHitbox, IDamageable>(SaveDamage));
+        eventManager.StartListeningToOnDamageEvent(new UnityAction<IAttackHitbox, IDamageable>(SaveDamage));
 
         statusManager = GetComponent<StatusManager>();
         staticSpeedBuff = new RonPassiveBuffStatus(1.5f, this);
@@ -31,14 +31,14 @@ public class RonPassive : MonoBehaviour, IPassive
         
     }
 
-    public void SaveDamage(IHitbox hitbox, IDamageable damageable) {
+    public void SaveDamage(IAttackHitbox hitbox, IDamageable damageable) {
         if (hitbox.GetOwner().Equals(this.gameObject)) {
             if (hitbox.GetName() == "NeutralSpecial" || hitbox.GetName() == "SideSpecial1" || hitbox.GetName() == "SideSpecial2") return;
             if (staticCharge >= maxStaticCharge) {
                 Clamp();
                 return;
             }
-            damageDealt += hitbox.Damage;
+            damageDealt += hitbox.Stats.Damage;
             ConvertDamageToStaticCharge();
         }
         

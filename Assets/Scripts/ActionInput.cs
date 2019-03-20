@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum InputType
 {
-    Attack, Special, Shield, Grab, None
+    Attack, Special, Shield, Grab, Direction, None
 }
 
 public enum InputDirection

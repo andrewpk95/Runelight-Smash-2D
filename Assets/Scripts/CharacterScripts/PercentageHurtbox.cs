@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PercentageHurtbox : MonoBehaviour, IDamageable
+public class PercentageHurtbox : FreezeBehaviour, IDamageable
 {
     [SerializeField] protected int weight;
     [SerializeField] protected float percentage;
     [SerializeField] protected bool isHitStunned;
     [SerializeField] protected bool isLaunched;
-    [SerializeField] protected bool isFrozen;
     [SerializeField] protected bool isInvulnerable;
     [SerializeField] protected bool isIntangible;
 
@@ -17,7 +16,6 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
     public float Percentage {get {return percentage;} set {percentage = value;}}
     public bool IsHitStunned {get {return isHitStunned;} set {isHitStunned = value;}}
     public bool IsLaunched {get {return isLaunched;} set {isLaunched = value;}}
-    public bool IsFrozen {get {return isFrozen;} set {isFrozen = value;}}
     public bool IsInvulnerable {get {return isInvulnerable;} set {isInvulnerable = value;}}
     public bool IsIntangible {get {return isIntangible;} set {isIntangible = value;}}
 
@@ -26,7 +24,6 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
     public float flashTick;
 
     protected int hitStunFrameLeft;
-    protected int freezeFrameLeft;
     protected Vector2 storedVelocity;
 
     Animator animator;
@@ -45,7 +42,7 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
         hurtbox = GetComponentInChildren<HurtboxManager>();
 
         eventManager = (EventManager) GameObject.FindObjectOfType(typeof(EventManager));
-        eventManager.StartListeningToOnHitEvent(new UnityAction<IHitbox, GameObject>(OnHit));
+        eventManager.StartListeningToOnHitEvent(new UnityAction<IAttackHitbox, GameObject>(OnHit));
 
         statusManager = GetComponent<StatusManager>();
         launchStatus = new LaunchStatus();
@@ -64,22 +61,8 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
         Tick();
     }
 
-    void Tick() {
-        if (IsFrozen) {
-            UpdateFreezeFrame();
-        }
-        else {
-            UpdateHitStunFrame();
-        }
-    }
-
-    void UpdateFreezeFrame() {
-		freezeFrameLeft--;
-		if (freezeFrameLeft < 0){ //FreezeFrame Over
-			character.EnableMovement();
-			character.SetVelocity(storedVelocity);
-			IsFrozen = false;
-		}
+    protected override void UpdateOtherBehaviour() {
+        UpdateHitStunFrame();
     }
 
     void UpdateHitStunFrame() {
@@ -88,7 +71,11 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
 		}
 		if (hitStunFrameLeft < 0) { //Hitstun Over
 			IsHitStunned = false;
-            if (IsLaunched) character.Tumble();
+            if (IsLaunched) {
+                Debug.Log("Start Tumbling Down!");
+                statusManager.RemoveStatus(launchStatus);
+                character.StartTumbling();
+            }
 			IsLaunched = false;
 			hitStunFrameLeft = 0;
 			character.IgnoreInput(false);
@@ -96,14 +83,36 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
 		}
     }
 
-    public void OnHit(IHitbox hitbox, GameObject entity) {
+    //IFreezable Overrides
+
+    public override void Freeze(int freezeFrameDuration) {
+        base.Freeze(freezeFrameDuration);
+        statusManager.Freeze(freezeFrameDuration);
+        storedVelocity = character.Velocity;
+    }
+
+    protected override void OnFreeze() {
+        base.OnFreeze();
+        character.Freeze();
+    }
+
+    protected override void OnUnFreeze() {
+        base.OnUnFreeze();
+        character.UnFreeze();
+		character.Velocity = storedVelocity;
+    }
+
+    //IDamageable Implementations
+
+    public void OnHit(IAttackHitbox hitbox, GameObject entity) {
         if (IsInvulnerable) return;
         if (entity.Equals(this.gameObject)) {
-            TakeDamage(hitbox.Damage);
+            TakeDamage(hitbox.Stats.Damage);
             eventManager.InvokeOnDamageEvent(hitbox, this);
+            FaceHitbox(hitbox);
             HitStun(hitbox);
             Launch(hitbox);
-            Freeze(hitbox.FreezeFrame);
+            Freeze(hitbox.Stats.FreezeFrame);
         }
     }
 
@@ -119,29 +128,34 @@ public class PercentageHurtbox : MonoBehaviour, IDamageable
         return this.gameObject;
     }
 
-    public void HitStun(IHitbox hitbox) {
-        if (!hitbox.HitStun) return;
-        eventManager.InvokeOnHitStunEvent(hitbox, this.gameObject);
-        IsHitStunned = true;
-        hitStunFrameLeft = SmashCalculator.HitStunDuration(hitbox, this);
-        character.IgnoreInput(true);
-        character.EnableAirDeceleration(false);
-        character.SetPreventWalkOffLedge(false);
+    public void FaceHitbox(IAttackHitbox hitbox) {
+        if (hitbox.Stats.FaceOwnerWhenHit) character.Face(hitbox.GetOwner());
     }
 
-    public void Launch(IHitbox hitbox) {
+    public void HitStun(IAttackHitbox hitbox) {
+        if (!hitbox.Stats.HitStun) return;
+        eventManager.InvokeOnHitStunEvent(hitbox, this.gameObject);
+        if (!IsHitStunned) { //If not hitstunned before
+            IsHitStunned = true;
+            character.IgnoreInput(true);
+            character.EnableAirDeceleration(false);
+            character.UnPreventWalkOffLedge();
+        }
+        hitStunFrameLeft = SmashCalculator.HitStunDuration(hitbox, this);
+        if (character.IsTumbling) character.StopTumbling();
+        if (character.IsTumbled) character.UnTumble();
+    }
+
+    public void Launch(IAttackHitbox hitbox) {
         Vector2 launchVector = SmashCalculator.LaunchVector(hitbox, this);
         IsLaunched = SmashCalculator.Tumble(hitbox, this);
         if (IsLaunched) statusManager.AddStatus(launchStatus);
-        Debug.Log(launchVector);
-        character.SetVelocity(launchVector);
-    }
-
-    public void Freeze(int freezeFrameDuration) {
-        freezeFrameLeft = freezeFrameDuration;
-        storedVelocity = character.GetVelocity();
-        character.DisableMovement();
-        IsFrozen = true;
+        Debug.Log("Launched! " + launchVector);
+        character.Velocity = launchVector;
+        //Release from grab if launched with high enough velocity
+        if (character.GetGrabber() != null && SmashCalculator.GrabRelease(hitbox, this)) {
+            character.GetGrabber().GetComponent<ICharacter>().GrabRelease();
+        }
     }
 
     public void SetIntangible() {

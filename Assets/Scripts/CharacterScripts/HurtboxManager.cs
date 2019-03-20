@@ -4,30 +4,20 @@ using UnityEngine;
 
 public class HurtboxManager : MonoBehaviour
 {
-    public List<GameObject> hurtboxes;
-    public List<Material> spriteMaterials;
+    public List<IHurtbox> hurtboxes;
     public int layer;
 
+    private Color defaultColor = new Color(1, 1, 1, 0);
     private const string SHADER_COLOR_NAME = "_Color";
     
     // Start is called before the first frame update
     void Start()
     {
-        hurtboxes = new List<GameObject>();
-        spriteMaterials = new List<Material>();
-        Transform[] list = GetComponentsInChildren<Transform>();
-        foreach (Transform trans in list) {
-            if (trans.gameObject.tag == "Hurtbox") {
-                hurtboxes.Add(trans.gameObject);
-                spriteMaterials.Add(trans.gameObject.GetComponent<SpriteRenderer>().material);
-            }
+        hurtboxes = new List<IHurtbox>();
+        IHurtbox[] list = GetComponentsInChildren<IHurtbox>();
+        foreach (IHurtbox element in list) {
+            hurtboxes.Add(element);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void SetIntangible(bool intangible) {
@@ -42,15 +32,19 @@ public class HurtboxManager : MonoBehaviour
     }
 
     public void SetHurtboxLayer(int layerMask) {
-        foreach (GameObject hurtbox in hurtboxes) {
-            hurtbox.layer = layerMask;
+        foreach (IHurtbox hurtbox in hurtboxes) {
+            hurtbox.SetLayer(layerMask);
         }
     }
 
     public void ChangeSpriteColor(Color color) {
-        foreach (Material material in spriteMaterials) {
-            material.SetColor(SHADER_COLOR_NAME, color);
+        foreach (IHurtbox hurtbox in hurtboxes) {
+            hurtbox.ChangeSpriteColor(color);
         }
+    }
+
+    public void ResetSpriteColor() {
+        ChangeSpriteColor(defaultColor);
     }
 
     public void StartFlashing(Color color1, Color color2, float tick) {
@@ -59,7 +53,7 @@ public class HurtboxManager : MonoBehaviour
 
     public void StopFlashing() {
         StopAllCoroutines();
-        ChangeSpriteColor(new Color(1, 1, 1, 0));
+        ResetSpriteColor();
     }
 
     IEnumerator FlashRoutine(Color color1, Color color2, float tick) {

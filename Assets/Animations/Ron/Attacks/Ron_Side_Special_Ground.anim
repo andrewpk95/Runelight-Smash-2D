@@ -17118,13 +17118,6 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.26666668
-    functionName: SideSpecialMovement
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
   - time: 0.31666666
     functionName: ActivateHitboxGroup
     data: SideSpecial1
@@ -17219,13 +17212,6 @@ AnimationClip:
   - time: 0.65
     functionName: DeactivateHitboxGroup
     data: SideSpecial2
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.6666667
-    functionName: SideSpecialEnd
-    data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

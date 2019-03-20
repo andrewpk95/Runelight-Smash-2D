@@ -11,4 +11,6 @@ public interface IStatus
     void OnStatusStay(GameObject entity);
 
     void OnStatusExit(GameObject entity);
+
+    void OnStatusInterrupt(GameObject entity);
 }

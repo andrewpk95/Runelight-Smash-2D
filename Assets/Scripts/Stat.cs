@@ -26,5 +26,11 @@ public enum Stat
     Attack,
     Defense,
     Knockback,
-    Resistance
+    Resistance,
+
+    //Hitbox Stats
+    Damage,
+    BaseKnockback,
+    KnockbackGrowth,
+    ShieldStunMultiplier
 }

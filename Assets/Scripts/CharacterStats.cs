@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class CharacterStats : MonoBehaviour
+public class CharacterStats
 {
     Dictionary<Stat, List<IModifier>> modifiers;
     Dictionary<Stat, float> stats;
@@ -31,9 +31,7 @@ public class CharacterStats : MonoBehaviour
     public float Knockback {get {return GetStat(Stat.Knockback);} set {SetStat(Stat.Knockback, value);}}
     public float Resistance {get {return GetStat(Stat.Resistance);} set {SetStat(Stat.Resistance, value);}}
     
-    // Start is called before the first frame update
-    void Awake()
-    {
+    public CharacterStats() {
         modifiers = new Dictionary<Stat, List<IModifier>>();
         stats = new Dictionary<Stat, float>();
     }

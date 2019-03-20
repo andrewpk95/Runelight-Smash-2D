@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IDamageable
+public interface IDamageable : IFreezable
 {
     int Weight {get; set;}
     float Percentage {get; set;}
     bool IsHitStunned {get; set;}
-    bool IsFrozen {get; set;}
     bool IsInvulnerable {get; set;}
     bool IsIntangible {get; set;}
     
-    void OnHit(IHitbox hitbox, GameObject entity);
+    void OnHit(IAttackHitbox hitbox, GameObject entity);
 
     void TakeDamage(float damage);
 
@@ -19,11 +18,9 @@ public interface IDamageable
 
     GameObject GetOwner();
 
-    void HitStun(IHitbox hitbox);
+    void HitStun(IAttackHitbox hitbox);
 
-    void Launch(IHitbox hitbox);
-
-    void Freeze(int freezeFrameDuration);
+    void Launch(IAttackHitbox hitbox);
 
     void SetIntangible();
 

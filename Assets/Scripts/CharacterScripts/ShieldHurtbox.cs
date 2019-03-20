@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ShieldHurtbox : MonoBehaviour, IShield
+public class ShieldHurtbox : FreezeBehaviour, IShield
 {
     [SerializeField] protected float maxShieldHealth;
     [SerializeField] protected float currentShieldHealth;
@@ -12,7 +12,6 @@ public class ShieldHurtbox : MonoBehaviour, IShield
     [SerializeField] protected bool isActive;
     [SerializeField] protected bool isShieldStunned;
     [SerializeField] protected bool isShieldBroken;
-    [SerializeField] protected bool isFrozen;
     [SerializeField] protected bool isInvulnerable;
     public GameObject owner;
     public IDamageable damageable;
@@ -24,12 +23,10 @@ public class ShieldHurtbox : MonoBehaviour, IShield
     public bool IsActive {get {return isActive;} set{isActive = value;}}
     public bool IsShieldStunned {get {return isShieldStunned;} set {isShieldStunned = value;}}
     public bool IsShieldBroken {get {return isShieldBroken;} set {isShieldBroken = value;}}
-    public bool IsFrozen {get {return isFrozen;} set {isFrozen = value;}}
     public bool IsInvulnerable {get {return isInvulnerable;} set {isInvulnerable = value;}}
 
     protected int shieldStunFrameLeft;
     public int shieldBreakFrameLeft;
-    protected int freezeFrameLeft;
     protected Vector2 storedVelocity;
 
     Animator animator;
@@ -56,15 +53,16 @@ public class ShieldHurtbox : MonoBehaviour, IShield
         trans = GetComponent<Transform>();
 
         eventManager = (EventManager) GameObject.FindObjectOfType(typeof(EventManager));
-        eventManager.StartListeningToOnHitEvent(new UnityAction<IHitbox, GameObject>(OnHit));
-        eventManager.StartListeningToOnHitStunEvent(new UnityAction<IHitbox, GameObject>(OnHitStun));
+        eventManager.StartListeningToOnHitEvent(new UnityAction<IAttackHitbox, GameObject>(OnHit));
+        eventManager.StartListeningToOnHitStunEvent(new UnityAction<IAttackHitbox, GameObject>(OnHitStun));
+        eventManager.StartListeningToOnGrabEvent(new UnityAction<GameObject, GameObject>(OnGrab));
 
         statusManager = GetComponentInParent<StatusManager>();
         shieldBreakStatus = new ShieldBreakStatus();
     }
     
     void Update() {
-        
+        animator.SetBool("isShieldStunned", IsShieldStunned);
     }
 
     // Update is called once per frame
@@ -73,27 +71,36 @@ public class ShieldHurtbox : MonoBehaviour, IShield
         Tick();
     }
 
-    void Tick() {
+    protected override void Tick() {
         UpdateShieldSize();
-        if (IsFrozen) {
-            UpdateFreezeFrame();
-        }
-        else {
-            UpdateShieldBreakFrame();
-            UpdateShieldStunFrame();
-            UpdateShieldHealth();
-        }
+        base.Tick();
     }
 
-    void UpdateFreezeFrame() {
-        if (IsFrozen) freezeFrameLeft--;
-		if (freezeFrameLeft < 0){ //FreezeFrame Over
-            IsFrozen = false;
-            freezeFrameLeft = 0;
-			character.EnableMovement();
-			character.SetVelocity(storedVelocity);
-		}
+    //Freeze Behaviour Overrides
+
+    protected override void UpdateOtherBehaviour() {
+        UpdateShieldBreakFrame();
+        UpdateShieldStunFrame();
+        UpdateShieldHealth();
     }
+
+    public override void Freeze(int freezeFrameDuration) {
+        base.Freeze(freezeFrameDuration);
+        storedVelocity = character.Velocity;
+    }
+
+    protected override void OnFreeze() {
+        base.OnFreeze();
+        character.Freeze();
+    }
+
+    protected override void OnUnFreeze() {
+        base.OnUnFreeze();
+		character.UnFreeze();
+		character.Velocity = storedVelocity;
+    }
+
+    //Shield Functions
 
     void UpdateShieldBreakFrame() {
         if (IsShieldBroken) shieldBreakFrameLeft--;
@@ -107,9 +114,7 @@ public class ShieldHurtbox : MonoBehaviour, IShield
     void UpdateShieldStunFrame() {
 		if (IsShieldStunned) shieldStunFrameLeft--;
 		if (shieldStunFrameLeft < 0) { //Hitstun Over
-			IsShieldStunned = false;
-			shieldStunFrameLeft = 0;
-			character.IgnoreInput(false);
+			OnShieldStunOver();
 		}
     }
 
@@ -134,35 +139,48 @@ public class ShieldHurtbox : MonoBehaviour, IShield
     }
 
     public void ActivateShield() {
+        if (isActive) return;
         isActive = true;
-        character.IgnoreInput(true);
+        character.IgnoreMainJoystick(true);
         sprite.enabled = true;
         col.enabled = true;
     }
 
     public void DeactivateShield() {
+        if (!isActive) return;
         isActive = false;
-        character.IgnoreInput(false);
+        character.IgnoreMainJoystick(false);
         sprite.enabled = false;
         col.enabled = false;
     }
     
-    public void OnHit(IHitbox hitbox, GameObject entity) {
+    public void OnHit(IAttackHitbox hitbox, GameObject entity) {
         if (IsInvulnerable) return;
         if (entity.Equals(this.gameObject)) {
-            TakeDamage(hitbox.Damage);
+            TakeDamage(hitbox.Stats.Damage);
             Push(hitbox);
             ShieldStun(hitbox);
-            Freeze(hitbox.FreezeFrame);
+            Freeze(hitbox.Stats.FreezeFrame);
         }
     }
 
-    public void OnHitStun(IHitbox hitbox, GameObject entity) {
+    //Event Functions
+
+    public void OnHitStun(IAttackHitbox hitbox, GameObject entity) {
         if (entity.Equals(owner)) {
             if (IsActive) DeactivateShield();
             if (IsShieldBroken) OnShieldBreakOver();
         }
     }
+
+    public void OnGrab(GameObject entity, GameObject target) {
+        if (target.Equals(owner)) {
+            if (IsActive) DeactivateShield();
+            if (IsShieldBroken) OnShieldBreakOver();
+        }
+    }
+
+    //IShield Implementation
 
     public void TakeDamage(float damage) {
         CurrentShieldHealth = Mathf.Max(CurrentShieldHealth - damage, 0.0f);
@@ -176,35 +194,36 @@ public class ShieldHurtbox : MonoBehaviour, IShield
         return owner;
     }
 
-    public void ShieldStun(IHitbox hitbox) {
-        if (!hitbox.HitStun) return;
-        IsShieldStunned = true;
-        character.IgnoreInput(true);
+    public void ShieldStun(IAttackHitbox hitbox) {
+        if (!hitbox.Stats.HitStun) return;
+        if (!IsShieldStunned) { //If not shield stunned before
+            IsShieldStunned = true;
+            character.IgnoreInput(true);
+        }
         shieldStunFrameLeft = SmashCalculator.ShieldStunFrame(hitbox, this);
     }
 
-    public void Push(IHitbox hitbox) {
-        Vector2 launchVector = SmashCalculator.ShieldKnockbackVector(hitbox, this);
-        Debug.Log(launchVector);
-        character.SetVelocity(launchVector);
+    protected void OnShieldStunOver() {
+        IsShieldStunned = false;
+		shieldStunFrameLeft = 0;
+		character.IgnoreInput(false);
     }
 
-    public void Freeze(int freezeFrameDuration) {
-        freezeFrameLeft = freezeFrameDuration;
-        storedVelocity = character.GetVelocity();
-        character.DisableMovement();
-        IsFrozen = true;
+    public void Push(IAttackHitbox hitbox) {
+        Vector2 launchVector = SmashCalculator.ShieldKnockbackVector(hitbox, this);
+        Debug.Log(launchVector);
+        character.Velocity = launchVector;
     }
 
     public void OnShieldBreak() {
         Debug.Log(owner.name + "'s Shield Broken!");
-        IsShieldStunned = false;
+        if (IsShieldStunned) OnShieldStunOver();
         DeactivateShield();
         statusManager.AddStatus(shieldBreakStatus);
         character.IgnoreInput(true);
         animator.SetTrigger("ShieldBreak");
-        Vector2 launchVector = new Vector2(0.0f, 5.0f);
-        character.SetVelocity(launchVector);
+        Vector2 launchVector = new Vector2(0.0f, 6.0f);
+        character.Velocity = launchVector;
         damageable.SetIntangible();
         Freeze(15);
     }

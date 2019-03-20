@@ -12,7 +12,7 @@ public class RonNeutralSpecialHitboxManager : HitboxManager
     // Start is called before the first frame update
     void Start()
     {
-        list = GetComponentsInChildren<IHitbox>();
+        list = GetComponentsInChildren<IAttackHitbox>();
         collisionDictionary = new Dictionary<GameObject, List<IHitbox>>();
         victims = new List<GameObject>();
 
@@ -34,8 +34,8 @@ public class RonNeutralSpecialHitboxManager : HitboxManager
         activated = true;
         numberOfHits = passive.ConsumeCharge();
         if (numberOfHits >= passive.maxStaticCharge) {
-            foreach(IHitbox hitbox in list) {
-                hitbox.HitStun = true;
+            foreach(IAttackHitbox hitbox in list) {
+                hitbox.Stats.HitStun = true;
             }
         }
         hitsLeft = numberOfHits;
@@ -44,8 +44,8 @@ public class RonNeutralSpecialHitboxManager : HitboxManager
     public override void DeactivateHitboxes() {
         collisionDictionary.Clear();
         victims.Clear();
-        foreach(IHitbox hitbox in list) {
-            hitbox.HitStun = false;
+        foreach(IAttackHitbox hitbox in list) {
+            hitbox.Stats.HitStun = false;
             hitbox.Reset();
         }
     }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HitboxManager : MonoBehaviour
 {
+    protected GameObject owner;
     protected IHitbox[] list;
     protected Dictionary<GameObject, List<IHitbox>> collisionDictionary;
     protected List<GameObject> victims;
@@ -13,6 +14,11 @@ public class HitboxManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Initialize();
+    }
+
+    protected virtual void Initialize() {
+        owner = this.gameObject.transform.root.gameObject;
         list = GetComponentsInChildren<IHitbox>();
         collisionDictionary = new Dictionary<GameObject, List<IHitbox>>();
         victims = new List<GameObject>();
@@ -71,7 +77,7 @@ public class HitboxManager : MonoBehaviour
             //Add to the victims list to prevent hitting again
             if (victims.Contains(p.Key)) continue;
             victims.Add(p.Key);
-            topIDHitbox.Hit(p.Key);
+            topIDHitbox.OnHit(p.Key);
         }
     }
 

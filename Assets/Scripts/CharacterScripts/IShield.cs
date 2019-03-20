@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IShield
+public interface IShield : IFreezable
 {
     float MaxShieldHealth {get; set;}
     float CurrentShieldHealth {get; set;}
@@ -10,14 +10,13 @@ public interface IShield
     float ShieldHealthRegenRate {get; set;}
     bool IsActive {get; set;}
     bool IsShieldStunned {get; set;}
-    bool IsFrozen {get; set;}
     bool IsInvulnerable {get; set;}
     
     void ActivateShield();
 
     void DeactivateShield();
     
-    void OnHit(IHitbox hitbox, GameObject damageable);
+    void OnHit(IAttackHitbox hitbox, GameObject damageable);
 
     void TakeDamage(float damage);
 
@@ -25,11 +24,9 @@ public interface IShield
 
     GameObject GetOwner();
 
-    void ShieldStun(IHitbox hitbox);
+    void ShieldStun(IAttackHitbox hitbox);
 
-    void Push(IHitbox hitbox);
-
-    void Freeze(int freezeFrameDuration);
+    void Push(IAttackHitbox hitbox);
 
     void OnShieldBreak();
 

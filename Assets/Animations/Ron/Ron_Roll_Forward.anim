@@ -7009,8 +7009,8 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.033333335
-    functionName: ForwardRollMovement
+  - time: 0
+    functionName: PreventWalkOffLedge
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -7030,8 +7030,15 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.33333334
-    functionName: ForwardRollEnd
+  - time: 0.25
+    functionName: Flip
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.51666665
+    functionName: UnPreventWalkOffLedge
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -2,13 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpeedBuffStatus : IStatus
+public class SpeedBuffStatus : BaseStatus
 {
-    protected bool endStatus;
-    public bool EndStatus {get {return endStatus;} set {endStatus = value;}}
-    
-    protected CharacterStats character;
-    protected List<IModifier> modifiers;
     protected float modifyValue;
 
     public SpeedBuffStatus(float buffRatio) {
@@ -16,8 +11,8 @@ public class SpeedBuffStatus : IStatus
         InitializeStatus(); 
     }
 
-    protected virtual void InitializeStatus() {
-        modifiers = new List<IModifier>();
+    protected override void InitializeStatus() {
+        base.InitializeStatus();
         modifiers.Add(new MultiplyModifier(Stat.MaxWalkSpeed, modifyValue));
         modifiers.Add(new MultiplyModifier(Stat.WalkAccelerationRate, modifyValue));
         modifiers.Add(new MultiplyModifier(Stat.GroundDecelerationRate, modifyValue));
@@ -30,18 +25,5 @@ public class SpeedBuffStatus : IStatus
         modifiers.Add(new MultiplyModifier(Stat.Gravity, modifyValue));
         modifiers.Add(new MultiplyModifier(Stat.MaxFallSpeed, modifyValue));
         modifiers.Add(new MultiplyModifier(Stat.MaxFastFallSpeed, modifyValue));
-    }
-    
-    public virtual void OnStatusEnter(GameObject entity) {
-        character = entity.GetComponent<CharacterStats>();
-        character.AddModifiers(modifiers);
-    }
-
-    public virtual void OnStatusStay(GameObject entity) {
-
-    }
-
-    public virtual void OnStatusExit(GameObject entity) {
-        character.RemoveModifiers(modifiers);
     }
 }

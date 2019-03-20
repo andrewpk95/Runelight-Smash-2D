@@ -3,42 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hitbox : MonoBehaviour, IHitbox
+public class BaseHitbox : MonoBehaviour, IHitbox
 {
-    public GameObject owner;
-    ICharacter ownerCharacter;
-    IDamageable ownerDamageable;
-    public HitboxManager manager;
-    public EventManager eventManager;
-    public Collider2D hitbox;
-    List<GameObject> collisions;
-
-    [SerializeField] protected float damage;
-    [SerializeField] protected bool hitStun;
-    [SerializeField] protected int angle;
-    [SerializeField] protected float baseKnockback;
-    [SerializeField] protected float knockbackGrowth;
-    [SerializeField] protected int freezeFrame;
-    [SerializeField] protected int id;
-    [SerializeField] protected float shieldStunMultiplier;
+    protected GameObject owner;
+    protected ICharacter ownerCharacter;
+    protected IDamageable ownerDamageable;
+    protected HitboxManager manager;
+    protected EventManager eventManager;
+    protected Collider2D hitbox;
+    protected List<GameObject> collisions;
     
-    public float Damage {get {return damage;} set {damage = value;}}
-    public bool HitStun {get {return hitStun;} set {hitStun = value;}}
-    public int Angle {get {return angle;} set {angle = value;}}
-    public float BaseKnockback {get {return baseKnockback;} set {baseKnockback = value;}}
-    public float KnockbackGrowth {get {return knockbackGrowth;} set {knockbackGrowth = value;}}
-    public int FreezeFrame {get {return freezeFrame;} set {freezeFrame = value;}}
+    [SerializeField] protected int id;
     public int ID {get {return id;} set {id = value;}}
-    public float ShieldStunMultiplier {get {return shieldStunMultiplier;} set {shieldStunMultiplier = value;}}
 
     public LayerMask mask;
 
-    Collider2D[] result;
-    int numResults;
+    protected Collider2D[] result;
+    protected int numResults;
     
     // Start is called before the first frame update
     void Start()
     {
+        Initialize();
+    }
+
+    protected virtual void Initialize() {
         owner = this.gameObject.transform.root.gameObject;
         ownerCharacter = owner.GetComponent<ICharacter>();
         ownerDamageable = owner.GetComponent<IDamageable>();
@@ -49,12 +38,9 @@ public class Hitbox : MonoBehaviour, IHitbox
         collisions = new List<GameObject>();
         result = new Collider2D[100];
         numResults = 0;
-        if (ShieldStunMultiplier == 0.0f) {
-            ShieldStunMultiplier = 1.0f;
-        }
     }
 
-    void CheckCollision() {
+    protected virtual void CheckCollision() {
         hitbox.enabled = true;
         ContactFilter2D contactFilter = new ContactFilter2D();
         mask = Physics2D.GetLayerCollisionMask (gameObject.layer);
@@ -65,17 +51,19 @@ public class Hitbox : MonoBehaviour, IHitbox
         //Debug.Log(numResults);
         
         for(int i = 0; i < numResults; i++) {
-            GameObject fighter = result[i].gameObject.transform.root.gameObject;
             if (result[i].gameObject.tag == "Shield") {
-                if (collisions.Contains(result[i].gameObject)) {
+                GameObject fighter = result[i].gameObject.GetComponent<IShield>().GetOwner();
+                if (fighter.Equals(owner) || collisions.Contains(result[i].gameObject)) {
 					continue;
 				}
                 else {
+                    
                     Debug.Log(this.gameObject.name + " hit " + fighter.name + "'s Shield!");
                     collisions.Add(result[i].gameObject);
                 }
             }
             else if (result[i].gameObject.tag == "Hurtbox") {
+                GameObject fighter = result[i].gameObject.GetComponent<IHurtbox>().GetOwner();
 				if (fighter.Equals(owner) || collisions.Contains(fighter)) {
 					continue;
 				}
@@ -87,54 +75,45 @@ public class Hitbox : MonoBehaviour, IHitbox
         }
     }
 
-    public void Hit(GameObject target) {
-        eventManager.InvokeOnHitEvent(this, target);
-        if (target.tag == "Shield") {
-            Debug.Log("Shielded");
-            ownerDamageable.Freeze(FreezeFrame);
-        }
-        else if (target.tag == "Entity") {
-            ownerDamageable.Freeze(FreezeFrame);
-        }
+    public virtual void OnHit(GameObject target) {
+        
     }
 
-    public void Reset() {
+    public virtual void Reset() {
         collisions.Clear();
         hitbox.enabled = false;
     }
 
-    public string GetName() {
+    public virtual string GetName() {
         return this.gameObject.name;
     }
 
-    public GameObject GetOwner() {
+    public virtual GameObject GetOwner() {
         return owner;
     }
 
-    public Vector3 GetWorldPosition() {
+    public virtual Vector3 GetWorldPosition() {
         return this.gameObject.transform.position;
     }
 
-    public void SetOwner(GameObject newOwner) {
+    public virtual void SetOwner(GameObject newOwner) {
         owner = newOwner;
     }
 
-    public List<GameObject> GetCollisionList() {
+    public virtual List<GameObject> GetCollisionList() {
         CheckCollision();
         return collisions;
     }
 
-    public void Ignore(GameObject fighter) {
+    public virtual void Ignore(GameObject fighter) {
         collisions.Add(fighter);
     }
 
-    public void ClearCollisionList() {
+    public virtual void ClearCollisionList() {
         collisions.Clear();
     }
 
     void OnDisable() {
         Reset();
     }
-
-    
 }

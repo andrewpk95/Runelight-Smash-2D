@@ -43,6 +43,7 @@ public class RonAnimationEvents : MonoBehaviour
         if (hitboxes.Count <= 0) {
             return;
         }
+        //Debug.Log("Activating " + hitboxGroupName);
         hitboxes[hitboxGroupName].ActivateHitboxes();
         activatedHitboxes.Add(hitboxes[hitboxGroupName]);
     }
