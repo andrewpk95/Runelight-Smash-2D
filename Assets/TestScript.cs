@@ -6,16 +6,22 @@ public class TestScript : MonoBehaviour
 {
     public GameObject test;
     //public LayerMask mask;
+
+    public Coroutine timer;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        //timer = Timer.instance.CreateTimer(120, Empty, Empty, "Test Timer");
+    }
+
+    void Empty() {
+        Debug.Log("Haha");
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        Debug.DrawRay(test.transform.position, Vector3.right, Color.red);
+        //if (Time.frameCount > 50) Timer.instance.StopTimer(timer);
     }
 }

@@ -741,7 +741,26 @@ AnimationClip:
       m_RotationOrder: 4
     path: SpriteParent/SpriteGroup/UpperBody/LeftUpperArm/LeftLowerArm/LeftHand
   m_ScaleCurves: []
-  m_FloatCurves: []
+  m_FloatCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 103
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: isBusy
+    path: 
+    classID: 114
+    script: {fileID: 11500000, guid: d37552ff7ca92ed4087edf97b0393ae7, type: 3}
   m_PPtrCurves:
   - curve:
     - time: 0
@@ -968,6 +987,13 @@ AnimationClip:
       script: {fileID: 0}
       typeID: 4
       customType: 4
+      isPPtrCurve: 0
+    - serializedVersion: 2
+      path: 0
+      attribute: 1856486542
+      script: {fileID: 11500000, guid: d37552ff7ca92ed4087edf97b0393ae7, type: 3}
+      typeID: 114
+      customType: 0
       isPPtrCurve: 0
     pptrCurveMapping:
     - {fileID: 21300024, guid: 172097887ce74fd4aa4754ba9160565d, type: 3}
@@ -3429,6 +3455,25 @@ AnimationClip:
     path: SpriteParent/SpriteGroup/UpperBody/LeftUpperArm/LeftLowerArm/LeftHand
     classID: 4
     script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 103
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: isBusy
+    path: 
+    classID: 114
+    script: {fileID: 11500000, guid: d37552ff7ca92ed4087edf97b0393ae7, type: 3}
   m_EulerEditorCurves:
   - curve:
       serializedVersion: 2

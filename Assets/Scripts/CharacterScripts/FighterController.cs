@@ -10,6 +10,10 @@ public class FighterController : CharacterMovement
     protected HurtboxManager hurtbox;
     protected EventManager eventManager;
 
+    public GameObject collidingWall;
+    protected Vector2 collisionContact;
+    protected Vector2 collisionNormal;
+
     public bool isBusy;
     
     public bool isJabbing;
@@ -23,11 +27,11 @@ public class FighterController : CharacterMovement
     protected IStatus tumblingStatus;
     [SerializeField] protected bool isTumbled;
     public bool IsTumbled {get {return isTumbled;} set {isTumbled = value;}}
-    protected Coroutine TumbleDurationCoroutine;
+    protected Timer TumbleDurationTimer;
     public const int TUMBLE_MAXIMUM_DURATION_FRAME = 180;
     [SerializeField] protected bool isTeching;
     public bool IsTeching {get {return isTeching;} set {isTeching = value;}}
-    protected Coroutine TechWindowDurationCoroutine;
+    protected Timer TechWindowDurationTimer;
     public const int TECH_WINDOW_FRAME = 11;
 
     public bool isShielding;
@@ -44,22 +48,24 @@ public class FighterController : CharacterMovement
     public GameObject grabber;
     public Transform grabTransform;
     protected int grabDurationLeft;
-    protected Coroutine GrabDurationCoroutine;
+    protected Coroutine GrabDurationTimer;
     public const int GRAB_MAXIMUM_DURATION_FRAME = 180;
     protected IStatus grabImmuneStatus;
     public const int GRAB_IMMUNE_FRAME = 70;
 
     protected BoolStat canGrabEdge;
     public bool CanGrabEdge {get {return canGrabEdge.stat;} set {canGrabEdge.Switch(value);}}
+    public bool isEdgeGrabImmune;
     public bool isGrabbingEdge;
     public GameObject grabbingEdge;
     public Transform edgeGrabTransform;
     public Collider2D edgeHitbox;
+    protected IStatus edgeGrabIntangibilityStatus;
     protected int edgeGrabDurationLeft;
-    protected Coroutine EdgeGrabDurationCoroutine;
+    protected Timer EdgeGrabDurationTimer;
     public const int EDGE_GRAB_MAXIMUM_DURATION_FRAME = 300;
-    protected IStatus edgeGrabImmuneStatus;
-    public const int EDGE_GRAB_IMMUNE_FRAME = 10;
+    protected Timer EdgeGrabImmuneTimer;
+    public const int EDGE_GRAB_IMMUNE_FRAME = 15;
     
     //Action Buffer Queue Veriables
     public int actionBufferFrame;
@@ -85,10 +91,16 @@ public class FighterController : CharacterMovement
     }
 
     protected override void InitializeVariables() {
+        EdgeGrabDurationTimer = new Timer(EDGE_GRAB_MAXIMUM_DURATION_FRAME, "Edge Grab Duration Timer", null, EdgeNeutralRelease);
+        EdgeGrabImmuneTimer = new Timer(EDGE_GRAB_IMMUNE_FRAME, "Edge Grab Immune Timer", OnEdgeGrabImmuneStart, OnEdgeGrabImmuneStop);
+        
+        TumbleDurationTimer = new Timer (TUMBLE_MAXIMUM_DURATION_FRAME, "Tumble Duration Timer", null, OnTumbleDurationStop);
+        TechWindowDurationTimer = new Timer(TECH_WINDOW_FRAME, "Tech Window Timer", OnTechWindowStart, OnTechWindowStop);
+
         canBeGrabbed = new BoolStat(true);
         grabImmuneStatus = new GrabImmuneStatus(GRAB_IMMUNE_FRAME);
-        canGrabEdge = new BoolStat(true);
-        edgeGrabImmuneStatus = new EdgeGrabImmuneStatus(EDGE_GRAB_IMMUNE_FRAME);
+        canGrabEdge = new BoolStat(false);
+        //edgeGrabImmuneStatus = new EdgeGrabImmuneStatus(EDGE_GRAB_IMMUNE_FRAME);
         tumblingStatus = new TumblingStatus();
         helplessStatus = new HelplessStatus(0.7f);
         base.InitializeVariables();
@@ -106,13 +118,38 @@ public class FighterController : CharacterMovement
     }
 
     protected override void Tick() {
+        if (isGrabbingEdge) this.gameObject.transform.position = grabbingEdge.transform.position + this.gameObject.transform.position - edgeGrabTransform.position;
         base.Tick();
-        edgeHitbox.enabled = !isBusy && !isGrabbingEdge && CanGrabEdge && velocity.y < 0;
+        edgeHitbox.enabled = !isEdgeGrabImmune && !isGrabbingEdge && (CanGrabEdge || (!isBusy && velocity.y < 0));
+    }
+
+    protected override void UpdateOverridingVelocity() {
+        base.UpdateOverridingVelocity();
+        if (collidingWall != null) {
+            //Transfer velocity along the wall surface if the fighter is moving through forced movement
+            if (overrideVelocity) {
+                //If the velocity is not moving into the surface, return
+                if (Vector2.Angle(Velocity, collisionNormal) <= 90.0f) return;
+                Vector3 transferDirection = Vector3.ProjectOnPlane(Velocity, new Vector3(collisionNormal.x, collisionNormal.y, 0));
+                Vector3 transferVelocity = transferDirection.normalized * Velocity.magnitude;
+                Velocity = transferVelocity;
+                Debug.DrawRay(collisionContact, transferDirection.normalized, Color.green);
+            }
+        }
     }
 
     protected override void UpdatePhysics() {
         if (isGrabbingEdge) return;
         base.UpdatePhysics();
+    }
+
+    protected override void UpdateFallSpeed() {
+        if (isFastFalling) {
+            Velocity = new Vector2 (Velocity.x, -Stats.MaxFastFallSpeed);
+        }
+        else {
+            Velocity = new Vector2 (Velocity.x, Mathf.Min(GetTargetVelocity(Velocity.y, -Stats.MaxFallSpeed, Stats.Gravity), Velocity.y));
+        }
     }
 
     protected override void UpdateMovement() {
@@ -261,7 +298,7 @@ public class FighterController : CharacterMovement
         //If the fighter is grabbing onto ledge, perform getup attack
         if (isGrabbingEdge) {
             animator.SetTrigger("EdgeGetupAttack");
-            StopCoroutine(EdgeGrabDurationCoroutine);
+            TimerManager.instance.StopTimer(EdgeGrabDurationTimer);
             return;
         }
         //Shake out of tumbling state when performing the attack
@@ -272,7 +309,7 @@ public class FighterController : CharacterMovement
         //If the fighter is tumbled on the floor, perform getup attack
         if (IsTumbled) {
             animator.SetTrigger("GetupAttack");
-            StopCoroutine(TumbleDurationCoroutine);
+            TimerManager.instance.StopTimer(TumbleDurationTimer);
             UnTumble();
             return;
         }
@@ -293,7 +330,7 @@ public class FighterController : CharacterMovement
         if (IsTumbling) {
             if (!IsTeching) {
                 IsTeching = true;
-                TechWindowDurationCoroutine = StartCoroutine(TechWindowDuration(TECH_WINDOW_FRAME));
+                TimerManager.instance.StartTimer(TechWindowDurationTimer);
             }
         }
         if (isGrabbing) {
@@ -301,7 +338,8 @@ public class FighterController : CharacterMovement
         }
         if (isGrabbingEdge) {
             animator.SetTrigger("EdgeRollGetup");
-            StopCoroutine(EdgeGrabDurationCoroutine);
+            TimerManager.instance.StopTimer(EdgeGrabDurationTimer);
+            return;
         }
         if (IsTumbling) {
             statusManager.RemoveStatus(tumblingStatus);
@@ -309,7 +347,7 @@ public class FighterController : CharacterMovement
         }
         if (IsTumbled) {
             animator.SetTrigger("NeutralGetup");
-            StopCoroutine(TumbleDurationCoroutine);
+            TimerManager.instance.StopTimer(TumbleDurationTimer);
             UnTumble();
             return;
         }
@@ -390,7 +428,7 @@ public class FighterController : CharacterMovement
         }
         if (IsTumbled) {
             animator.SetTrigger("GetupAttack");
-            StopCoroutine(TumbleDurationCoroutine);
+            TimerManager.instance.StopTimer(TumbleDurationTimer);
             UnTumble();
             return;
         }
@@ -473,7 +511,7 @@ public class FighterController : CharacterMovement
         }
         if (IsTumbled) {
             animator.SetTrigger("GetupAttack");
-            StopCoroutine(TumbleDurationCoroutine);
+            TimerManager.instance.StopTimer(TumbleDurationTimer);
             UnTumble();
             return;
         }
@@ -542,20 +580,20 @@ public class FighterController : CharacterMovement
             case InputDirection.Right:
                 if (isFacingRight) animator.SetTrigger("ForwardThrow");
                 else animator.SetTrigger("BackThrow");
-                StopCoroutine(GrabDurationCoroutine);
+                StopCoroutine(GrabDurationTimer);
                 break;
             case InputDirection.Left:
                 if (isFacingRight) animator.SetTrigger("BackThrow");
                 else animator.SetTrigger("ForwardThrow");
-                StopCoroutine(GrabDurationCoroutine);
+                StopCoroutine(GrabDurationTimer);
                 break;
             case InputDirection.Up:
                 animator.SetTrigger("UpThrow");
-                StopCoroutine(GrabDurationCoroutine);
+                StopCoroutine(GrabDurationTimer);
                 break;
             case InputDirection.Down:
                 animator.SetTrigger("DownThrow");
-                StopCoroutine(GrabDurationCoroutine);
+                StopCoroutine(GrabDurationTimer);
                 break;
             }
         }
@@ -564,21 +602,21 @@ public class FighterController : CharacterMovement
             switch (actionInputQueue.inputDirection) {
             case InputDirection.Right:
                 if (isFacingRight) animator.SetTrigger("EdgeNeutralGetup");
-                else ReleaseEdge();
-                StopCoroutine(EdgeGrabDurationCoroutine);
+                else EdgeNeutralRelease();
+                TimerManager.instance.StopTimer(EdgeGrabDurationTimer);
                 break;
             case InputDirection.Left:
-                if (isFacingRight) ReleaseEdge();
+                if (isFacingRight) EdgeNeutralRelease();
                 else animator.SetTrigger("EdgeNeutralGetup");
-                StopCoroutine(EdgeGrabDurationCoroutine);
+                TimerManager.instance.StopTimer(EdgeGrabDurationTimer);
                 break;
             case InputDirection.Up:
                 animator.SetTrigger("EdgeJumpGetup");
-                StopCoroutine(EdgeGrabDurationCoroutine);
+                TimerManager.instance.StopTimer(EdgeGrabDurationTimer);
                 break;
             case InputDirection.Down:
-                ReleaseEdge();
-                StopCoroutine(EdgeGrabDurationCoroutine);
+                EdgeNeutralRelease();
+                TimerManager.instance.StopTimer(EdgeGrabDurationTimer);
                 break;
             }
         }
@@ -588,27 +626,32 @@ public class FighterController : CharacterMovement
             case InputDirection.Right:
                 if (isFacingRight) animator.SetTrigger("RollForwardGetup");
                 else animator.SetTrigger("RollBackwardGetup");
-                StopCoroutine(TumbleDurationCoroutine);
+                TimerManager.instance.StopTimer(TumbleDurationTimer);
                 UnTumble();
                 break;
             case InputDirection.Left:
                 if (isFacingRight) animator.SetTrigger("RollBackwardGetup");
                 else animator.SetTrigger("RollForwardGetup");
-                StopCoroutine(TumbleDurationCoroutine);
+                TimerManager.instance.StopTimer(TumbleDurationTimer);
                 UnTumble();
                 break;
             case InputDirection.Up:
                 animator.SetTrigger("NeutralGetup");
-                StopCoroutine(TumbleDurationCoroutine);
+                TimerManager.instance.StopTimer(TumbleDurationTimer);
                 UnTumble();
                 break;
             case InputDirection.Down:
                 animator.SetTrigger("NeutralGetup");
-                StopCoroutine(TumbleDurationCoroutine);
+                TimerManager.instance.StopTimer(TumbleDurationTimer);
                 UnTumble();
                 break;
             }
         }
+    }
+
+    protected virtual void EdgeNeutralRelease() {
+        animator.SetTrigger("EdgeRelease"); 
+        ReleaseEdge();
     }
 
     protected virtual void ProcessAerialAttackInput() {
@@ -696,6 +739,11 @@ public class FighterController : CharacterMovement
         if (entity.Equals(this.gameObject)) {
             //Interrupt any movement status
             if (movementStatus != null) statusManager.RemoveStatus(movementStatus);
+            //Remove Tumbled State
+            if (IsTumbled) {
+                TimerManager.instance.StopTimer(TumbleDurationTimer);
+                UnTumble();
+            }
             //Remove Helplessness
             if (IsHelpless) {
                 IsHelpless = false; 
@@ -704,7 +752,7 @@ public class FighterController : CharacterMovement
             //Interrupt any grabbing state
             if (isGrabbing) GrabReleasePushed();
             //Interrupt edge grabbing
-            if (isGrabbingEdge) grabbingEdge.GetComponent<EdgeBehaviour>().ReleaseFighter(this.gameObject);
+            if (isGrabbingEdge) ReleaseEdge();
         }
     }
 
@@ -716,36 +764,25 @@ public class FighterController : CharacterMovement
         }
     }
 
-    public void OnEdgeGrab(GameObject entity, GameObject edge) {
+    public virtual void OnEdgeGrab(GameObject entity, GameObject edge) {
         if (entity.Equals(this.gameObject)) {
-            if (!CanGrabEdge) return;
+            //if (!CanGrabEdge) return;
             Debug.Log(entity.name + " grabbed edge " + edge.name);
             EdgeGrab(edge);
         }
     }
 
-    IEnumerator TechWindowDuration(int duration) {
-        Debug.Log("Tech Window Duration Started");
+    //Timer Methods
+
+    void OnTechWindowStart() {
         IsTeching = true;
-        int techWindowDurationLeft = 0;
-        while (techWindowDurationLeft < duration) {
-            techWindowDurationLeft++;
-            Debug.Log("Tech Window Counting: Frame " + techWindowDurationLeft);
-            yield return null;
-        }
-        Debug.Log("Tech Window Counting Done...");
+    }
+
+    void OnTechWindowStop() {
         IsTeching = false;
     }
 
-    IEnumerator TumbleDuration(int duration) {
-        Debug.Log("Tumble Duration Started");
-        int tumbleDurationLeft = 0;
-        while (tumbleDurationLeft < duration) {
-            tumbleDurationLeft++;
-            Debug.Log("Tumble Counting: Frame " + tumbleDurationLeft);
-            yield return null;
-        }
-        Debug.Log("Tumble Counting Done...");
+    void OnTumbleDurationStop() {
         animator.SetTrigger("NeutralGetup");
         UnTumble();
     }
@@ -763,16 +800,12 @@ public class FighterController : CharacterMovement
         animator.SetTrigger("GrabRelease");
     }
 
-    IEnumerator EdgeGrabDuration(int duration) {
-        Debug.Log("Edge Grab Duration Started");
-        edgeGrabDurationLeft = 0;
-        while (edgeGrabDurationLeft < duration) {
-            edgeGrabDurationLeft++;
-            Debug.Log("Edge Grab Counting: Frame " + edgeGrabDurationLeft);
-            yield return null;
-        }
-        Debug.Log("Edge Grab Counting Done, Releasing...");
-        ReleaseEdge();
+    void OnEdgeGrabImmuneStart() {
+        isEdgeGrabImmune = true;
+    }
+
+    void OnEdgeGrabImmuneStop() {
+        isEdgeGrabImmune = false;
     }
 
     //ICharacter Implement Functions
@@ -790,8 +823,9 @@ public class FighterController : CharacterMovement
         }
         if (isTumbled) return;
         if (isGrabbingEdge) {
+            if (isBusy) return;
             animator.SetTrigger("EdgeJumpGetup");
-            StopCoroutine(EdgeGrabDurationCoroutine);
+            TimerManager.instance.StopTimer(EdgeGrabDurationTimer);
             return;
         }
         base.Jump();
@@ -848,7 +882,7 @@ public class FighterController : CharacterMovement
         statusManager.RemoveStatus(tumblingStatus);
     }
 
-    public void Tumble() {
+    public virtual void Tumble() {
         if (IsTumbling) {
             IsTumbling = false;
         }
@@ -856,16 +890,16 @@ public class FighterController : CharacterMovement
         IsTumbled = true;
         CanBeGrabbed = false;
         IgnoreMainJoystick(true);
-        TumbleDurationCoroutine = StartCoroutine(TumbleDuration(TUMBLE_MAXIMUM_DURATION_FRAME));
+        TimerManager.instance.StartTimer(TumbleDurationTimer);
     }
 
-    public void UnTumble() {
+    public virtual void UnTumble() {
         IsTumbled = false;
         CanBeGrabbed = true;
         IgnoreMainJoystick(false);
     }
 
-    public void Grab(GameObject target) {
+    public virtual void Grab(GameObject target) {
         CanBeGrabbed = false;
         isGrabbing = true;
         IgnoreMainJoystick(true);
@@ -874,10 +908,10 @@ public class FighterController : CharacterMovement
         grabbingFighter.transform.SetParent(grabTransform);
         
         grabbingFighter.GetComponent<ICharacter>().GetGrabbedBy(this.gameObject);
-        GrabDurationCoroutine = StartCoroutine(GrabDuration(GRAB_MAXIMUM_DURATION_FRAME));
+        GrabDurationTimer = StartCoroutine(GrabDuration(GRAB_MAXIMUM_DURATION_FRAME));
     }
 
-    public void GetGrabbedBy(GameObject parent) {
+    public virtual void GetGrabbedBy(GameObject parent) {
         if (IsTumbling) {
             statusManager.RemoveStatus(tumblingStatus);
             IsTumbling = false;
@@ -890,9 +924,9 @@ public class FighterController : CharacterMovement
         Face(parent);
     }
 
-    public void GrabRelease() {
+    public virtual void GrabRelease() {
         if (grabbingFighter == null) return;
-        StopCoroutine(GrabDurationCoroutine);
+        StopCoroutine(GrabDurationTimer);
         CanBeGrabbed = true;
         isGrabbing = false;
         IgnoreMainJoystick(false);
@@ -901,9 +935,9 @@ public class FighterController : CharacterMovement
         grabbingFighter = null;
     }
 
-    public void GrabReleasePushed() {
+    public virtual void GrabReleasePushed() {
         if (grabbingFighter == null) return;
-        StopCoroutine(GrabDurationCoroutine);
+        StopCoroutine(GrabDurationTimer);
         CanBeGrabbed = true;
         isGrabbing = false;
         IgnoreMainJoystick(false);
@@ -912,7 +946,7 @@ public class FighterController : CharacterMovement
         grabbingFighter = null;
     }
 
-    public void FreeFromGrab(bool pushed) {
+    public virtual void FreeFromGrab(bool pushed) {
         if (grabber == null) return;
         CanBeGrabbed = true;
         isGrabbed = false;
@@ -928,12 +962,12 @@ public class FighterController : CharacterMovement
         }
     }
 
-    public void MashFromGrab() {
+    public virtual void MashFromGrab() {
         Debug.Log("Mashing!");
         grabber.GetComponent<ICharacter>().GetMashed(5);
     }
 
-    public void GetMashed(int mashAmount) {
+    public virtual void GetMashed(int mashAmount) {
         grabDurationLeft += 5;
         Debug.Log("Grab Counting: Frame " + grabDurationLeft);
     }
@@ -946,30 +980,37 @@ public class FighterController : CharacterMovement
         return grabber;
     }
 
-    public void EdgeGrab(GameObject edge) {
+    public virtual void EdgeGrab(GameObject edge) {
         animator.SetTrigger("EdgeGrab");
         if (IsTumbling) {
             statusManager.RemoveStatus(tumblingStatus);
             IsTumbling = false;
         }
+        if (IsHelpless) {
+            statusManager.RemoveStatus(helplessStatus);
+            IsHelpless = false;
+        }
+        if (movementStatus != null) statusManager.RemoveStatus(movementStatus);
         CanGrabEdge = false;
         isGrabbingEdge = true;
         IgnoreMainJoystick(true);
         grabbingEdge = edge;
         OnLand();
-        statusManager.AddStatus(new IntangibilityStatus(40)); //Grant Intangibility based on percentage
+        edgeGrabIntangibilityStatus = new IntangibilityStatus(40); //Grant Intangibility based on percentage
+        statusManager.AddStatus(edgeGrabIntangibilityStatus);
+        Velocity = Vector2.zero;
         DisableMovement();
         Face(edge.transform.parent.gameObject);
-        this.gameObject.transform.position = edge.transform.position - edgeGrabTransform.localPosition;
-
-        EdgeGrabDurationCoroutine = StartCoroutine(EdgeGrabDuration(EDGE_GRAB_MAXIMUM_DURATION_FRAME));
+        this.gameObject.transform.position = grabbingEdge.transform.position + this.gameObject.transform.position - edgeGrabTransform.position;
+        
+        TimerManager.instance.StartTimer(EdgeGrabDurationTimer);
 
         edge.GetComponent<EdgeBehaviour>().AttachFighter(this.gameObject);
     }
 
-    public void ReleaseEdge() {
+    public virtual void ReleaseEdge() {
         if (grabbingEdge == null) return;
-        animator.SetTrigger("EdgeRelease");
+        
         CanGrabEdge = true;
         isGrabbingEdge = false;
         IgnoreMainJoystick(false);
@@ -979,12 +1020,31 @@ public class FighterController : CharacterMovement
         EnableMovement();
         this.gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
         this.gameObject.transform.localScale = Vector3.one;
-        statusManager.AddStatus(edgeGrabImmuneStatus); //Edge Grab Immunity after releasing edge
+        //End intangibility
+        statusManager.RemoveStatus(edgeGrabIntangibilityStatus);
+        //Edge Grab Immunity after releasing edge
+        TimerManager.instance.StartTimer(EdgeGrabImmuneTimer);
         
-        StopCoroutine(EdgeGrabDurationCoroutine);
+        //TimerManager.instance.StopTimer(EdgeGrabDurationTimer);
+    }
+
+    public virtual void EdgeJump() {
+        Velocity = new Vector2(isFacingRight ? 4.0f : -4.0f, 0.0f);
+        base.Jump(fullHopHeight);
     }
 
     //Overrides
+
+    protected override void GroundCheck() {
+        base.GroundCheck();
+        if (IsGrounded) {
+            if (IsTumbling) {
+                Debug.Log("Tumble!");
+                statusManager.RemoveStatus(tumblingStatus);
+                Tumble();
+            }
+        }
+    }
 
     protected override void OnLand() {
         base.OnLand();
@@ -1000,7 +1060,7 @@ public class FighterController : CharacterMovement
             else { //Tech in place
                 animator.SetTrigger("Tech");
             }
-            StopCoroutine(TechWindowDurationCoroutine);
+            TimerManager.instance.StopTimer(TechWindowDurationTimer);
             Debug.Log("Teched!");
             IsTeching = false;
         }
@@ -1009,11 +1069,7 @@ public class FighterController : CharacterMovement
             statusManager.RemoveStatus(helplessStatus);
             IsHelpless = false;
         }
-        if (IsTumbling) {
-            Debug.Log("Tumble!");
-            statusManager.RemoveStatus(tumblingStatus);
-            Tumble();
-        }
+        
     }
 
     protected override void Jump(float jumpHeight) {
@@ -1024,5 +1080,39 @@ public class FighterController : CharacterMovement
     protected override void DoubleJump(float jumpHeight) {
         base.DoubleJump(jumpHeight);
         animator.SetTrigger("DoubleJump");
+    }
+
+    //Collision with walls
+
+    protected override void OnCollisionEnter2D(Collision2D collision) {
+        base.OnCollisionEnter2D(collision);
+        if (collision.collider.gameObject.tag == "Wall") {
+            //Debug.Log(this.gameObject.name + " collided with wall: " + collision.collider.gameObject.name);
+        }
+    }
+
+    protected override void OnCollisionStay2D(Collision2D collision) {
+        base.OnCollisionStay2D(collision);
+        if (collision.collider.gameObject.tag == "Wall") {
+            //Debug.Log("Colliding with wall: " + collision.collider.gameObject.name);
+            ContactPoint2D[] contacts = new ContactPoint2D[collision.contactCount];
+            collision.GetContacts(contacts);
+            //Debug Draw Contact point
+            foreach (ContactPoint2D contactPoint in contacts) {
+                Debug.DrawRay(contactPoint.point, contactPoint.normal, Color.red);
+            }
+            //Update variables
+            collidingWall = collision.collider.gameObject;
+            collisionContact = contacts[0].point;
+            collisionNormal = contacts[0].normal;
+        }
+    }
+
+    protected override void OnCollisionExit2D(Collision2D collision) {
+        base.OnCollisionExit2D(collision);
+        if (collision.collider.gameObject.tag == "Wall") {
+            //Debug.Log(this.gameObject.name + " collision with wall over: " + collision.collider.gameObject.name);
+            collidingWall = null;
+        }
     }
 }

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlatformBehavior : MonoBehaviour, IGround
 {
-    Collider2D col;
+    public Collider2D col;
+    public Collider2D wall;
     
     // Start is called before the first frame update
     void Start()
@@ -25,6 +26,7 @@ public class PlatformBehavior : MonoBehaviour, IGround
     public void IgnoreCollision(Collider2D fighter, bool ignore) {
         //Debug.Log(fighter.gameObject.name + " can land on " + this.gameObject.name + ": " + !ignore);
         Physics2D.IgnoreCollision(col, fighter, ignore);
+        Physics2D.IgnoreCollision(wall, fighter, ignore);
         //IgnoreEdgeCollision(fighter, ignore);
     }
 

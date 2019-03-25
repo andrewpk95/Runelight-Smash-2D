@@ -24,4 +24,14 @@ public class HelplessStatus : BaseStatus
         modifiers.Add(new OverrideModifier(Stat.MaxFallSpeed, HELPLESS_MAX_FALL_SPEED));
         modifiers.Add(new OverrideModifier(Stat.MaxFastFallSpeed, HELPLESS_MAX_FAST_FALL_SPEED));
     }
+
+    public override void OnStatusEnter(GameObject entity) {
+        base.OnStatusEnter(entity);
+        character.CanGrabEdge = true;
+    }
+
+    public override void OnStatusExit(GameObject entity) {
+        base.OnStatusExit(entity);
+        character.CanGrabEdge = false;
+    }
 }

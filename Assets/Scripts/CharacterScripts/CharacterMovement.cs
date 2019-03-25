@@ -158,7 +158,7 @@ public class CharacterMovement : MonoBehaviour
         if (movementEnabled) {
             GroundCheck();
             if (overrideVelocity) {
-                Velocity = overridingVelocity;
+                UpdateOverridingVelocity();
             }
             else {
                 UpdatePhysics();
@@ -179,10 +179,14 @@ public class CharacterMovement : MonoBehaviour
         //Debug.DrawRay(GetFeetPosition(velocity * Time.fixedDeltaTime), -Vector2.up, debugColor);
     }
 
+    protected virtual void UpdateOverridingVelocity() {
+        Velocity = overridingVelocity;
+    }
+
     protected virtual void UpdatePhysics() {
         //Ground Check Update
         if (IsGrounded) {
-            Velocity = new Vector2 (Velocity.x, 0.0f);
+            //Velocity = new Vector2 (Velocity.x, 0.0f);
         }
         else {
             //Falling Speed Update
@@ -534,6 +538,31 @@ public class CharacterMovement : MonoBehaviour
         else {
             Velocity = new Vector2 (Velocity.x, Mathf.Sqrt(2.0f * Stats.Gravity * jumpHeight));
         }
+    }
+
+    //Collision Functions
+
+    protected virtual void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.collider.gameObject.tag == "Ground") {
+            //Debug.Log("Collided with Ground: " + collision.collider.gameObject.name);
+            if (Velocity.y < 0) {
+                Velocity = new Vector2(Velocity.x, 0.0f);
+            }
+        }
+        if (collision.collider.gameObject.tag == "Platform") {
+            //Debug.Log("Collided with Platform: " + collision.collider.gameObject.name);
+            if (Velocity.y < 0) {
+                Velocity = new Vector2(Velocity.x, 0.0f);
+            }
+        }
+    }
+
+    protected virtual void OnCollisionStay2D(Collision2D collision) {
+
+    }
+
+    protected virtual void OnCollisionExit2D(Collision2D collision) {
+
     }
 
 }

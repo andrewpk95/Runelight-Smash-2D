@@ -12,6 +12,9 @@ public class RonController : FighterController, ICharacter
     public float upSpecialVerticalAcceleration;
 
     public float downSpecialFallSpeed;
+    protected IStatus downSpecialStatus;
+    protected Timer MetalFormDurationTimer;
+    public const int METAL_FORM_MAXIMUM_DURATION = 120;
 
     public bool isMetalForm;
     public Color metalFormColor1;
@@ -27,6 +30,11 @@ public class RonController : FighterController, ICharacter
     protected override void InitializeComponents() {
         base.InitializeComponents();
         passive = GetComponent<RonPassive>();
+    }
+
+    protected override void InitializeVariables() {
+        base.InitializeVariables();
+        MetalFormDurationTimer = new Timer(METAL_FORM_MAXIMUM_DURATION, "Metal Form Duration Timer", OnMetalFormDurationStart, OnMetalFormDurationStop);
     }
 
     // Update is called once per frame
@@ -61,6 +69,7 @@ public class RonController : FighterController, ICharacter
         if (isMetalForm) {
             animator.SetTrigger("DownSpecialEnd");
             isMetalForm = false;
+            TimerManager.instance.StopTimer(MetalFormDurationTimer);
             return;
         }
         base.ProcessSpecialInput();
@@ -85,6 +94,15 @@ public class RonController : FighterController, ICharacter
         if (isMetalForm) return;
         base.Crouch();
     }
+
+    void OnMetalFormDurationStart() {
+
+    }
+
+    void OnMetalFormDurationStop() {
+        animator.SetTrigger("DownSpecialEnd");
+        isMetalForm = false;
+    }
     
     public void SideSpecialStart() {
         Debug.Log("Side Special Start");
@@ -108,15 +126,17 @@ public class RonController : FighterController, ICharacter
     public void DownSpecialMovement() {
         isMetalForm = true;
         statusManager.RemoveStatus(movementStatus);
-        movementStatus = new MovementStatus(new Vector2(0, -downSpecialFallSpeed), 120);
-        statusManager.AddStatus(movementStatus);
+        downSpecialStatus = new RonDownSpecialMovementStatus(downSpecialFallSpeed, 1.0f, 120);
+        statusManager.AddStatus(downSpecialStatus);
         hurtbox.StopFlashing();
         hurtbox.ChangeSpriteColor(metalFormColor2);
+
+        TimerManager.instance.StartTimer(MetalFormDurationTimer);
     }
 
     public void DownSpecialEnd() {
         isMetalForm = false;
-        statusManager.RemoveStatus(movementStatus);
+        statusManager.RemoveStatus(downSpecialStatus);
         movementStatus = new MovementStatus(Vector2.zero, 20);
         statusManager.AddStatus(movementStatus);
         hurtbox.ResetSpriteColor();
@@ -130,8 +150,23 @@ public class RonController : FighterController, ICharacter
         }
     }
 
+    public override void EdgeGrab(GameObject edge) {
+        if (isMetalForm) {
+            TimerManager.instance.StopTimer(MetalFormDurationTimer);
+            statusManager.RemoveStatus(downSpecialStatus);
+            isMetalForm = false;
+            hurtbox.ResetSpriteColor();
+        }
+        base.EdgeGrab(edge);
+    }
+
     protected override void GroundCheck() {
         base.GroundCheck();
         if (IsGrounded) canUseSideSpecial = true;
+    }
+
+    protected override void OnLand() {
+        base.OnLand();
+        canUseSideSpecial = true;
     }
 }

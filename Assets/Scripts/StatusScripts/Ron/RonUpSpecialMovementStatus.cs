@@ -13,6 +13,10 @@ public class RonUpSpecialMovementStatus : MovementStatus
     protected const int MOVEMENT_DURATION = 14;
     protected const int END_DURATION = 10;
 
+    protected const int EDGE_SNAP_FRAME = 15;
+    protected const int EDGE_SNAP_DURATION = 15;
+    protected bool snapToEdge;
+
     public RonUpSpecialMovementStatus(float horizontalSpeed, float verticalAcceleration, float movementRatio, int duration) : base(duration) {
         upSpecialHorizontalSpeed = horizontalSpeed;
         upSpecialVerticalAcceleration = verticalAcceleration;
@@ -37,6 +41,14 @@ public class RonUpSpecialMovementStatus : MovementStatus
             targetVelocity = new Vector2(character.GetTargetVelocity(character.Velocity.x, 0.0f, upSpecialDecelerationRate),
                                             character.GetTargetVelocity(character.Velocity.y, 0.0f, upSpecialDecelerationRate));
         }
+        if (durationLeft == EDGE_SNAP_FRAME) {
+            snapToEdge = true;
+            character.CanGrabEdge = true;
+        }
+        if (durationLeft == EDGE_SNAP_FRAME + EDGE_SNAP_DURATION) {
+            snapToEdge = false;
+            character.CanGrabEdge = false;
+        }
         base.OnStatusStay(entity);
     }
 
@@ -48,5 +60,7 @@ public class RonUpSpecialMovementStatus : MovementStatus
         base.OnStatusExit(entity);
         Debug.Log("Up Special Done");
         character.Helpless();
+        if (snapToEdge) character.CanGrabEdge = false;
+        snapToEdge = false;
     }
 }

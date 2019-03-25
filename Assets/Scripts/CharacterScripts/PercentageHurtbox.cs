@@ -169,21 +169,33 @@ public class PercentageHurtbox : FreezeBehaviour, IDamageable
         hurtbox.SetIntangible(false);
         hurtbox.StopFlashing();
     }
-    /*
-    public void HitStun(float duration) {
-        IsHitStunned = true;
-        hitStunDurationLeft = duration;
-        character.IgnoreInput(true);
-        character.EnableAirDeceleration(false);
-    }
-
-    public void Launch(int angle, float baseKnockback, float knockbackGrowth) {
-        Vector2 launchVector = SmashCalculator.LaunchVector(angle, percentage, baseKnockback, knockbackGrowth, weight)
-        Debug.Log(launchVector);
-        character.SetVelocity(launchVector);
-    }
-
     
-    */
+    //Collision with walls
 
+    protected virtual void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.collider.gameObject.tag == "Wall") {
+            //Debug.Log(this.gameObject.name + " collided with wall: " + collision.collider.gameObject.name);
+            ContactPoint2D[] contacts = new ContactPoint2D[collision.contactCount];
+            collision.GetContacts(contacts);
+            Vector2 normal = contacts[0].normal;
+            //Reflect character off the wall if being launched
+            if (IsLaunched) {
+                //If the velocity is not moving into the surface, return
+                if (Vector2.Angle(character.Velocity, normal) <= 90.0f) return;
+                Vector2 reflectDirection = Vector2.Reflect(character.Velocity, normal);
+                character.Velocity = reflectDirection;
+                Debug.DrawRay(contacts[0].point, reflectDirection, Color.blue, 0.5f);
+            }
+        }
+    }
+
+    protected virtual void OnCollisionStay2D(Collision2D collision) {
+        if (collision.collider.gameObject.tag == "Wall") {
+            
+        }
+    }
+
+    protected virtual void OnCollisionExit2D(Collision2D collision) {
+        
+    }
 }

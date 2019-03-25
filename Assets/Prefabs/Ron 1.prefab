@@ -42,7 +42,6 @@ Transform:
   - {fileID: 6860406468707261449}
   - {fileID: 4083321403230603261}
   - {fileID: 7442244189288566777}
-  - {fileID: 6106207257174247882}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -163,6 +162,7 @@ MonoBehaviour:
   isBusy: 0
   isJabbing: 0
   canJab: 0
+  isHelpless: 0
   isTumbling: 0
   isTumbled: 0
   isTeching: 0
@@ -181,13 +181,10 @@ MonoBehaviour:
   edgeHitbox: {fileID: 5924996048108513368}
   actionBufferFrame: 6
   sideSpecialSpeed: 7
-  isSideSpecial: 0
+  canUseSideSpecial: 0
   upSpecialHorizontalSpeed: 5
   upSpecialVerticalAcceleration: 50
-  isUpSpecial: 0
-  isUpSpecialStop: 0
   downSpecialFallSpeed: 15
-  isDownSpecial: 0
   isMetalForm: 0
   metalFormColor1: {r: 0, g: 0, b: 0, a: 0.30980393}
   metalFormColor2: {r: 0, g: 0, b: 0, a: 0.4}
@@ -1640,6 +1637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9479bb8757041c499d51d4249f79c3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFrozen: 0
   maxShieldHealth: 50
   currentShieldHealth: 0
   shieldHealthDegenRate: 9
@@ -1647,7 +1645,6 @@ MonoBehaviour:
   isActive: 0
   isShieldStunned: 0
   isShieldBroken: 0
-  isFrozen: 0
   isInvulnerable: 0
   owner: {fileID: 0}
   shieldBreakFrameLeft: 0
@@ -7783,6 +7780,7 @@ Transform:
   m_Children:
   - {fileID: 8806557844335133466}
   - {fileID: 2862426331704363821}
+  - {fileID: 6106207257174247882}
   m_Father: {fileID: 179608326160442946}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9371,8 +9369,8 @@ Transform:
   m_LocalPosition: {x: 0.126, y: 0.957, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 179608326160442946}
-  m_RootOrder: 7
+  m_Father: {fileID: 6860406468707261449}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7125269927181705210
 GameObject:
@@ -10741,7 +10739,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8874793723675609027}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.386, y: -0.634, z: 0}
+  m_LocalPosition: {x: 0.553, y: -0.178, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5327976563155756736}
