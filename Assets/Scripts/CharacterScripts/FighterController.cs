@@ -74,7 +74,7 @@ public class FighterController : CharacterMovement
     protected ActionInput actionInputQueue;
     
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         Initialize();
     }
