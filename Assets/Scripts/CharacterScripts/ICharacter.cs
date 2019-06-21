@@ -101,4 +101,8 @@ public interface ICharacter
      void EdgeGrab(GameObject edge);
 
      void ReleaseEdge();
+
+     //Death and Respawn Functions
+
+     void OnRespawn();
 }

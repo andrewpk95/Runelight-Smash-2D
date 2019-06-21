@@ -9,7 +9,6 @@ public class BaseHitbox : MonoBehaviour, IHitbox
     protected ICharacter ownerCharacter;
     protected IDamageable ownerDamageable;
     protected HitboxManager manager;
-    protected EventManager eventManager;
     protected Collider2D hitbox;
     protected List<GameObject> collisions;
     
@@ -32,7 +31,6 @@ public class BaseHitbox : MonoBehaviour, IHitbox
         ownerCharacter = owner.GetComponent<ICharacter>();
         ownerDamageable = owner.GetComponent<IDamageable>();
         manager = GetComponentInParent<HitboxManager>();
-        eventManager = (EventManager) GameObject.FindObjectOfType(typeof(EventManager));
         hitbox = GetComponent<Collider2D>();
         hitbox.enabled = false;
         collisions = new List<GameObject>();

@@ -6,6 +6,8 @@ public class BaseStatus : IStatus
 {
     protected bool endStatus;
     public bool EndStatus {get {return endStatus;} set {endStatus = value;}}
+    protected bool isPermanent;
+    public bool IsPermanent {get {return isPermanent;} set {isPermanent = value;}}
     
     protected CharacterStats characterStats;
     protected ICharacter character;

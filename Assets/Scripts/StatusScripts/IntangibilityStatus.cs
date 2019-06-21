@@ -20,4 +20,8 @@ public class IntangibilityStatus : TimerStatus
         base.OnStatusExit(entity);
         damageable.SetTangible();
     }
+
+    public override void OnStatusInterrupt(GameObject entity) {
+        OnStatusExit(entity);
+    }
 }

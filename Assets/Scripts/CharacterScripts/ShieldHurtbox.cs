@@ -35,7 +35,6 @@ public class ShieldHurtbox : FreezeBehaviour, IShield
     Collider2D col;
     Transform trans;
 
-    public EventManager eventManager;
     public StatusManager statusManager;
     protected IStatus shieldBreakStatus;
     
@@ -52,10 +51,9 @@ public class ShieldHurtbox : FreezeBehaviour, IShield
         col = GetComponent<Collider2D>();
         trans = GetComponent<Transform>();
 
-        eventManager = (EventManager) GameObject.FindObjectOfType(typeof(EventManager));
-        eventManager.StartListeningToOnHitEvent(new UnityAction<IAttackHitbox, GameObject>(OnHit));
-        eventManager.StartListeningToOnHitStunEvent(new UnityAction<IAttackHitbox, GameObject>(OnHitStun));
-        eventManager.StartListeningToOnGrabEvent(new UnityAction<GameObject, GameObject>(OnGrab));
+        EventManager.instance.StartListeningToOnHitEvent(new UnityAction<IAttackHitbox, GameObject>(OnHit));
+        EventManager.instance.StartListeningToOnHitStunEvent(new UnityAction<IAttackHitbox, GameObject>(OnHitStun));
+        EventManager.instance.StartListeningToOnGrabEvent(new UnityAction<GameObject, GameObject>(OnGrab));
 
         statusManager = GetComponentInParent<StatusManager>();
         shieldBreakStatus = new ShieldBreakStatus();

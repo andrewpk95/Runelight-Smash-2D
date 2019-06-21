@@ -17,4 +17,8 @@ public class EdgeGrabImmuneStatus : TimerStatus
         base.OnStatusExit(entity);
         character.CanGrabEdge = true;
     }
+
+    public override void OnStatusInterrupt(GameObject entity) {
+        OnStatusExit(entity);
+    }
 }

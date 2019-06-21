@@ -33,4 +33,8 @@ public class TimerStatus : BaseStatus
         base.OnStatusExit(entity);
         durationLeft = 0;
     }
+
+    public override void OnStatusInterrupt(GameObject entity) {
+        OnStatusExit(entity);
+    }
 }

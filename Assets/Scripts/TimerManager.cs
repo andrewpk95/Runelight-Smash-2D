@@ -38,16 +38,21 @@ public class TimerManager : MonoBehaviour
     }
 
     public Timer StartTimer(Timer newTimer) {
+        if (newTimer == null) return null;
         Coroutine newCoroutine = StartCoroutine(RunTimer(newTimer));
         TimerDictionary.Add(newTimer, newCoroutine);
         return newTimer;
     }
 
     public void StopTimer(Timer timer) {
+        if (timer == null) return;
         Debug.Log(timer.name + " Stopped");
-        StopCoroutine(TimerDictionary[timer]);
+        Coroutine timerCoroutine;
+        if (TimerDictionary.TryGetValue(timer, out timerCoroutine)) {
+            StopCoroutine(timerCoroutine);
+            TimerDictionary.Remove(timer);
+        }
         //timer.OnTimerStop();
-        TimerDictionary.Remove(timer);
     }
 
     IEnumerator RunTimer(Timer timer) {

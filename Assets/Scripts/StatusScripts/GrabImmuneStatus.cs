@@ -17,4 +17,8 @@ public class GrabImmuneStatus : TimerStatus
         base.OnStatusExit(entity);
         character.CanBeGrabbed = true;
     }
+
+    public override void OnStatusInterrupt(GameObject entity) {
+        OnStatusExit(entity);
+    }
 }

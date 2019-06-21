@@ -59,7 +59,14 @@ public class RonUpSpecialMovementStatus : MovementStatus
     public override void OnStatusExit(GameObject entity) {
         base.OnStatusExit(entity);
         Debug.Log("Up Special Done");
-        character.Helpless();
+        character.Helpless(); //Adds New status
+        if (snapToEdge) character.CanGrabEdge = false;
+        snapToEdge = false;
+    }
+
+    public override void OnStatusInterrupt(GameObject entity) {
+        base.OnStatusExit(entity);
+        Debug.Log("Up Special Interrupted");
         if (snapToEdge) character.CanGrabEdge = false;
         snapToEdge = false;
     }

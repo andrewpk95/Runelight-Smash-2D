@@ -11,6 +11,7 @@ public class PercentageHurtbox : FreezeBehaviour, IDamageable
     [SerializeField] protected bool isLaunched;
     [SerializeField] protected bool isInvulnerable;
     [SerializeField] protected bool isIntangible;
+    [SerializeField] protected GameObject lastDamagedBy;
 
     public int Weight {get {return weight;} set {weight = value;}}
     public float Percentage {get {return percentage;} set {percentage = value;}}
@@ -18,6 +19,7 @@ public class PercentageHurtbox : FreezeBehaviour, IDamageable
     public bool IsLaunched {get {return isLaunched;} set {isLaunched = value;}}
     public bool IsInvulnerable {get {return isInvulnerable;} set {isInvulnerable = value;}}
     public bool IsIntangible {get {return isIntangible;} set {isIntangible = value;}}
+    public GameObject LastDamagedBy {get {return lastDamagedBy;} set {lastDamagedBy = value;}}
 
     public Color intangibleColor1;
     public Color intangibleColor2;
@@ -30,7 +32,6 @@ public class PercentageHurtbox : FreezeBehaviour, IDamageable
     ICharacter character;
     HurtboxManager hurtbox;
 
-    public EventManager eventManager;
     public StatusManager statusManager;
     protected IStatus launchStatus;
     
@@ -41,8 +42,8 @@ public class PercentageHurtbox : FreezeBehaviour, IDamageable
         character = GetComponent<ICharacter>();
         hurtbox = GetComponentInChildren<HurtboxManager>();
 
-        eventManager = (EventManager) GameObject.FindObjectOfType(typeof(EventManager));
-        eventManager.StartListeningToOnHitEvent(new UnityAction<IAttackHitbox, GameObject>(OnHit));
+        EventManager.instance.StartListeningToOnHitEvent(new UnityAction<IAttackHitbox, GameObject>(OnHit));
+        EventManager.instance.StartListeningToOnDeathEvent(new UnityAction<GameObject>(OnDeath));
 
         statusManager = GetComponent<StatusManager>();
         launchStatus = new LaunchStatus();
@@ -108,11 +109,25 @@ public class PercentageHurtbox : FreezeBehaviour, IDamageable
         if (IsInvulnerable) return;
         if (entity.Equals(this.gameObject)) {
             TakeDamage(hitbox.Stats.Damage);
-            eventManager.InvokeOnDamageEvent(hitbox, this);
+            lastDamagedBy = hitbox.GetOwner();
+            EventManager.instance.InvokeOnDamageEvent(hitbox, this);
             FaceHitbox(hitbox);
             HitStun(hitbox);
             Launch(hitbox);
             Freeze(hitbox.Stats.FreezeFrame);
+        }
+    }
+
+    public void OnDeath(GameObject entity) {
+        if (entity.Equals(this.gameObject)) {
+            Percentage = 0;
+            IsHitStunned = false;
+            IsLaunched = false;
+            IsInvulnerable = false;
+            IsIntangible = false;
+            LastDamagedBy = null;
+            hitStunFrameLeft = 0;
+            storedVelocity = Vector2.zero;
         }
     }
 
@@ -134,7 +149,7 @@ public class PercentageHurtbox : FreezeBehaviour, IDamageable
 
     public void HitStun(IAttackHitbox hitbox) {
         if (!hitbox.Stats.HitStun) return;
-        eventManager.InvokeOnHitStunEvent(hitbox, this.gameObject);
+        EventManager.instance.InvokeOnHitStunEvent(hitbox, this.gameObject);
         if (!IsHitStunned) { //If not hitstunned before
             IsHitStunned = true;
             character.IgnoreInput(true);

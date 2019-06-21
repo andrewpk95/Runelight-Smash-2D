@@ -3,31 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-[System.Serializable]
-public class OnHitEvent : UnityEvent<IAttackHitbox, GameObject>
-{
-}
-
-[System.Serializable]
-public class OnGrabEvent : UnityEvent<GameObject, GameObject>
-{
-}
-
-[System.Serializable]
-public class OnDamageEvent : UnityEvent<IAttackHitbox, IDamageable>
-{
-}
-
-[System.Serializable]
-public class OnHitStunEvent : UnityEvent<IAttackHitbox, GameObject>
-{
-}
-
-[System.Serializable]
-public class OnEdgeGrabEvent : UnityEvent<GameObject, GameObject>
-{
-}
-
 public class EventManager : MonoBehaviour
 {
     public OnHitEvent onHitEvent;
@@ -35,15 +10,33 @@ public class EventManager : MonoBehaviour
     public OnDamageEvent onDamageEvent;
     public OnHitStunEvent onHitStunEvent;
     public OnEdgeGrabEvent onEdgeGrabEvent;
+    public OnDeathEvent onDeathEvent;
+    public OnGameOverEvent onGameOverEvent;
+
+    Dictionary<EventType, UnityEventBase> eventDictionary;
+
+    public static EventManager instance;
     
     // Start is called before the first frame update
     void Awake()
     {
+        //Singleton Pattern
+        if (instance == null) instance = this;
+        else if (instance != this) Destroy(this.gameObject);    
+        
+        DontDestroyOnLoad(this.gameObject);
+        
+        Initialize();
+    }
+
+    void Initialize() {
         onHitEvent = new OnHitEvent();
         onGrabEvent = new OnGrabEvent();
         onDamageEvent = new OnDamageEvent();
         onHitStunEvent = new OnHitStunEvent();
         onEdgeGrabEvent = new OnEdgeGrabEvent();
+        onDeathEvent = new OnDeathEvent();
+        onGameOverEvent = new OnGameOverEvent();
     }
 
     // Update is called once per frame
@@ -125,5 +118,35 @@ public class EventManager : MonoBehaviour
     public void StopListeningToOnEdgeGrabEvent(UnityAction<GameObject, GameObject> listener) {
         Debug.Log(listener.Method.Name + " Unsubscribed to OnEdgeGrabEvent");
         onEdgeGrabEvent.RemoveListener(listener);
+    }
+
+    public void InvokeOnDeathEvent(GameObject entity) {
+        Debug.Log("OnDeathEvent Invoked");
+        onDeathEvent.Invoke(entity);
+    }
+
+    public void StartListeningToOnDeathEvent(UnityAction<GameObject> listener) {
+        Debug.Log(listener.Method.Name + " Subscribed to OnDeathEvent");
+        onDeathEvent.AddListener(listener);
+    }
+
+    public void StopListeningToOnDeathEvent(UnityAction<GameObject> listener) {
+        Debug.Log(listener.Method.Name + " Unsubscribed to OnDeathEvent");
+        onDeathEvent.RemoveListener(listener);
+    }
+
+    public void InvokeOnGameOverEvent() {
+        Debug.Log("OnGameOverEvent Invoked");
+        onGameOverEvent.Invoke();
+    }
+
+    public void StartListeningToOnDeathEvent(UnityAction listener) {
+        Debug.Log(listener.Method.Name + " Subscribed to OnGameOverEvent");
+        onGameOverEvent.AddListener(listener);
+    }
+
+    public void StopListeningToOnDeathEvent(UnityAction listener) {
+        Debug.Log(listener.Method.Name + " Unsubscribed to OnGameOverEvent");
+        onGameOverEvent.RemoveListener(listener);
     }
 }

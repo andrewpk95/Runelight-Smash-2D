@@ -8,7 +8,6 @@ public class FighterController : CharacterMovement
     protected Animator animator;
     protected StatusManager statusManager;
     protected HurtboxManager hurtbox;
-    protected EventManager eventManager;
 
     public GameObject collidingWall;
     protected Vector2 collisionContact;
@@ -84,10 +83,10 @@ public class FighterController : CharacterMovement
         animator = GetComponent<Animator>();
         statusManager = GetComponent<StatusManager>();
         hurtbox = GetComponentInChildren<HurtboxManager>();
-        eventManager = (EventManager) GameObject.FindObjectOfType(typeof(EventManager));
-        eventManager.StartListeningToOnHitStunEvent(new UnityAction<IAttackHitbox, GameObject>(OnHitStun));
-        eventManager.StartListeningToOnGrabEvent(new UnityAction<GameObject, GameObject>(OnGrab));
-        eventManager.StartListeningToOnEdgeGrabEvent(new UnityAction<GameObject, GameObject>(OnEdgeGrab));
+        EventManager.instance.StartListeningToOnHitStunEvent(new UnityAction<IAttackHitbox, GameObject>(OnHitStun));
+        EventManager.instance.StartListeningToOnGrabEvent(new UnityAction<GameObject, GameObject>(OnGrab));
+        EventManager.instance.StartListeningToOnEdgeGrabEvent(new UnityAction<GameObject, GameObject>(OnEdgeGrab));
+        EventManager.instance.StartListeningToOnDeathEvent(new UnityAction<GameObject>(OnDeath));
     }
 
     protected override void InitializeVariables() {
@@ -772,6 +771,22 @@ public class FighterController : CharacterMovement
         }
     }
 
+    public virtual void OnDeath(GameObject entity) {
+        if (entity.Equals(this.gameObject)) {
+            Reset();
+            DisableMovement();
+            IgnoreInput(true);
+            animator.Rebind();
+            Debug.Log(this.gameObject.name + " Died!");
+        }
+    }
+
+    public virtual void OnRespawn() {
+        EnableMovement();
+        IgnoreInput(false);
+        Debug.Log(this.gameObject.name + " Respawned!");
+    }
+
     //Timer Methods
 
     void OnTechWindowStart() {
@@ -1114,5 +1129,46 @@ public class FighterController : CharacterMovement
             //Debug.Log(this.gameObject.name + " collision with wall over: " + collision.collider.gameObject.name);
             collidingWall = null;
         }
+    }
+
+    //Reset Override
+
+    protected override void Reset() {
+        base.Reset();
+
+        collidingWall = null;
+        isBusy = false;
+    
+        isJabbing = false;
+        canJab = false;
+
+        IsHelpless = false;
+        IsTumbling = false;
+        IsTumbled = false;
+        TimerManager.instance.StopTimer(TumbleDurationTimer);
+        IsTeching = false;
+        TimerManager.instance.StopTimer(TechWindowDurationTimer);
+
+        isShielding = false;
+        isRollingForward = false;
+        isRollingBackward = false;
+        canBeGrabbed.setCount = 0;
+        isGrabbing = false;
+        isGrabbed = false;
+        grabbingFighter = null;
+        grabber = null;
+        grabDurationLeft = 0;
+        //TimerManager.instance.StopTimer(GrabDurationTimer);
+
+        canGrabEdge.setCount = 0;
+        isEdgeGrabImmune = false;
+        isGrabbingEdge = false;
+        grabbingEdge = null;
+        edgeGrabDurationLeft = 0;
+        TimerManager.instance.StopTimer(EdgeGrabDurationTimer);
+        TimerManager.instance.StopTimer(EdgeGrabImmuneTimer);
+        
+        isActionBuffered = false;
+        actionInputQueue = null;
     }
 }

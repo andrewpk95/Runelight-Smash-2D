@@ -34,4 +34,8 @@ public class HelplessStatus : BaseStatus
         base.OnStatusExit(entity);
         character.CanGrabEdge = false;
     }
+
+    public override void OnStatusInterrupt(GameObject entity) {
+        OnStatusExit(entity);
+    }
 }

@@ -160,6 +160,10 @@ public class RonController : FighterController, ICharacter
         base.EdgeGrab(edge);
     }
 
+    public override void OnDeath(GameObject entity) {
+        base.OnDeath(entity);
+    }
+
     protected override void GroundCheck() {
         base.GroundCheck();
         if (IsGrounded) canUseSideSpecial = true;
@@ -168,5 +172,14 @@ public class RonController : FighterController, ICharacter
     protected override void OnLand() {
         base.OnLand();
         canUseSideSpecial = true;
+    }
+
+    //Reset Override
+
+    protected override void Reset() {
+        base.Reset();
+        canUseSideSpecial = true;
+        TimerManager.instance.StopTimer(MetalFormDurationTimer);
+        isMetalForm = false;
     }
 }

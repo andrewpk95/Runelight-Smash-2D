@@ -9,6 +9,7 @@ public interface IDamageable : IFreezable
     bool IsHitStunned {get; set;}
     bool IsInvulnerable {get; set;}
     bool IsIntangible {get; set;}
+    GameObject LastDamagedBy {get; set;}
     
     void OnHit(IAttackHitbox hitbox, GameObject entity);
 

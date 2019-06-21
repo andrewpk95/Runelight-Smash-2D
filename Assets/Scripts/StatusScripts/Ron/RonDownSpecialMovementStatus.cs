@@ -31,4 +31,8 @@ public class RonDownSpecialMovementStatus : MovementStatus
         Debug.Log("Down Special Done");
         character.CanGrabEdge = false;
     }
+
+    public override void OnStatusInterrupt(GameObject entity) {
+        OnStatusExit(entity);
+    }
 }

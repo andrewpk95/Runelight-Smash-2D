@@ -8,6 +8,7 @@ public class RonPassiveBuffStatus : SpeedBuffStatus
     
     public RonPassiveBuffStatus(float buffRatio, RonPassive ronPassive) : base(buffRatio) {
         passive = ronPassive;
+        IsPermanent = true;
         InitializeStatus();
     }
 
@@ -15,5 +16,9 @@ public class RonPassiveBuffStatus : SpeedBuffStatus
         foreach (IModifier modifier in modifiers) {
             modifier.ModifyValue = 1.0f + 0.05f * passive.GetStaticCharge();
         }
+    }
+
+    public override void OnStatusInterrupt(GameObject entity) {
+        //Non-interruptible
     }
 }

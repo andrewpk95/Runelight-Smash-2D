@@ -565,4 +565,35 @@ public class CharacterMovement : MonoBehaviour
 
     }
 
+    //Reset Function (May be useful for implementing death and respawn)
+
+    protected virtual void Reset() {
+        movementEnabled = true;
+
+        mainJoystick = Vector2.zero;
+        ignoreInput.setCount = 0;
+        ignoreMainJoystick.setCount = 0;
+
+        Velocity = Vector2.zero;
+        overrideVelocity = false;
+        overridingVelocity = Vector2.zero;
+
+        IsFacingRight = true;
+        IsGrounded = false;
+
+        isWalking = false;
+        isDashing = false;
+        isCrouching = false;
+        currentPlatform = null;
+
+        isFastFalling = false;
+        isFallingThrough = false;
+        fallingThroughFrameLeft = 0;
+
+        isJumpSquatting = false;
+        doubleJumpLeft = doubleJumpCount;
+        jumpBuffered = false;
+        jumpButtonHeld = false;
+    }
+
 }

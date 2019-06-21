@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class StatusManager : FreezeBehaviour
 {
-    List<IStatus> statuses;
+    public List<IStatus> statuses;
     List<IStatus> toRemoveStatuses;
     
     // Start is called before the first frame update
@@ -12,6 +13,7 @@ public class StatusManager : FreezeBehaviour
     {
         statuses = new List<IStatus>();
         toRemoveStatuses = new List<IStatus>();
+        EventManager.instance.StartListeningToOnDeathEvent(new UnityAction<GameObject>(OnDeath));
     }
 
     // Update is called once per frame
@@ -51,5 +53,31 @@ public class StatusManager : FreezeBehaviour
         if (status == null) return;
         status.OnStatusExit(this.gameObject);
         statuses.Remove(status);
+    }
+
+    public void InterruptStatus(IStatus status) {
+        if (status == null) return;
+        status.OnStatusInterrupt(this.gameObject);
+        statuses.Remove(status);
+    }
+
+    public void InterruptAll() {
+        foreach (IStatus status in statuses) {
+            status.OnStatusInterrupt(this.gameObject);
+        }
+        foreach (IStatus status in statuses) {
+            if (!status.IsPermanent) toRemoveStatuses.Add(status);
+        }
+        foreach (IStatus status in toRemoveStatuses) {
+            statuses.Remove(status);
+        }
+    }
+
+    //Event Listener Functions
+
+    public void OnDeath(GameObject entity) {
+        if (entity.Equals(this.gameObject)) {
+            InterruptAll();
+        }
     }
 }

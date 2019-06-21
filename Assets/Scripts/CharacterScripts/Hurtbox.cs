@@ -8,8 +8,6 @@ public class Hurtbox : MonoBehaviour, IHurtbox
     ICharacter ownerCharacter;
     IDamageable ownerDamageable;
     public HurtboxManager manager;
-    public EventManager eventManager;
-    
     public Collider2D hurtbox;
     public Material material;
 
@@ -20,8 +18,6 @@ public class Hurtbox : MonoBehaviour, IHurtbox
     {
         owner = this.gameObject.transform.root.gameObject;
         manager = GetComponentInParent<HurtboxManager>();
-        eventManager = (EventManager) GameObject.FindObjectOfType(typeof(EventManager));
-
         material = GetComponent<SpriteRenderer>().material;
     }
 

@@ -47,7 +47,7 @@ public class AttackHitbox : BaseHitbox, IAttackHitbox
     }
 
     public override void OnHit(GameObject target) {
-        eventManager.InvokeOnHitEvent(this, target);
+        EventManager.instance.InvokeOnHitEvent(this, target);
         if (target.tag == "Shield") {
             Debug.Log("Shielded");
             ownerDamageable.Freeze(Stats.FreezeFrame);

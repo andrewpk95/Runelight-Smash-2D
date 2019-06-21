@@ -59,4 +59,8 @@ public class RonSideSpecialMovementStatus : MovementStatus
         if (snapToEdge) character.CanGrabEdge = false;
         snapToEdge = false;
     }
+
+    public override void OnStatusInterrupt(GameObject entity) {
+        OnStatusExit(entity);
+    }
 }

@@ -25,4 +25,8 @@ public class MovementStatus : TimerStatus
         base.OnStatusExit(entity);
         character.StopOverride();
     }
+
+    public override void OnStatusInterrupt(GameObject entity) {
+        OnStatusExit(entity);
+    }
 }

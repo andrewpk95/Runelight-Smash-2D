@@ -5,6 +5,7 @@ using UnityEngine;
 public interface IStatus
 {
     bool EndStatus {get; set;}
+    bool IsPermanent {get; set;}
     
     void OnStatusEnter(GameObject entity);
 
