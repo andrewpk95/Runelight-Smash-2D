@@ -125,7 +125,6 @@ public class PercentageHurtbox : FreezeBehaviour, IDamageable
             IsLaunched = false;
             IsInvulnerable = false;
             IsIntangible = false;
-            LastDamagedBy = null;
             hitStunFrameLeft = 0;
             storedVelocity = Vector2.zero;
         }

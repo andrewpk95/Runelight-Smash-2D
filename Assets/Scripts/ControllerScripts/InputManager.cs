@@ -4,19 +4,7 @@ using UnityEngine;
 
 public static class InputManager
 {
-    //public static float mainHorizontalAxis;
-    //public static float mainVerticalAxis;
-    //public static bool jumpButtonPressed;
-    //public static bool jumpButtonHeld;
-    
-    public static void readInput() {
-        //mainHorizontalAxis = MainHorizontal();
-        //mainVerticalAxis = MainVertical();
-        //jumpButtonPressed = JumpButtonPressed();
-        //jumpButtonHeld = JumpButtonHeld();
-    }
-
-    static float MainHorizontal() {
+    static float KeyboardMainHorizontal() {
         
         return Input.GetAxis ("Keyboard_MainHorizontal");
     }

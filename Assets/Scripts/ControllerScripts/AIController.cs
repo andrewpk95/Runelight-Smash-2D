@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class AIController : MonoBehaviour, IController
 {
-    public GameObject fighter;
+    private Player controllingPlayer;
+    public Player ControllingPlayer {get {return controllingPlayer;} set {controllingPlayer = value;}}
+
+    [SerializeField] private GameObject fighter;
+    public GameObject Fighter {get {return fighter;} set {fighter = value;}}
+    
     ICharacter character;
     
     ActionInput actionInput;
@@ -13,7 +18,7 @@ public class AIController : MonoBehaviour, IController
     void Start()
     {
         //Initialize character
-        character = fighter.GetComponent<ICharacter>();
+        character = Fighter.GetComponent<ICharacter>();
         //actionInput = new ActionInput(InputType.Grab);
         actionInput = new ActionInput(InputType.Attack, InputDirection.Right, InputStrength.Strong);
     }

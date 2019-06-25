@@ -14,6 +14,8 @@ TagManager:
   - Edge
   - EdgeHitbox
   - Wall
+  - Canvas
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX
@@ -51,6 +53,9 @@ TagManager:
   - name: Background
     uniqueID: 1905269405
     locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
   - name: Stage
     uniqueID: 1760428015
     locked: 0
@@ -59,7 +64,4 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 1810044217
-    locked: 0
-  - name: Default
-    uniqueID: 0
     locked: 0

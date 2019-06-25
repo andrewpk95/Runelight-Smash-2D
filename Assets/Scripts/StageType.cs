@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IController
+public enum StageType
 {
-    
+    NONE,
+    BATTLE_FIELD,
+    FINAL_DESTINATION
 }

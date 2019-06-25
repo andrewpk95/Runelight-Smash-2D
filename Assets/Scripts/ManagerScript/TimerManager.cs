@@ -50,6 +50,7 @@ public class TimerManager : MonoBehaviour
         Coroutine timerCoroutine;
         if (TimerDictionary.TryGetValue(timer, out timerCoroutine)) {
             StopCoroutine(timerCoroutine);
+            timer.Reset();
             TimerDictionary.Remove(timer);
         }
         //timer.OnTimerStop();
@@ -58,14 +59,21 @@ public class TimerManager : MonoBehaviour
     IEnumerator RunTimer(Timer timer) {
         Debug.Log("Timer Started: " + timer.name);
         timer.OnTimerStart();
-        int durationLeft = 0;
-        while (durationLeft < timer.duration) {
-            //Debug.Log("Timer " + timer.name + " Counting: Frame " + durationLeft);
-            durationLeft++;
+        while (timer.durationLeft > 0) {
+            //Debug.Log("Timer " + timer.name + " Counting: Frame " + timer.durationLeft);
+            timer.durationLeft--;
             yield return new WaitForFixedUpdate();
         }
         Debug.Log("Timer " + timer.name + " Counting Done!");
         timer.OnTimerStop();
+        timer.Reset();
         TimerDictionary.Remove(timer);
+    }
+
+    public void Reset() {
+        foreach (Timer timer in TimerDictionary.Keys) {
+            StopCoroutine(TimerDictionary[timer]);
+        }
+        TimerDictionary.Clear();
     }
 }

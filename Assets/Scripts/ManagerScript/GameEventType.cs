@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public enum GameEventType {
+    OnPlayerJoinEvent,
+    OnPlayerLeaveEvent,
+    OnCharacterSelectEvent,
+    OnCharacterDeSelectEvent,
     OnHitEvent, 
     OnGrabEvent, 
     OnDamageEvent, 
@@ -11,6 +15,26 @@ public enum GameEventType {
     OnEdgeGrabEvent, 
     OnDeathEvent,
     OnGameOverEvent
+}
+
+[System.Serializable]
+public class OnPlayerJoinEvent : UnityEvent<Player>
+{
+}
+
+[System.Serializable]
+public class OnPlayerLeaveEvent : UnityEvent<Player>
+{
+}
+
+[System.Serializable]
+public class OnCharacterSelectEvent : UnityEvent<Player, CharacterType>
+{
+}
+
+[System.Serializable]
+public class OnCharacterDeSelectEvent : UnityEvent<Player>
+{
 }
 
 [System.Serializable]

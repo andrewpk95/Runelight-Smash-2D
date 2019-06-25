@@ -12,6 +12,7 @@ public class CameraFollow : MonoBehaviour
     public float extraHorizontalBoundarySize;
     public float extraVerticalBoundarySize;
     public float lerpStrength;
+    public BlastZone blastZone;
     public Bounds bounds;
     
     // Start is called before the first frame update
@@ -24,6 +25,8 @@ public class CameraFollow : MonoBehaviour
         foreach (GameObject entity in entities) {
             characters.Add(entity.GetComponent<Rigidbody2D>());
         }
+        bounds = blastZone.GetComponent<BoxCollider2D>().bounds;
+        bounds.Expand(-2.0f);
     }
 
     // Update is called once per frame

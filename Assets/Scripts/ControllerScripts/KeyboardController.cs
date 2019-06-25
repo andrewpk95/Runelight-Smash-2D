@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class KeyboardController : MonoBehaviour, IController
 {
-    public GameObject fighter;
+    private Player controllingPlayer;
+    public Player ControllingPlayer {get {return controllingPlayer;} set {controllingPlayer = value;}}
+
+    [SerializeField] private GameObject fighter;
+    public GameObject Fighter {get {return fighter;} set {fighter = value;}}
     ICharacter character;
 
     public Vector2 mainJoystick;
@@ -39,7 +43,7 @@ public class KeyboardController : MonoBehaviour, IController
     void Start()
     {
         //Initialize character
-        character = fighter.GetComponent<ICharacter>();
+        character = Fighter.GetComponent<ICharacter>();
         
         //Initialize Input Variables
         mainJoystick = Vector2.zero;
@@ -52,8 +56,6 @@ public class KeyboardController : MonoBehaviour, IController
     // Update is called once per frame
     void Update()
     {
-        InputManager.readInput();
-
         UpdateMovementInput();
         UpdateDashInput();
         UpdateDownKeyInput();
@@ -268,5 +270,9 @@ public class KeyboardController : MonoBehaviour, IController
         }
         //Debug
         //actionInput.Print();
+    }
+
+    void OnDisable() {
+        Cursor.lockState = CursorLockMode.None;
     }
 }

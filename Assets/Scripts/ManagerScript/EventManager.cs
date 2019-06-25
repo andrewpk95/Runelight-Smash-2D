@@ -5,6 +5,10 @@ using UnityEngine.Events;
 
 public class EventManager : MonoBehaviour
 {
+    public OnPlayerJoinEvent onPlayerJoinEvent;
+    public OnPlayerLeaveEvent onPlayerLeaveEvent;
+    public OnCharacterSelectEvent onCharacterSelectEvent;
+    public OnCharacterDeSelectEvent onCharacterDeSelectEvent;
     public OnHitEvent onHitEvent;
     public OnGrabEvent onGrabEvent;
     public OnDamageEvent onDamageEvent;
@@ -30,6 +34,10 @@ public class EventManager : MonoBehaviour
     }
 
     void Initialize() {
+        onPlayerJoinEvent = new OnPlayerJoinEvent();
+        onPlayerLeaveEvent = new OnPlayerLeaveEvent();
+        onCharacterSelectEvent = new OnCharacterSelectEvent();
+        onCharacterDeSelectEvent = new OnCharacterDeSelectEvent();
         onHitEvent = new OnHitEvent();
         onGrabEvent = new OnGrabEvent();
         onDamageEvent = new OnDamageEvent();
@@ -43,6 +51,71 @@ public class EventManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void ClearAllEvents() {
+        onPlayerJoinEvent.RemoveAllListeners();
+        onPlayerLeaveEvent.RemoveAllListeners();
+    }
+
+    public void InvokeOnPlayerJoinEvent(Player player) {
+        Debug.Log("OnPlayerJoinEvent Invoked");
+        onPlayerJoinEvent.Invoke(player);
+    }
+
+    public void StartListeningToOnPlayerJoinEvent(UnityAction<Player> listener) {
+        Debug.Log(listener.Method.Name + " Subscribed to OnPlayerJoinEvent");
+        onPlayerJoinEvent.AddListener(listener);
+    }
+
+    public void StopListeningToOnPlayerJoinEvent(UnityAction<Player> listener) {
+        Debug.Log(listener.Method.Name + " Unsubscribed to OnPlayerJoinEvent");
+        onPlayerJoinEvent.RemoveListener(listener);
+    }
+
+    public void InvokeOnPlayerLeaveEvent(Player player) {
+        Debug.Log("OnPlayerLeaveEvent Invoked");
+        onPlayerLeaveEvent.Invoke(player);
+    }
+
+    public void StartListeningToOnPlayerLeaveEvent(UnityAction<Player> listener) {
+        Debug.Log(listener.Method.Name + " Subscribed to OnPlayerLeaveEvent");
+        onPlayerLeaveEvent.AddListener(listener);
+    }
+
+    public void StopListeningToOnPlayerLeaveEvent(UnityAction<Player> listener) {
+        Debug.Log(listener.Method.Name + " Unsubscribed to OnPlayerLeaveEvent");
+        onPlayerLeaveEvent.RemoveListener(listener);
+    }
+
+    public void InvokeOnCharacterSelectEvent(Player player, CharacterType character) {
+        Debug.Log("OnCharacterSelectEvent Invoked");
+        onCharacterSelectEvent.Invoke(player, character);
+    }
+
+    public void StartListeningToOnCharacterSelectEvent(UnityAction<Player, CharacterType> listener) {
+        Debug.Log(listener.Method.Name + " Subscribed to OnCharacterSelectEvent");
+        onCharacterSelectEvent.AddListener(listener);
+    }
+
+    public void StopListeningToOnCharacterSelectEvent(UnityAction<Player, CharacterType> listener) {
+        Debug.Log(listener.Method.Name + " Unsubscribed to OnCharacterSelectEvent");
+        onCharacterSelectEvent.RemoveListener(listener);
+    }
+
+    public void InvokeOnCharacterDeSelectEvent(Player player) {
+        Debug.Log("OnCharacterDeSelectEvent Invoked");
+        onCharacterDeSelectEvent.Invoke(player);
+    }
+
+    public void StartListeningToOnCharacterDeSelectEvent(UnityAction<Player> listener) {
+        Debug.Log(listener.Method.Name + " Subscribed to OnCharacterDeSelectEvent");
+        onCharacterDeSelectEvent.AddListener(listener);
+    }
+
+    public void StopListeningToOnCharacterDeSelectEvent(UnityAction<Player> listener) {
+        Debug.Log(listener.Method.Name + " Unsubscribed to OnCharacterDeSelectEvent");
+        onCharacterDeSelectEvent.RemoveListener(listener);
     }
 
     public void InvokeOnHitEvent(IAttackHitbox hitbox, GameObject entity) {
@@ -121,7 +194,7 @@ public class EventManager : MonoBehaviour
     }
 
     public void InvokeOnDeathEvent(GameObject entity) {
-        Debug.Log("OnDeathEvent Invoked");
+        Debug.Log("OnDeathEvent Invoked: " + entity.name);
         onDeathEvent.Invoke(entity);
     }
 
@@ -140,12 +213,12 @@ public class EventManager : MonoBehaviour
         onGameOverEvent.Invoke();
     }
 
-    public void StartListeningToOnDeathEvent(UnityAction listener) {
+    public void StartListeningToOnGameOverEvent(UnityAction listener) {
         Debug.Log(listener.Method.Name + " Subscribed to OnGameOverEvent");
         onGameOverEvent.AddListener(listener);
     }
 
-    public void StopListeningToOnDeathEvent(UnityAction listener) {
+    public void StopListeningToOnGameOverEvent(UnityAction listener) {
         Debug.Log(listener.Method.Name + " Unsubscribed to OnGameOverEvent");
         onGameOverEvent.RemoveListener(listener);
     }

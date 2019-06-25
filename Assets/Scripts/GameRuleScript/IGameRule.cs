@@ -4,5 +4,13 @@ using UnityEngine;
 
 public interface IGameRule
 {
-    List<GameObject> GetCurrentWinners();
+    void StartGame();
+
+    void StopGame();
+
+    List<Player> GetCurrentWinners();
+
+    Dictionary<Player, int> GetRankings();
+
+    string ToString();
 }
