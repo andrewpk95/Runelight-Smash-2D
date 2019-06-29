@@ -51,9 +51,9 @@ public class ShieldHurtbox : FreezeBehaviour, IShield
         col = GetComponent<Collider2D>();
         trans = GetComponent<Transform>();
 
-        EventManager.instance.StartListeningToOnHitEvent(new UnityAction<IAttackHitbox, GameObject>(OnHit));
-        EventManager.instance.StartListeningToOnHitStunEvent(new UnityAction<IAttackHitbox, GameObject>(OnHitStun));
-        EventManager.instance.StartListeningToOnGrabEvent(new UnityAction<GameObject, GameObject>(OnGrab));
+        EventManager.instance.StartListeningToOnHitEvent(this.gameObject, new UnityAction<IAttackHitbox, GameObject>(OnHit));
+        EventManager.instance.StartListeningToOnHitStunEvent(this.gameObject, new UnityAction<IAttackHitbox, GameObject>(OnHitStun));
+        EventManager.instance.StartListeningToOnGrabEvent(this.gameObject, new UnityAction<GameObject, GameObject>(OnGrab));
 
         statusManager = GetComponentInParent<StatusManager>();
         shieldBreakStatus = new ShieldBreakStatus();
@@ -240,5 +240,9 @@ public class ShieldHurtbox : FreezeBehaviour, IShield
         statusManager.RemoveStatus(shieldBreakStatus);
         character.IgnoreInput(false);
         CurrentShieldHealth = MaxShieldHealth / 2;
+    }
+
+    void OnDisable() {
+        EventManager.instance.UnsubscribeAll(this.gameObject);
     }
 }

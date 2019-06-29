@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameStateManager : MonoBehaviour
 {
@@ -26,7 +27,12 @@ public class GameStateManager : MonoBehaviour
     }
 
     void Initialize() {
-        GameRule = new TimeGameRule(DEFAULT_TIME);
+        if (SceneManager.GetActiveScene().name == "_DevelopingScene") {
+            GameRule = new TimeGameRule(3600);
+        }
+        else {
+            GameRule = new TimeGameRule(DEFAULT_TIME);
+        }
         SelectedStage = StageType.BATTLE_FIELD;
     }
 

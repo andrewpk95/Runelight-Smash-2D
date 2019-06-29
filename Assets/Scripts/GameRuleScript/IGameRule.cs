@@ -8,6 +8,8 @@ public interface IGameRule
 
     void StopGame();
 
+    void OnEntityDeath(GameObject entity);
+
     List<Player> GetCurrentWinners();
 
     Dictionary<Player, int> GetRankings();

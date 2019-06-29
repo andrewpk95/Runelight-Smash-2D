@@ -6,7 +6,7 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager instance;
 
-    Player keyboardPlayer;
+    public Player keyboardPlayer;
     
     // Start is called before the first frame update
     void Awake()

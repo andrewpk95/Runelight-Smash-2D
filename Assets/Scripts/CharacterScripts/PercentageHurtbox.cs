@@ -42,8 +42,8 @@ public class PercentageHurtbox : FreezeBehaviour, IDamageable
         character = GetComponent<ICharacter>();
         hurtbox = GetComponentInChildren<HurtboxManager>();
 
-        EventManager.instance.StartListeningToOnHitEvent(new UnityAction<IAttackHitbox, GameObject>(OnHit));
-        EventManager.instance.StartListeningToOnDeathEvent(new UnityAction<GameObject>(OnDeath));
+        EventManager.instance.StartListeningToOnHitEvent(this.gameObject, new UnityAction<IAttackHitbox, GameObject>(OnHit));
+        EventManager.instance.StartListeningToOnDeathEvent(this.gameObject, new UnityAction<GameObject>(OnDeath));
 
         statusManager = GetComponent<StatusManager>();
         launchStatus = new LaunchStatus();
@@ -211,5 +211,9 @@ public class PercentageHurtbox : FreezeBehaviour, IDamageable
 
     protected virtual void OnCollisionExit2D(Collision2D collision) {
         
+    }
+
+    void OnDisable() {
+        EventManager.instance.UnsubscribeAll(this.gameObject);
     }
 }

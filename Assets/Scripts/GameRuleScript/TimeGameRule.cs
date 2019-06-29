@@ -42,7 +42,7 @@ public class TimeGameRule : BaseGameRule
         EventManager.instance.InvokeOnGameOverEvent();
     }
 
-    protected override void OnEntityDeath(GameObject entity) {
+    public override void OnEntityDeath(GameObject entity) {
         base.OnEntityDeath(entity);
         System.Action OnRespawnTimerEnd = () => Respawn(entity);
         TimerManager.instance.StartTimer(RESPAWN_TIME, null, OnRespawnTimerEnd, "Respawn Timer");

@@ -16,8 +16,8 @@ public class RonPassive : MonoBehaviour, IPassive
     // Start is called before the first frame update
     void Start()
     {
-        EventManager.instance.StartListeningToOnDamageEvent(new UnityAction<IAttackHitbox, IDamageable>(SaveDamage));
-        EventManager.instance.StartListeningToOnDeathEvent(new UnityAction<GameObject>(OnDeath));
+        EventManager.instance.StartListeningToOnDamageEvent(this.gameObject, new UnityAction<IAttackHitbox, IDamageable>(SaveDamage));
+        EventManager.instance.StartListeningToOnDeathEvent(this.gameObject, new UnityAction<GameObject>(OnDeath));
 
         statusManager = GetComponent<StatusManager>();
         staticSpeedBuff = new RonPassiveBuffStatus(1.5f, this);
@@ -70,5 +70,9 @@ public class RonPassive : MonoBehaviour, IPassive
 
     public int GetStaticCharge() {
         return staticCharge;
+    }
+
+    void OnDisable() {
+        EventManager.instance.UnsubscribeAll(this.gameObject);
     }
 }

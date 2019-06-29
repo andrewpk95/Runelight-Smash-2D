@@ -1,13 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class BaseGameRule : IGameRule
 {
     protected GameObject[] spawnPointList;
-
-    UnityAction<GameObject> listener;
 
     public BaseGameRule() {
         Initialize();
@@ -19,19 +16,16 @@ public class BaseGameRule : IGameRule
 
     public virtual void StartGame() {
         spawnPointList = GameObject.FindGameObjectsWithTag("Respawn");
-        listener = new UnityAction<GameObject>(OnEntityDeath);
-        EventManager.instance.StartListeningToOnDeathEvent(listener);
     }
 
     public virtual void StopGame() {
-        EventManager.instance.StopListeningToOnDeathEvent(listener);
     }
 
     public override string ToString() {
         return "BaseGameRule";
     }
 
-    protected virtual void OnEntityDeath(GameObject entity) {
+    public virtual void OnEntityDeath(GameObject entity) {
         foreach (Player player in Player.GetPlayers()) {
             if (player != null) {
                 if (entity.Equals(player.ControllingCharacter)) {

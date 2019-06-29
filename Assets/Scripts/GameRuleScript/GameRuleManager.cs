@@ -45,7 +45,8 @@ public class GameRuleManager : MonoBehaviour
     void InitializeGameRule() {
         interval = CHECK_WINNER_INTERVAL;
         gameRule = GameStateManager.instance.GameRule;
-        EventManager.instance.StartListeningToOnGameOverEvent(new UnityAction(OnGameOver));
+        EventManager.instance.StartListeningToOnDeathEvent(this.gameObject, new UnityAction<GameObject>(OnEntityDeath));
+        EventManager.instance.StartListeningToOnGameOverEvent(this.gameObject, new UnityAction(OnGameOver));
     }
 
     void InitializePlayers() {
@@ -56,6 +57,7 @@ public class GameRuleManager : MonoBehaviour
             Debug.Log("Initializing default players...");
 
             Player player = new Player();
+            PlayerManager.instance.keyboardPlayer = player;
             CreatePlayer(player);
 
             Player player2 = new Player(true);
@@ -118,6 +120,10 @@ public class GameRuleManager : MonoBehaviour
 
     }
 
+    void OnEntityDeath(GameObject entity) {
+        gameRule.OnEntityDeath(entity);
+    }
+
     void OnGameOver() {
         foreach (IController controller in controllers) {
             
@@ -126,5 +132,9 @@ public class GameRuleManager : MonoBehaviour
         GameStateManager.instance.Winners = gameRule.GetCurrentWinners();
         GameStateManager.instance.Rankings = gameRule.GetRankings();
         GameManager.instance.LoadResultScene();
+    }
+
+    void OnDisable() {
+        EventManager.instance.UnsubscribeAll(this.gameObject);
     }
 }

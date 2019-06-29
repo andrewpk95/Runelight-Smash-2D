@@ -18,8 +18,8 @@ public class PlayerPanelBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EventManager.instance.StartListeningToOnCharacterSelectEvent(new UnityAction<Player, CharacterType>(OnCharacterSelect));
-        EventManager.instance.StartListeningToOnCharacterDeSelectEvent(new UnityAction<Player>(OnCharacterDeSelect));
+        EventManager.instance.StartListeningToOnCharacterSelectEvent(this.gameObject, new UnityAction<Player, CharacterType>(OnCharacterSelect));
+        EventManager.instance.StartListeningToOnCharacterDeSelectEvent(this.gameObject, new UnityAction<Player>(OnCharacterDeSelect));
     }
 
     // Update is called once per frame
@@ -62,5 +62,9 @@ public class PlayerPanelBehavior : MonoBehaviour
             playerNumberText.text = string.Format("P{0}", controllingPlayer.playerNumber);
         }
         
+    }
+
+    void OnDisable() {
+        EventManager.instance.UnsubscribeAll(this.gameObject);
     }
 }

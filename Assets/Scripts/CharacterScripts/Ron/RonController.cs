@@ -182,4 +182,8 @@ public class RonController : FighterController, ICharacter
         TimerManager.instance.StopTimer(MetalFormDurationTimer);
         isMetalForm = false;
     }
+
+    void OnDisable() {
+        EventManager.instance.UnsubscribeAll(this.gameObject);
+    }
 }

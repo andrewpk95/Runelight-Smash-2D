@@ -50,10 +50,10 @@ public class CharacterSelectManager : MonoBehaviour
     void InitializeManager() {
         canvas = GameObject.FindGameObjectWithTag("Canvas");
 
-        EventManager.instance.StartListeningToOnPlayerJoinEvent(new UnityAction<Player>(OnPlayerJoin));
-        EventManager.instance.StartListeningToOnPlayerLeaveEvent(new UnityAction<Player>(OnPlayerLeave));
-        EventManager.instance.StartListeningToOnCharacterSelectEvent(new UnityAction<Player, CharacterType>(OnCharacterSelect));
-        EventManager.instance.StartListeningToOnCharacterDeSelectEvent(new UnityAction<Player>(OnCharacterDeSelect));
+        EventManager.instance.StartListeningToOnPlayerJoinEvent(this.gameObject, new UnityAction<Player>(OnPlayerJoin));
+        EventManager.instance.StartListeningToOnPlayerLeaveEvent(this.gameObject, new UnityAction<Player>(OnPlayerLeave));
+        EventManager.instance.StartListeningToOnCharacterSelectEvent(this.gameObject, new UnityAction<Player, CharacterType>(OnCharacterSelect));
+        EventManager.instance.StartListeningToOnCharacterDeSelectEvent(this.gameObject, new UnityAction<Player>(OnCharacterDeSelect));
     }
 
     // Update is called once per frame
@@ -116,5 +116,9 @@ public class CharacterSelectManager : MonoBehaviour
         }
         readyToFight.SetActive(true);
         return true;
+    }
+
+    void OnDisable() {
+        EventManager.instance.UnsubscribeAll(this.gameObject);
     }
 }

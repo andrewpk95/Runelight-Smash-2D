@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public interface IEvent {
+
+}
+
 public enum GameEventType {
     OnPlayerJoinEvent,
     OnPlayerLeaveEvent,
@@ -18,7 +22,7 @@ public enum GameEventType {
 }
 
 [System.Serializable]
-public class OnPlayerJoinEvent : UnityEvent<Player>
+public class OnPlayerJoinEvent : UnityEvent<Player>, IEvent
 {
 }
 

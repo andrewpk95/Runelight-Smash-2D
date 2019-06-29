@@ -66,11 +66,15 @@ public class FighterController : CharacterMovement
     protected Timer EdgeGrabImmuneTimer;
     public const int EDGE_GRAB_IMMUNE_FRAME = 15;
     
-    //Action Buffer Queue Veriables
+    //Action Buffer Queue Variables
     public int actionBufferFrame;
     protected bool isActionBuffered;
     protected Coroutine ActionBufferCoroutine;
     protected ActionInput actionInputQueue;
+
+    //Delegates
+    protected delegate void DisableDelegate();
+    protected DisableDelegate CleanUp;
     
     // Start is called before the first frame update
     void Awake()
@@ -83,10 +87,10 @@ public class FighterController : CharacterMovement
         animator = GetComponent<Animator>();
         statusManager = GetComponent<StatusManager>();
         hurtbox = GetComponentInChildren<HurtboxManager>();
-        EventManager.instance.StartListeningToOnHitStunEvent(new UnityAction<IAttackHitbox, GameObject>(OnHitStun));
-        EventManager.instance.StartListeningToOnGrabEvent(new UnityAction<GameObject, GameObject>(OnGrab));
-        EventManager.instance.StartListeningToOnEdgeGrabEvent(new UnityAction<GameObject, GameObject>(OnEdgeGrab));
-        EventManager.instance.StartListeningToOnDeathEvent(new UnityAction<GameObject>(OnDeath));
+        EventManager.instance.StartListeningToOnHitStunEvent(this.gameObject, new UnityAction<IAttackHitbox, GameObject>(OnHitStun));
+        EventManager.instance.StartListeningToOnGrabEvent(this.gameObject, new UnityAction<GameObject, GameObject>(OnGrab));
+        EventManager.instance.StartListeningToOnEdgeGrabEvent(this.gameObject, new UnityAction<GameObject, GameObject>(OnEdgeGrab));
+        EventManager.instance.StartListeningToOnDeathEvent(this.gameObject, new UnityAction<GameObject>(OnDeath));
     }
 
     protected override void InitializeVariables() {
@@ -1170,5 +1174,9 @@ public class FighterController : CharacterMovement
         
         isActionBuffered = false;
         actionInputQueue = null;
+    }
+
+    void OnDisable() {
+        EventManager.instance.UnsubscribeAll(this.gameObject);
     }
 }

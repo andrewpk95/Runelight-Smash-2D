@@ -43,8 +43,8 @@ public class ResultManager : MonoBehaviour
     void InitializeManager() {
         OnPlayerJoinAction = new UnityAction<Player>(OnPlayerJoin);
         OnPlayerLeaveAction = new UnityAction<Player>(OnPlayerLeave);
-        EventManager.instance.StartListeningToOnPlayerJoinEvent(OnPlayerJoinAction);
-        EventManager.instance.StartListeningToOnPlayerLeaveEvent(OnPlayerLeaveAction);
+        EventManager.instance.StartListeningToOnPlayerJoinEvent(this.gameObject, OnPlayerJoinAction);
+        EventManager.instance.StartListeningToOnPlayerLeaveEvent(this.gameObject, OnPlayerLeaveAction);
 
         if (GameStateManager.instance.Winners != null && GameStateManager.instance.Winners.Count > 0) {
             string s = "";
@@ -111,7 +111,6 @@ public class ResultManager : MonoBehaviour
     }
 
     void OnDisable() {
-        EventManager.instance.StopListeningToOnPlayerJoinEvent(OnPlayerJoinAction);
-        EventManager.instance.StopListeningToOnPlayerLeaveEvent(OnPlayerLeaveAction);
+        EventManager.instance.UnsubscribeAll(this.gameObject);
     }
 }

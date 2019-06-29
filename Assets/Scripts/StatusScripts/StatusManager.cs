@@ -13,7 +13,7 @@ public class StatusManager : FreezeBehaviour
     {
         statuses = new List<IStatus>();
         toRemoveStatuses = new List<IStatus>();
-        EventManager.instance.StartListeningToOnDeathEvent(new UnityAction<GameObject>(OnDeath));
+        EventManager.instance.StartListeningToOnDeathEvent(this.gameObject, new UnityAction<GameObject>(OnDeath));
     }
 
     // Update is called once per frame
@@ -79,5 +79,9 @@ public class StatusManager : FreezeBehaviour
         if (entity.Equals(this.gameObject)) {
             InterruptAll();
         }
+    }
+
+    void OnDisable() {
+        EventManager.instance.UnsubscribeAll(this.gameObject);
     }
 }
