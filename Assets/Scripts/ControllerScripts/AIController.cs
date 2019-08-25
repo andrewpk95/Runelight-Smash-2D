@@ -19,8 +19,9 @@ public class AIController : MonoBehaviour, IController
     {
         //Initialize character
         character = Fighter.GetComponent<ICharacter>();
-        //actionInput = new ActionInput(InputType.Grab);
-        actionInput = new ActionInput(InputType.Attack, InputDirection.Right, InputStrength.Strong);
+        actionInput = new ActionInput(InputType.Grab);
+        //actionInput = new ActionInput(InputType.Shield);
+        //actionInput = new ActionInput(InputType.Attack, InputDirection.Left, InputStrength.Strong);
     }
 
     // Update is called once per frame

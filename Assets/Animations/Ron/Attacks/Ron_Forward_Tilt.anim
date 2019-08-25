@@ -16852,14 +16852,14 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.083333336
-    functionName: ActivateHitboxGroup
+    functionName: ActivateHitbox
     data: ForwardTilt
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.11666667
-    functionName: DeactivateHitboxGroup
+    functionName: DeactivateHitbox
     data: ForwardTilt
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -17149,14 +17149,14 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.083333336
-    functionName: ActivateHitboxGroup
+    functionName: ActivateHitbox
     data: UpTilt
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.2
-    functionName: DeactivateHitboxGroup
+    functionName: DeactivateHitbox
     data: UpTilt
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

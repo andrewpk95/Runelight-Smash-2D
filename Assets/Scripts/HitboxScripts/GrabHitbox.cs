@@ -13,6 +13,7 @@ public class GrabHitbox : BaseHitbox
 
     public override void OnHit(GameObject target) {
         EventManager.instance.InvokeOnGrabEvent(this.owner, target);
+        Reset();
     }
 
     void OnDisable() {

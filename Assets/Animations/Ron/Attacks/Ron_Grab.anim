@@ -9406,14 +9406,14 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.1
-    functionName: ActivateHitboxGroup
+    functionName: ActivateHitbox
     data: Grab
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.13333334
-    functionName: DeactivateHitboxGroup
+  - time: 0.3
+    functionName: DeactivateHitbox
     data: Grab
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

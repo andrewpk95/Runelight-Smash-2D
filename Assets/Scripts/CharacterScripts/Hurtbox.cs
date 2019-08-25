@@ -7,7 +7,7 @@ public class Hurtbox : MonoBehaviour, IHurtbox
     public GameObject owner;
     ICharacter ownerCharacter;
     IDamageable ownerDamageable;
-    public HurtboxManager manager;
+    public HurtboxContainer container;
     public Collider2D hurtbox;
     public Material material;
 
@@ -17,7 +17,7 @@ public class Hurtbox : MonoBehaviour, IHurtbox
     void Start()
     {
         owner = this.gameObject.transform.root.gameObject;
-        manager = GetComponentInParent<HurtboxManager>();
+        container = GetComponentInParent<HurtboxContainer>();
         material = GetComponent<SpriteRenderer>().material;
     }
 

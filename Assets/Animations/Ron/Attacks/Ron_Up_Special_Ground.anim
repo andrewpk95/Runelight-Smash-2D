@@ -14305,70 +14305,70 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.1
-    functionName: ActivateHitboxGroup
+    functionName: ActivateHitbox
     data: UpSpecial0
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.13333334
-    functionName: DeactivateHitboxGroup
+    functionName: DeactivateHitbox
     data: UpSpecial0
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.25
-    functionName: ActivateHitboxGroup
+    functionName: ActivateHitbox
     data: UpSpecial1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.28333333
-    functionName: DeactivateHitboxGroup
+    functionName: DeactivateHitbox
     data: UpSpecial1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.33333334
-    functionName: ActivateHitboxGroup
+    functionName: ActivateHitbox
     data: UpSpecial1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.36666667
-    functionName: DeactivateHitboxGroup
+    functionName: DeactivateHitbox
     data: UpSpecial1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.41666666
-    functionName: ActivateHitboxGroup
+    functionName: ActivateHitbox
     data: UpSpecial1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.45
-    functionName: DeactivateHitboxGroup
+    functionName: DeactivateHitbox
     data: UpSpecial1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.5
-    functionName: ActivateHitboxGroup
+    functionName: ActivateHitbox
     data: UpSpecial2
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.53333336
-    functionName: DeactivateHitboxGroup
+    functionName: DeactivateHitbox
     data: UpSpecial2
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

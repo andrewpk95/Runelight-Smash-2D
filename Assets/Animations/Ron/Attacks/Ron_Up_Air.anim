@@ -7145,14 +7145,14 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.06666667
-    functionName: ActivateHitboxGroup
+    functionName: ActivateHitbox
     data: UpAir
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.16666667
-    functionName: DeactivateHitboxGroup
+    functionName: DeactivateHitbox
     data: UpAir
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

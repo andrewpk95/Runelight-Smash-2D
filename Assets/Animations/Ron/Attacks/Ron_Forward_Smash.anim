@@ -12357,42 +12357,70 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.25
-    functionName: ActivateHitboxGroup
-    data: ForwardSmash1
+    functionName: ActivateHitbox
+    data: ForwardSmash1_0
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.25
+    functionName: ActivateHitbox
+    data: ForwardSmash1_1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.28333333
-    functionName: DeactivateHitboxGroup
-    data: ForwardSmash1
+    functionName: DeactivateHitbox
+    data: ForwardSmash1_0
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.28333333
+    functionName: DeactivateHitbox
+    data: ForwardSmash1_1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.3
-    functionName: ActivateHitboxGroup
-    data: ForwardSmash1
+    functionName: ActivateHitbox
+    data: ForwardSmash1_0
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.3
+    functionName: ActivateHitbox
+    data: ForwardSmash1_1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.33333334
-    functionName: DeactivateHitboxGroup
-    data: ForwardSmash1
+    functionName: DeactivateHitbox
+    data: ForwardSmash1_0
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.33333334
+    functionName: ActivateHitbox
+    data: ForwardSmash1_1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.35
-    functionName: ActivateHitboxGroup
+    functionName: ActivateHitbox
     data: ForwardSmash2
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.38333333
-    functionName: DeactivateHitboxGroup
+    functionName: DeactivateHitbox
     data: ForwardSmash2
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

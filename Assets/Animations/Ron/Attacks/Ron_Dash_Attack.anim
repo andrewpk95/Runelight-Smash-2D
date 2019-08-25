@@ -7771,14 +7771,14 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.1
-    functionName: ActivateHitboxGroup
+    functionName: ActivateHitbox
     data: DashAttack
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.41666666
-    functionName: DeactivateHitboxGroup
+    functionName: DeactivateHitbox
     data: DashAttack
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -14,13 +14,7 @@ public class RonAnimationEvents : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        hitboxes = new Dictionary<string, HitboxManager>();
-        HitboxManager[] list = GetComponentsInChildren<HitboxManager>();
-        foreach (HitboxManager hitbox in list) {
-            hitboxes.Add(hitbox.name, hitbox);
-            //Debug.Log(hitbox.name);
-        }
-        activatedHitboxes = new List<HitboxManager>();
+        
 
         shield = GetComponentInChildren<IShield>();
 
@@ -37,30 +31,6 @@ public class RonAnimationEvents : MonoBehaviour
     void FixedUpdate() 
     {
 
-    }
-
-    public void ActivateHitboxGroup(string hitboxGroupName) {
-        if (hitboxes.Count <= 0) {
-            return;
-        }
-        //Debug.Log("Activating " + hitboxGroupName);
-        hitboxes[hitboxGroupName].ActivateHitboxes();
-        activatedHitboxes.Add(hitboxes[hitboxGroupName]);
-    }
-
-    public void DeactivateHitboxGroup(string hitboxGroupName) {
-        if (hitboxes.Count <= 0) {
-            return;
-        }
-        hitboxes[hitboxGroupName].DeactivateHitboxes();
-        activatedHitboxes.Remove(hitboxes[hitboxGroupName]);
-    }
-
-    public void DeactivateAllHitbox() {
-        foreach(HitboxManager hitboxGroup in activatedHitboxes) {
-            hitboxGroup.DeactivateHitboxes();
-        }
-        activatedHitboxes.Clear();
     }
 
     public void ActivateShield() {

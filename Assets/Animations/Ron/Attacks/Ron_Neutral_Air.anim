@@ -7905,15 +7905,15 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.083333336
-    functionName: ActivateHitboxGroup
-    data: NeutralAir
+    functionName: ActivateHitbox
+    data: NeutralAir_0
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.48333332
-    functionName: DeactivateHitboxGroup
-    data: NeutralAir
+  - time: 0.25
+    functionName: DeactivateHitbox
+    data: NeutralAir_0
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

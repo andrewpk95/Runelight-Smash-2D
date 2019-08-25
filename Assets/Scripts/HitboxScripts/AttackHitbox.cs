@@ -14,9 +14,9 @@ public class AttackHitbox : BaseHitbox, IAttackHitbox
     [SerializeField] protected int freezeFrame;
     [SerializeField] protected bool faceOwnerWhenHit;
     [SerializeField] protected float shieldStunMultiplier;
+    [SerializeField] protected bool weightIndependentKnockback;
 
     protected IHitboxStat stats;
-
     public IHitboxStat Stats {get {return stats;} set {stats = value;}}
     
     // Start is called before the first frame update
@@ -41,6 +41,7 @@ public class AttackHitbox : BaseHitbox, IAttackHitbox
         Stats.FreezeFrame = freezeFrame;
         Stats.FaceOwnerWhenHit = faceOwnerWhenHit;
         Stats.ShieldStunMultiplier = shieldStunMultiplier;
+        Stats.WeightIndependentKnockback = weightIndependentKnockback;
         if (shieldStunMultiplier == 0.0f) {
             Stats.ShieldStunMultiplier = 1.0f;
         }
@@ -50,10 +51,14 @@ public class AttackHitbox : BaseHitbox, IAttackHitbox
         EventManager.instance.InvokeOnHitEvent(this, target);
         if (target.tag == "Shield") {
             Debug.Log("Shielded");
-            ownerDamageable.Freeze(Stats.FreezeFrame);
+            if (Stats.FreezeFrame > 0) {
+                EventManager.instance.InvokeOnFreezeEvent(owner, Stats.FreezeFrame);
+            }
         }
         else if (target.tag == "Entity") {
-            ownerDamageable.Freeze(Stats.FreezeFrame);
+            if (Stats.FreezeFrame > 0) {
+                EventManager.instance.InvokeOnFreezeEvent(owner, Stats.FreezeFrame);
+            }
         }
     }
 

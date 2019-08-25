@@ -13,4 +13,13 @@ public interface IHitboxStat
     int FreezeFrame {get; set;}
     bool FaceOwnerWhenHit {get; set;}
     float ShieldStunMultiplier {get; set;}
+    bool WeightIndependentKnockback {get; set;}
+
+    void AddModifier(IModifier modifier);
+
+    void AddModifiers(List<IModifier> modifier);
+
+    void RemoveModifier(IModifier modifier);
+
+    void RemoveModifiers(List<IModifier> modifier);
 }

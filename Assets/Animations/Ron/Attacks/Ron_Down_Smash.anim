@@ -9946,43 +9946,85 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.18333334
-    functionName: ActivateHitboxGroup
-    data: DownSmash1
+    functionName: ActivateHitbox
+    data: DownSmash1_0
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.18333334
+    functionName: ActivateHitbox
+    data: DownSmash1_1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.21666667
-    functionName: DeactivateHitboxGroup
-    data: DownSmash1
+    functionName: DeactivateHitbox
+    data: DownSmash1_0
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.21666667
+    functionName: DeactivateHitbox
+    data: DownSmash1_1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.23333333
-    functionName: ActivateHitboxGroup
-    data: DownSmash1
+    functionName: ActivateHitbox
+    data: DownSmash1_0
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.23333333
+    functionName: ActivateHitbox
+    data: DownSmash1_1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.26666668
-    functionName: DeactivateHitboxGroup
-    data: DownSmash1
+    functionName: DeactivateHitbox
+    data: DownSmash1_0
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.26666668
+    functionName: DeactivateHitbox
+    data: DownSmash1_1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.28333333
-    functionName: ActivateHitboxGroup
-    data: DownSmash2
+    functionName: ActivateHitbox
+    data: DownSmash2_0
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.28333333
+    functionName: ActivateHitbox
+    data: DownSmash2_1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.31666666
-    functionName: DeactivateHitboxGroup
-    data: DownSmash2
+    functionName: DeactivateHitbox
+    data: DownSmash2_0
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.31666666
+    functionName: DeactivateHitbox
+    data: DownSmash2_1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

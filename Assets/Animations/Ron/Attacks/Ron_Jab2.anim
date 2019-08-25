@@ -8581,15 +8581,29 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.05
-    functionName: ActivateHitboxGroup
-    data: Jab2
+    functionName: ActivateHitbox
+    data: Jab2_0
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.05
+    functionName: ActivateHitbox
+    data: Jab2_1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.083333336
-    functionName: DeactivateHitboxGroup
-    data: Jab2
+    functionName: DeactivateHitbox
+    data: Jab2_0
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.083333336
+    functionName: DeactivateHitbox
+    data: Jab2_1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

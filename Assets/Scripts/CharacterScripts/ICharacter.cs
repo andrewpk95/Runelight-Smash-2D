@@ -52,10 +52,6 @@ public interface ICharacter
 
      void EnableMovement();
 
-     void Freeze();
-
-     void UnFreeze();
-
      void IgnoreInput(bool ignore);
 
      void IgnoreMainJoystick(bool ignore);
@@ -101,6 +97,10 @@ public interface ICharacter
      void EdgeGrab(GameObject edge);
 
      void ReleaseEdge();
+
+     //Clash Functions
+
+     void Clash(int clashFrame);
 
      //Death and Respawn Functions
 

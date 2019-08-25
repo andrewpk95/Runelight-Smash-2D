@@ -41,6 +41,12 @@ public class ShieldHurtbox : FreezeBehaviour, IShield
     // Start is called before the first frame update
     void Start()
     {
+        Initialize();
+    }
+
+    protected override void Initialize() {
+        base.Initialize();
+
         CurrentShieldHealth = MaxShieldHealth;
         owner = this.gameObject.transform.root.gameObject;
         damageable = owner.GetComponent<IDamageable>();
@@ -82,19 +88,13 @@ public class ShieldHurtbox : FreezeBehaviour, IShield
         UpdateShieldHealth();
     }
 
-    public override void Freeze(int freezeFrameDuration) {
-        base.Freeze(freezeFrameDuration);
+    protected override void Freeze() {
+        base.Freeze();
         storedVelocity = character.Velocity;
     }
 
-    protected override void OnFreeze() {
-        base.OnFreeze();
-        character.Freeze();
-    }
-
-    protected override void OnUnFreeze() {
-        base.OnUnFreeze();
-		character.UnFreeze();
+    protected override void UnFreeze() {
+        base.UnFreeze();
 		character.Velocity = storedVelocity;
     }
 
@@ -158,7 +158,7 @@ public class ShieldHurtbox : FreezeBehaviour, IShield
             TakeDamage(hitbox.Stats.Damage);
             Push(hitbox);
             ShieldStun(hitbox);
-            Freeze(hitbox.Stats.FreezeFrame);
+            EventManager.instance.InvokeOnFreezeEvent(owner, hitbox.Stats.FreezeFrame);
         }
     }
 
@@ -209,7 +209,7 @@ public class ShieldHurtbox : FreezeBehaviour, IShield
 
     public void Push(IAttackHitbox hitbox) {
         Vector2 launchVector = SmashCalculator.ShieldKnockbackVector(hitbox, this);
-        Debug.Log(launchVector);
+        //Debug.Log(launchVector);
         character.Velocity = launchVector;
     }
 
@@ -223,7 +223,7 @@ public class ShieldHurtbox : FreezeBehaviour, IShield
         Vector2 launchVector = new Vector2(0.0f, 6.0f);
         character.Velocity = launchVector;
         damageable.SetIntangible();
-        Freeze(15);
+        EventManager.instance.InvokeOnFreezeEvent(owner, 15);
     }
 
     public void OnShieldBreakStart() {

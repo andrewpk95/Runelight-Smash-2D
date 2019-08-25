@@ -17,6 +17,7 @@ public class HitboxStat : IHitboxStat
     [SerializeField] protected int freezeFrame;
     [SerializeField] protected bool faceOwnerWhenHit;
     [SerializeField] protected float shieldStunMultiplier;
+    [SerializeField] protected bool weightIndependentKnockback;
     
     public float Damage {get {return GetStat(Stat.Damage);} set {SetStat(Stat.Damage, value);}}
     public bool HitStun {get {return hitStun;} set {hitStun = value;}}
@@ -27,6 +28,7 @@ public class HitboxStat : IHitboxStat
     public int FreezeFrame {get {return freezeFrame;} set {freezeFrame = value;}}
     public bool FaceOwnerWhenHit {get {return faceOwnerWhenHit;} set {faceOwnerWhenHit = value;}}
     public float ShieldStunMultiplier {get {return GetStat(Stat.ShieldStunMultiplier);} set {SetStat(Stat.ShieldStunMultiplier, value);}}
+    public bool WeightIndependentKnockback {get {return weightIndependentKnockback;} set {weightIndependentKnockback = value;}}
 
     public HitboxStat() {
         modifiers = new Dictionary<Stat, List<IModifier>>();

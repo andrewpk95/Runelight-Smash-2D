@@ -7,7 +7,7 @@ public class FighterController : CharacterMovement
 {
     protected Animator animator;
     protected StatusManager statusManager;
-    protected HurtboxManager hurtbox;
+    protected HurtboxContainer hurtbox;
 
     public GameObject collidingWall;
     protected Vector2 collisionContact;
@@ -65,6 +65,8 @@ public class FighterController : CharacterMovement
     public const int EDGE_GRAB_MAXIMUM_DURATION_FRAME = 300;
     protected Timer EdgeGrabImmuneTimer;
     public const int EDGE_GRAB_IMMUNE_FRAME = 15;
+
+    protected Timer ClashTimer;
     
     //Action Buffer Queue Variables
     public int actionBufferFrame;
@@ -86,7 +88,7 @@ public class FighterController : CharacterMovement
         base.InitializeComponents();
         animator = GetComponent<Animator>();
         statusManager = GetComponent<StatusManager>();
-        hurtbox = GetComponentInChildren<HurtboxManager>();
+        hurtbox = GetComponent<HurtboxContainer>();
         EventManager.instance.StartListeningToOnHitStunEvent(this.gameObject, new UnityAction<IAttackHitbox, GameObject>(OnHitStun));
         EventManager.instance.StartListeningToOnGrabEvent(this.gameObject, new UnityAction<GameObject, GameObject>(OnGrab));
         EventManager.instance.StartListeningToOnEdgeGrabEvent(this.gameObject, new UnityAction<GameObject, GameObject>(OnEdgeGrab));
@@ -99,6 +101,8 @@ public class FighterController : CharacterMovement
         
         TumbleDurationTimer = new Timer (TUMBLE_MAXIMUM_DURATION_FRAME, "Tumble Duration Timer", null, OnTumbleDurationStop);
         TechWindowDurationTimer = new Timer(TECH_WINDOW_FRAME, "Tech Window Timer", OnTechWindowStart, OnTechWindowStop);
+
+        ClashTimer = new Timer(0, "Clash Duration Timer", OnClashStart, OnClashStop);
 
         canBeGrabbed = new BoolStat(true);
         grabImmuneStatus = new GrabImmuneStatus(GRAB_IMMUNE_FRAME);
@@ -120,9 +124,9 @@ public class FighterController : CharacterMovement
         Tick();
     }
 
-    protected override void Tick() {
+    protected override void UpdateOtherBehaviour() {
         if (isGrabbingEdge) this.gameObject.transform.position = grabbingEdge.transform.position + this.gameObject.transform.position - edgeGrabTransform.position;
-        base.Tick();
+        base.UpdateOtherBehaviour();
         edgeHitbox.enabled = !isEdgeGrabImmune && !isGrabbingEdge && (CanGrabEdge || (!isBusy && velocity.y < 0));
     }
 
@@ -862,12 +866,14 @@ public class FighterController : CharacterMovement
         base.FallThrough();
     }
 
-    public virtual void Freeze() {
+    protected override void Freeze() {
+        base.Freeze();
         base.DisableMovement();
         animator.speed = 0;
     }
 
-    public virtual void UnFreeze() {
+    protected override void UnFreeze() {
+        base.UnFreeze();
         base.EnableMovement();
         animator.speed = 1;
     }
@@ -1050,6 +1056,21 @@ public class FighterController : CharacterMovement
     public virtual void EdgeJump() {
         Velocity = new Vector2(isFacingRight ? 4.0f : -4.0f, 0.0f);
         base.Jump(fullHopHeight);
+    }
+
+    public virtual void Clash(int clashFrame) {
+        animator.SetTrigger("GrabClash");
+        ClashTimer.duration = clashFrame;
+        ClashTimer.durationLeft = clashFrame;
+        TimerManager.instance.StartTimer(ClashTimer);
+    }
+
+    protected virtual void OnClashStart() {
+
+    }
+
+    protected virtual void OnClashStop() {
+
     }
 
     //Overrides

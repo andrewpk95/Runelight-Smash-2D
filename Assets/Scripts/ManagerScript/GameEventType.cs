@@ -13,6 +13,7 @@ public enum GameEventType {
     OnCharacterSelectEvent,
     OnCharacterDeSelectEvent,
     OnHitEvent, 
+    OnFreezeEvent,
     OnGrabEvent, 
     OnDamageEvent, 
     OnHitStunEvent, 
@@ -43,6 +44,11 @@ public class OnCharacterDeSelectEvent : UnityEvent<Player>
 
 [System.Serializable]
 public class OnHitEvent : UnityEvent<IAttackHitbox, GameObject>
+{
+}
+
+[System.Serializable]
+public class OnFreezeEvent : UnityEvent<GameObject, int>
 {
 }
 

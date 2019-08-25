@@ -3,20 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class FreezeBehaviour : MonoBehaviour, IFreezable
+public class MultihitHitbox : AttackHitbox, IFreezable
 {
+    public int multihitIntervalFrame;
+    public int hitIntervalFrameLeft;
+
     [SerializeField] protected bool isFrozen;
     public bool IsFrozen {get {return isFrozen;} set {isFrozen = value;}}
-    protected int freezeFrameLeft;
-    
+    public int freezeFrameLeft;
+
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         Initialize();
     }
 
-    protected virtual void Initialize() {
+    protected override void Initialize() {
+        base.Initialize();
         EventManager.instance.StartListeningToOnFreezeEvent(this.gameObject, new UnityAction<GameObject, int>(OnFreeze));
+        if (multihitIntervalFrame <= 0) {
+            multihitIntervalFrame = 120;
+        }
+        hitIntervalFrameLeft = multihitIntervalFrame;
     }
 
     // Update is called once per frame
@@ -31,7 +39,15 @@ public class FreezeBehaviour : MonoBehaviour, IFreezable
     }
 
     protected virtual void UpdateOtherBehaviour() {
-
+        //Clear victim list every cycle
+        if (hitbox.enabled) {
+            hitIntervalFrameLeft--;
+            if (hitIntervalFrameLeft <= 0) {
+                collisions.Clear();
+                hitboxGroup.Victims.Clear();
+                hitIntervalFrameLeft = multihitIntervalFrame;
+            }
+        }
     }
 
     protected virtual void UpdateFreezeFrame() {
@@ -61,7 +77,13 @@ public class FreezeBehaviour : MonoBehaviour, IFreezable
         IsFrozen = false;
     }
 
+    public override void Reset() {
+        base.Reset();
+        hitIntervalFrameLeft = multihitIntervalFrame;
+    }
+
     void OnDisable() {
+        Reset();
         EventManager.instance.UnsubscribeAll(this.gameObject);
     }
 }

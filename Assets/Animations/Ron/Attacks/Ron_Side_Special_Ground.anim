@@ -17119,98 +17119,28 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.31666666
-    functionName: ActivateHitboxGroup
-    data: SideSpecial1
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.35
-    functionName: DeactivateHitboxGroup
-    data: SideSpecial1
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.36666667
-    functionName: ActivateHitboxGroup
-    data: SideSpecial1
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.4
-    functionName: DeactivateHitboxGroup
-    data: SideSpecial1
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.41666666
-    functionName: ActivateHitboxGroup
-    data: SideSpecial1
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.45
-    functionName: DeactivateHitboxGroup
-    data: SideSpecial1
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.46666667
-    functionName: ActivateHitboxGroup
-    data: SideSpecial1
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.5
-    functionName: DeactivateHitboxGroup
-    data: SideSpecial1
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.51666665
-    functionName: ActivateHitboxGroup
-    data: SideSpecial1
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.55
-    functionName: DeactivateHitboxGroup
-    data: SideSpecial1
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.56666666
-    functionName: ActivateHitboxGroup
+    functionName: ActivateHitbox
     data: SideSpecial1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.6
-    functionName: DeactivateHitboxGroup
+    functionName: DeactivateHitbox
     data: SideSpecial1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.6166667
-    functionName: ActivateHitboxGroup
+    functionName: ActivateHitbox
     data: SideSpecial2
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.65
-    functionName: DeactivateHitboxGroup
+    functionName: DeactivateHitbox
     data: SideSpecial2
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

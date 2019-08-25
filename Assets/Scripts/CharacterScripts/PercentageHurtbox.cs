@@ -30,17 +30,23 @@ public class PercentageHurtbox : FreezeBehaviour, IDamageable
 
     Animator animator;
     ICharacter character;
-    HurtboxManager hurtbox;
+    HurtboxContainer hurtbox;
 
     public StatusManager statusManager;
     protected IStatus launchStatus;
     
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        Initialize();
+    }
+
+    protected override void Initialize() {
+        base.Initialize();
+
         animator = GetComponent<Animator>();
         character = GetComponent<ICharacter>();
-        hurtbox = GetComponentInChildren<HurtboxManager>();
+        hurtbox = GetComponent<HurtboxContainer>();
 
         EventManager.instance.StartListeningToOnHitEvent(this.gameObject, new UnityAction<IAttackHitbox, GameObject>(OnHit));
         EventManager.instance.StartListeningToOnDeathEvent(this.gameObject, new UnityAction<GameObject>(OnDeath));
@@ -86,20 +92,13 @@ public class PercentageHurtbox : FreezeBehaviour, IDamageable
 
     //IFreezable Overrides
 
-    public override void Freeze(int freezeFrameDuration) {
-        base.Freeze(freezeFrameDuration);
-        statusManager.Freeze(freezeFrameDuration);
+    protected override void Freeze() {
+        base.Freeze();
         storedVelocity = character.Velocity;
     }
 
-    protected override void OnFreeze() {
-        base.OnFreeze();
-        character.Freeze();
-    }
-
-    protected override void OnUnFreeze() {
-        base.OnUnFreeze();
-        character.UnFreeze();
+    protected override void UnFreeze() {
+        base.UnFreeze();
 		character.Velocity = storedVelocity;
     }
 
@@ -114,7 +113,7 @@ public class PercentageHurtbox : FreezeBehaviour, IDamageable
             FaceHitbox(hitbox);
             HitStun(hitbox);
             Launch(hitbox);
-            Freeze(hitbox.Stats.FreezeFrame);
+            EventManager.instance.InvokeOnFreezeEvent(this.gameObject, hitbox.Stats.FreezeFrame);
         }
     }
 
@@ -164,7 +163,7 @@ public class PercentageHurtbox : FreezeBehaviour, IDamageable
         Vector2 launchVector = SmashCalculator.LaunchVector(hitbox, this);
         IsLaunched = SmashCalculator.Tumble(hitbox, this);
         if (IsLaunched) statusManager.AddStatus(launchStatus);
-        Debug.Log("Launched! " + launchVector);
+        //Debug.Log("Launched! " + launchVector);
         character.Velocity = launchVector;
         //Release from grab if launched with high enough velocity
         if (character.GetGrabber() != null && SmashCalculator.GrabRelease(hitbox, this)) {
@@ -174,13 +173,13 @@ public class PercentageHurtbox : FreezeBehaviour, IDamageable
 
     public void SetIntangible() {
         IsIntangible = true;
-        hurtbox.SetIntangible(true);
+        hurtbox.SetIntangibility(true);
         hurtbox.StartFlashing(intangibleColor1, intangibleColor2, flashTick);
     }
 
     public void SetTangible() {
         IsIntangible = false;
-        hurtbox.SetIntangible(false);
+        hurtbox.SetIntangibility(false);
         hurtbox.StopFlashing();
     }
     

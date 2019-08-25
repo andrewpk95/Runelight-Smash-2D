@@ -48,10 +48,6 @@ public class RonController : FighterController, ICharacter
         Tick();
     }
 
-    protected override void Tick() {
-        base.Tick();
-    }
-
     //Overrides
 
     protected override void ProcessActionInput() {

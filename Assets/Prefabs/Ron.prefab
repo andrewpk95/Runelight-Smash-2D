@@ -9,14 +9,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 179608326160442946}
-  - component: {fileID: 5813354648146656563}
-  - component: {fileID: 8570242257921980804}
   - component: {fileID: 1819587434}
   - component: {fileID: 6110374302952998225}
   - component: {fileID: 3883178279339629315}
   - component: {fileID: 5335091596189386642}
   - component: {fileID: 8942577092732779746}
   - component: {fileID: 302481648788772294}
+  - component: {fileID: 3786577224678916052}
+  - component: {fileID: 294125790099050766}
+  - component: {fileID: 5895669793688282404}
+  - component: {fileID: 4353083392963081227}
   m_Layer: 12
   m_Name: Ron
   m_TagString: Entity
@@ -45,43 +47,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &5813354648146656563
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1819587433}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 0.01
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 0
-  m_Material: {fileID: 6200000, guid: 21f683a5537c24a4492dd93dc0b6f7d4, type: 2}
-  m_Interpolate: 1
-  m_SleepingMode: 1
-  m_CollisionDetection: 1
-  m_Constraints: 4
---- !u!70 &8570242257921980804
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1819587433}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: 21f683a5537c24a4492dd93dc0b6f7d4, type: 2}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.15}
-  m_Size: {x: 0.3, y: 1.2}
-  m_Direction: 0
 --- !u!95 &1819587434
 Animator:
   serializedVersion: 3
@@ -113,6 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d37552ff7ca92ed4087edf97b0393ae7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFrozen: 0
   movementEnabled: 0
   debugColor: {r: 1, g: 0.058819957, b: 0, a: 1}
   groundLayerMask:
@@ -257,6 +223,68 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFrozen: 0
+--- !u!114 &3786577224678916052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1819587433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d54adbc2a1dcf846bf25f72ee06a8f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layer: 0
+--- !u!114 &294125790099050766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1819587433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb8c9266fb8cc6a4da8d221a5eba43e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!50 &5895669793688282404
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1819587433}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.01
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 6200000, guid: 21f683a5537c24a4492dd93dc0b6f7d4, type: 2}
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 4
+--- !u!70 &4353083392963081227
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1819587433}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 21f683a5537c24a4492dd93dc0b6f7d4, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.15}
+  m_Size: {x: 0.3, y: 1.2}
+  m_Direction: 0
 --- !u!1 &30173234226752812
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,7 +294,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3530724253751786636}
-  - component: {fileID: 7450701856113666008}
+  - component: {fileID: 3583476617457149763}
   m_Layer: 0
   m_Name: BackAir
   m_TagString: Hitbox
@@ -289,7 +317,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7450701856113666008
+--- !u!114 &3583476617457149763
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -298,10 +326,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 30173234226752812}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &147759007291626935
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,7 +423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &232455466932824365
@@ -491,7 +519,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &253241309773601784
@@ -567,6 +595,7 @@ MonoBehaviour:
   freezeFrame: 10
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &326017824211137217
 GameObject:
   m_ObjectHideFlags: 0
@@ -576,7 +605,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6353488355943981862}
-  - component: {fileID: 5835099325797265487}
+  - component: {fileID: 8361017580775076754}
   m_Layer: 0
   m_Name: DownAir
   m_TagString: Hitbox
@@ -599,7 +628,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5835099325797265487
+--- !u!114 &8361017580775076754
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -608,10 +637,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 326017824211137217}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &430903041710863766
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,7 +651,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2058619975698870933}
   - component: {fileID: 8172057681619178821}
-  - component: {fileID: 7804590662903508576}
+  - component: {fileID: 2733438971694680827}
   m_Layer: 21
   m_Name: NeutralSpecial
   m_TagString: Hitbox
@@ -660,7 +689,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1
---- !u!114 &7804590662903508576
+--- !u!114 &2733438971694680827
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -669,7 +698,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 430903041710863766}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be3229d0281b6d84791786c4e318b053, type: 3}
+  m_Script: {fileID: 11500000, guid: 8092b6a6adf74cb449b09d83e9815839, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
@@ -685,6 +714,14 @@ MonoBehaviour:
   freezeFrame: 0
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
+  multihitIntervalFrame: 2
+  hitIntervalFrameLeft: 0
+  isFrozen: 0
+  freezeFrameLeft: 0
+  passive: {fileID: 0}
+  numberOfHits: 0
+  hitsLeft: 0
 --- !u!1 &512295092189505733
 GameObject:
   m_ObjectHideFlags: 0
@@ -778,7 +815,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &587757581006552944
@@ -835,9 +872,10 @@ MonoBehaviour:
   angle: 361
   baseKnockback: 20
   knockbackGrowth: 0
-  freezeFrame: 5
+  freezeFrame: 2
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!70 &319600877038068894
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -863,7 +901,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2244680553196016058}
-  - component: {fileID: 3019255322000076146}
+  - component: {fileID: 3197748378852246630}
   m_Layer: 0
   m_Name: ForwardSmash2
   m_TagString: Hitbox
@@ -886,7 +924,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3019255322000076146
+--- !u!114 &3197748378852246630
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -895,10 +933,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 674068012638613925}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &903281959140504871
 GameObject:
   m_ObjectHideFlags: 0
@@ -992,7 +1030,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.003124997, y: -0.18375}
@@ -1011,7 +1049,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &940422955836587872
@@ -1106,7 +1144,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.028124997, y: -0.11624999}
@@ -1125,7 +1163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &954582725898611010
@@ -1137,7 +1175,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7070946930742018467}
-  - component: {fileID: 6658432397555788317}
+  - component: {fileID: 2761879433477020086}
   m_Layer: 0
   m_Name: DashAttack
   m_TagString: Hitbox
@@ -1160,7 +1198,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6658432397555788317
+--- !u!114 &2761879433477020086
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1169,10 +1207,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 954582725898611010}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &991782169143355176
 GameObject:
   m_ObjectHideFlags: 0
@@ -1264,7 +1302,7 @@ CapsuleCollider2D:
   m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.053125005, y: -0.08125}
@@ -1283,7 +1321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &1059610787408206611
@@ -1295,7 +1333,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7534968386143286220}
-  - component: {fileID: 4283041281102642625}
+  - component: {fileID: 8836940649991940116}
   m_Layer: 0
   m_Name: GetupAttackFront
   m_TagString: Hitbox
@@ -1318,7 +1356,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 28
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4283041281102642625
+--- !u!114 &8836940649991940116
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1327,10 +1365,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1059610787408206611}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &1085783072738906957
 GameObject:
   m_ObjectHideFlags: 0
@@ -1404,6 +1442,7 @@ MonoBehaviour:
   freezeFrame: 10
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &1118304112216787643
 GameObject:
   m_ObjectHideFlags: 0
@@ -1413,7 +1452,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7862852949607940507}
-  - component: {fileID: 14153696568090340}
+  - component: {fileID: 7035497205018796405}
   m_Layer: 0
   m_Name: ForwardSmash1
   m_TagString: Hitbox
@@ -1437,7 +1476,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &14153696568090340
+--- !u!114 &7035497205018796405
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1446,10 +1485,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1118304112216787643}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &1175005229968465652
 GameObject:
   m_ObjectHideFlags: 0
@@ -1523,6 +1562,7 @@ MonoBehaviour:
   freezeFrame: 5
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &1184241038774070108
 GameObject:
   m_ObjectHideFlags: 0
@@ -1653,7 +1693,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3864117449205209831}
-  - component: {fileID: 7592895464167326227}
+  - component: {fileID: 4010105785596552115}
   m_Layer: 0
   m_Name: Jab3
   m_TagString: Hitbox
@@ -1676,7 +1716,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7592895464167326227
+--- !u!114 &4010105785596552115
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1685,10 +1725,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1186648731551248364}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &1229996655931431250
 GameObject:
   m_ObjectHideFlags: 0
@@ -1701,7 +1741,7 @@ GameObject:
   - component: {fileID: 9120433487357204735}
   - component: {fileID: 10924326278777976}
   m_Layer: 21
-  m_Name: Uptilt
+  m_Name: UpTilt
   m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1731,7 +1771,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1762,6 +1802,7 @@ MonoBehaviour:
   freezeFrame: 2
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &1255931160051364265
 GameObject:
   m_ObjectHideFlags: 0
@@ -1855,7 +1896,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &1268161099448396068
@@ -1868,7 +1909,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7582634123522470750}
   - component: {fileID: 5242814332025174510}
-  - component: {fileID: 5028046339984845668}
+  - component: {fileID: 6355068614320033918}
   m_Layer: 21
   m_Name: BackThrow
   m_TagString: Hitbox
@@ -1906,7 +1947,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.3
---- !u!114 &5028046339984845668
+--- !u!114 &6355068614320033918
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1915,22 +1956,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 1268161099448396068}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be3229d0281b6d84791786c4e318b053, type: 3}
+  m_Script: {fileID: 11500000, guid: db9c4e8301c64c343a988f34977f8406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
   mask:
     serializedVersion: 2
     m_Bits: 0
-  damage: 11
+  damage: 0
   hitStun: 1
   minimumHitStunFrame: 15
   angle: 45
   baseKnockback: 70
   knockbackGrowth: 66
-  freezeFrame: 5
+  freezeFrame: 0
   faceOwnerWhenHit: 1
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
+  releaseOnHit: 1
 --- !u!1 &1270420296471868761
 GameObject:
   m_ObjectHideFlags: 0
@@ -2004,6 +2047,7 @@ MonoBehaviour:
   freezeFrame: 3
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &1364894546064863505
 GameObject:
   m_ObjectHideFlags: 0
@@ -2014,7 +2058,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1185709932424929166}
   - component: {fileID: 6529823652532970168}
-  - component: {fileID: 4903052164099239831}
+  - component: {fileID: 3274850990618152788}
   m_Layer: 21
   m_Name: DownThrow
   m_TagString: Hitbox
@@ -2052,7 +2096,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.3
---- !u!114 &4903052164099239831
+--- !u!114 &3274850990618152788
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2061,7 +2105,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1364894546064863505}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be3229d0281b6d84791786c4e318b053, type: 3}
+  m_Script: {fileID: 11500000, guid: db9c4e8301c64c343a988f34977f8406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
@@ -2074,9 +2118,11 @@ MonoBehaviour:
   angle: 68
   baseKnockback: 40
   knockbackGrowth: 90
-  freezeFrame: 3
+  freezeFrame: 0
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
+  releaseOnHit: 1
 --- !u!1 &1697544660409754541
 GameObject:
   m_ObjectHideFlags: 0
@@ -2170,7 +2216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &1726515174840523717
@@ -2182,7 +2228,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6704606455920793712}
-  - component: {fileID: 9066990465438206332}
+  - component: {fileID: 447723837648189806}
   m_Layer: 0
   m_Name: DownSpecial
   m_TagString: Hitbox
@@ -2205,7 +2251,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9066990465438206332
+--- !u!114 &447723837648189806
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2214,10 +2260,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1726515174840523717}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &1727248056097977270
 GameObject:
   m_ObjectHideFlags: 0
@@ -2311,7 +2357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &1757510986799776143
@@ -2407,7 +2453,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &1813098632241600154
@@ -2509,7 +2555,7 @@ CapsuleCollider2D:
   m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.059374996, y: 0.125625}
@@ -2528,7 +2574,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &1855968401764313742
@@ -2624,7 +2670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &1881140194833181959
@@ -2700,6 +2746,7 @@ MonoBehaviour:
   freezeFrame: 5
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &1911352991136947701
 GameObject:
   m_ObjectHideFlags: 0
@@ -2793,7 +2840,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &1995194504164219084
@@ -2805,7 +2852,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2125121377624826456}
-  - component: {fileID: 2932713614133826423}
+  - component: {fileID: 60578287920967977}
   m_Layer: 0
   m_Name: UpSmash2
   m_TagString: Hitbox
@@ -2828,7 +2875,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2932713614133826423
+--- !u!114 &60578287920967977
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2837,10 +2884,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1995194504164219084}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &2068888340803189621
 GameObject:
   m_ObjectHideFlags: 0
@@ -2850,7 +2897,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5327976563155756736}
-  - component: {fileID: 8232460946698986222}
+  - component: {fileID: 8548792719441118567}
   m_Layer: 0
   m_Name: EdgeGetupAttack
   m_TagString: Hitbox
@@ -2873,7 +2920,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 30
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8232460946698986222
+--- !u!114 &8548792719441118567
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2882,10 +2929,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2068888340803189621}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &2090230902334390131
 GameObject:
   m_ObjectHideFlags: 0
@@ -2895,7 +2942,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 15425213631079288}
-  - component: {fileID: 7108217118847346921}
+  - component: {fileID: 3715713997457538239}
   m_Layer: 0
   m_Name: UpSmash1
   m_TagString: Hitbox
@@ -2919,7 +2966,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7108217118847346921
+--- !u!114 &3715713997457538239
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2928,10 +2975,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2090230902334390131}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &2200976516724555327
 GameObject:
   m_ObjectHideFlags: 0
@@ -3042,7 +3089,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &2209242240047472446
@@ -3138,7 +3185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &2229837200185760555
@@ -3150,7 +3197,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2482599344133156937}
-  - component: {fileID: 7432090962412359210}
+  - component: {fileID: 5350512617222318420}
   m_Layer: 0
   m_Name: SideSpecial1
   m_TagString: Hitbox
@@ -3173,7 +3220,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7432090962412359210
+--- !u!114 &5350512617222318420
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3182,11 +3229,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2229837200185760555}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cda74904da44ffa4d8c84b87bf33a47f, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
-  passive: {fileID: 0}
+  Victims: []
 --- !u!1 &2242837185661948772
 GameObject:
   m_ObjectHideFlags: 0
@@ -3278,7 +3324,7 @@ CapsuleCollider2D:
   m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.01875, y: -0.055624966}
@@ -3297,7 +3343,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &2256326427330491757
@@ -3354,9 +3400,10 @@ MonoBehaviour:
   angle: 361
   baseKnockback: 30
   knockbackGrowth: 80
-  freezeFrame: 7
+  freezeFrame: 4
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!70 &6055792168581945389
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -3484,7 +3531,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &2324034375517243049
@@ -3560,6 +3607,7 @@ MonoBehaviour:
   freezeFrame: 5
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &2538537869642506923
 GameObject:
   m_ObjectHideFlags: 0
@@ -3569,7 +3617,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 788723386097449622}
-  - component: {fileID: 5780444502674099568}
+  - component: {fileID: 8368946836616088766}
   m_Layer: 0
   m_Name: UpThrowMultiHit
   m_TagString: Hitbox
@@ -3592,7 +3640,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5780444502674099568
+--- !u!114 &8368946836616088766
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3601,11 +3649,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2538537869642506923}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db6fee3125354bc429ab24b3ae9e11a8, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
-  releaseOnHit: 0
+  Victims: []
 --- !u!1 &2550577151277729622
 GameObject:
   m_ObjectHideFlags: 0
@@ -3615,7 +3662,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2998347223244884962}
-  - component: {fileID: 7387804772166974244}
+  - component: {fileID: 7682148913749463927}
   m_Layer: 0
   m_Name: ForwardThrow
   m_TagString: Hitbox
@@ -3638,7 +3685,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7387804772166974244
+--- !u!114 &7682148913749463927
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3647,11 +3694,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2550577151277729622}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db6fee3125354bc429ab24b3ae9e11a8, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
-  releaseOnHit: 1
+  Victims: []
 --- !u!1 &2613863200293983398
 GameObject:
   m_ObjectHideFlags: 0
@@ -3662,7 +3708,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7136269146285094915}
   - component: {fileID: 4026047808392765638}
-  - component: {fileID: 944288624101248956}
+  - component: {fileID: 4845862048508373403}
   m_Layer: 21
   m_Name: SideSpecial1
   m_TagString: Hitbox
@@ -3700,7 +3746,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 0.7}
   m_Direction: 1
---- !u!114 &944288624101248956
+--- !u!114 &4845862048508373403
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3709,7 +3755,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2613863200293983398}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be3229d0281b6d84791786c4e318b053, type: 3}
+  m_Script: {fileID: 11500000, guid: 07dc67aa883ba7b4b890b88feca101b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
@@ -3725,6 +3771,12 @@ MonoBehaviour:
   freezeFrame: 5
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 1
+  multihitIntervalFrame: 3
+  hitIntervalFrameLeft: 0
+  isFrozen: 0
+  freezeFrameLeft: 0
+  passive: {fileID: 0}
 --- !u!1 &2638800427934654345
 GameObject:
   m_ObjectHideFlags: 0
@@ -3816,7 +3868,7 @@ CapsuleCollider2D:
   m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.048124995, y: -0.16499999}
@@ -3835,7 +3887,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &2721333090507999435
@@ -3847,7 +3899,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6629866213649384969}
-  - component: {fileID: 9168692252743004209}
+  - component: {fileID: 189811509576085266}
   m_Layer: 0
   m_Name: BackThrow
   m_TagString: Hitbox
@@ -3870,7 +3922,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 27
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9168692252743004209
+--- !u!114 &189811509576085266
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3879,11 +3931,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2721333090507999435}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db6fee3125354bc429ab24b3ae9e11a8, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
-  releaseOnHit: 1
+  Victims: []
 --- !u!1 &2746314141142318258
 GameObject:
   m_ObjectHideFlags: 0
@@ -3957,6 +4008,7 @@ MonoBehaviour:
   freezeFrame: 12
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &2782963090569943759
 GameObject:
   m_ObjectHideFlags: 0
@@ -4000,7 +4052,7 @@ GameObject:
   - component: {fileID: 5462360730729164671}
   m_Layer: 17
   m_Name: Grab
-  m_TagString: Hitbox
+  m_TagString: GrabHitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4033,7 +4085,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.5, y: 0.3}
+  m_Size: {x: 1, y: 0.3}
   m_Direction: 1
 --- !u!114 &5462360730729164671
 MonoBehaviour:
@@ -4060,7 +4112,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5739668396712907877}
-  - component: {fileID: 9108685704928074279}
+  - component: {fileID: 5479572901403422437}
   m_Layer: 0
   m_Name: DownSmash2
   m_TagString: Hitbox
@@ -4084,7 +4136,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9108685704928074279
+--- !u!114 &5479572901403422437
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4093,10 +4145,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2982912182464953176}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &3057830209940473383
 GameObject:
   m_ObjectHideFlags: 0
@@ -4106,7 +4158,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5866792327604462120}
-  - component: {fileID: 6422134247371790299}
+  - component: {fileID: 2128395232625527062}
   m_Layer: 0
   m_Name: DownTilt
   m_TagString: Hitbox
@@ -4129,7 +4181,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6422134247371790299
+--- !u!114 &2128395232625527062
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4138,10 +4190,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3057830209940473383}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &3179270817308650698
 GameObject:
   m_ObjectHideFlags: 0
@@ -4151,7 +4203,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4177669053454857273}
-  - component: {fileID: 4175715544125564607}
+  - component: {fileID: 2604737211977538194}
   m_Layer: 0
   m_Name: Pummel
   m_TagString: Hitbox
@@ -4174,7 +4226,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4175715544125564607
+--- !u!114 &2604737211977538194
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4183,11 +4235,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3179270817308650698}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db6fee3125354bc429ab24b3ae9e11a8, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
-  releaseOnHit: 0
+  Victims: []
 --- !u!1 &3181965839668231636
 GameObject:
   m_ObjectHideFlags: 0
@@ -4261,6 +4312,7 @@ MonoBehaviour:
   freezeFrame: 3
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &3186496157748191452
 GameObject:
   m_ObjectHideFlags: 0
@@ -4270,7 +4322,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3262728803561420047}
-  - component: {fileID: 2477110021503405199}
+  - component: {fileID: 4926996351507527718}
   m_Layer: 0
   m_Name: ForwardAir
   m_TagString: Hitbox
@@ -4293,7 +4345,7 @@ Transform:
   m_Father: {fileID: 2631675668446741857}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 8.6050005}
---- !u!114 &2477110021503405199
+--- !u!114 &4926996351507527718
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4302,10 +4354,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3186496157748191452}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &3225810066198874587
 GameObject:
   m_ObjectHideFlags: 0
@@ -4398,7 +4450,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.053125005, y: -0.029999942}
@@ -4417,7 +4469,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &3247674987352550299
@@ -4512,7 +4564,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.0018749982, y: 0.035625}
@@ -4531,9 +4583,83 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
+--- !u!1 &3313872280951601284
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3942671609723315130}
+  - component: {fileID: 6863515507780153225}
+  - component: {fileID: 7516944440575900967}
+  m_Layer: 15
+  m_Name: NeutralAir_1
+  m_TagString: Hitbox
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3942671609723315130
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3313872280951601284}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.509, y: -0.045, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 696212403572089009}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &6863515507780153225
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3313872280951601284}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.6, y: 0.25}
+  m_Direction: 1
+--- !u!114 &7516944440575900967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3313872280951601284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be3229d0281b6d84791786c4e318b053, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 1
+  mask:
+    serializedVersion: 2
+    m_Bits: 0
+  damage: 5
+  hitStun: 1
+  minimumHitStunFrame: 10
+  angle: 361
+  baseKnockback: 20
+  knockbackGrowth: 50
+  freezeFrame: 3
+  faceOwnerWhenHit: 0
+  shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &3333034110602094935
 GameObject:
   m_ObjectHideFlags: 0
@@ -4825,9 +4951,10 @@ MonoBehaviour:
   angle: 0
   baseKnockback: 0
   knockbackGrowth: 0
-  freezeFrame: 5
+  freezeFrame: 0
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &3449985234026186484
 GameObject:
   m_ObjectHideFlags: 0
@@ -4837,7 +4964,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5021947339086952643}
-  - component: {fileID: 1204341058014131180}
+  - component: {fileID: 7896265631496989697}
   m_Layer: 0
   m_Name: Jab2
   m_TagString: Hitbox
@@ -4861,7 +4988,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1204341058014131180
+--- !u!114 &7896265631496989697
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4870,10 +4997,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3449985234026186484}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &3466372125018665704
 GameObject:
   m_ObjectHideFlags: 0
@@ -4947,6 +5074,7 @@ MonoBehaviour:
   freezeFrame: 5
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &3679758514839273568
 GameObject:
   m_ObjectHideFlags: 0
@@ -4956,7 +5084,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8920266691869538384}
-  - component: {fileID: 6092308731894154674}
+  - component: {fileID: 1590770259364283195}
   m_Layer: 0
   m_Name: UpSpecial0
   m_TagString: Hitbox
@@ -4973,13 +5101,13 @@ Transform:
   m_GameObject: {fileID: 3679758514839273568}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.000000035143973, y: -1.5600765e-10, z: 0}
-  m_LocalScale: {x: 1.0000513, y: 1.0000534, z: 0.9999971}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1455553825368563487}
   m_Father: {fileID: 3979425423151584956}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6092308731894154674
+--- !u!114 &1590770259364283195
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4988,10 +5116,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3679758514839273568}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &3690670142966695711
 GameObject:
   m_ObjectHideFlags: 0
@@ -5085,7 +5213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &3713802874167537124
@@ -5098,7 +5226,7 @@ GameObject:
   m_Component:
   - component: {fileID: 730682805295542362}
   - component: {fileID: 4497158325392079887}
-  - component: {fileID: 1646345666825612936}
+  - component: {fileID: 76867586182759218}
   m_Layer: 21
   m_Name: UpThrowMultiHit
   m_TagString: Hitbox
@@ -5136,7 +5264,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.3
---- !u!114 &1646345666825612936
+--- !u!114 &76867586182759218
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5145,7 +5273,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3713802874167537124}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be3229d0281b6d84791786c4e318b053, type: 3}
+  m_Script: {fileID: 11500000, guid: db9c4e8301c64c343a988f34977f8406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
@@ -5161,6 +5289,8 @@ MonoBehaviour:
   freezeFrame: 3
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
+  releaseOnHit: 0
 --- !u!1 &3719978241146109550
 GameObject:
   m_ObjectHideFlags: 0
@@ -5170,7 +5300,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2026491199927187354}
-  - component: {fileID: 3056431035100904859}
+  - component: {fileID: 3587273272895721256}
   m_Layer: 0
   m_Name: Grab
   m_TagString: Hitbox
@@ -5193,7 +5323,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3056431035100904859
+--- !u!114 &3587273272895721256
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5202,10 +5332,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3719978241146109550}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &3766529036153814976
 GameObject:
   m_ObjectHideFlags: 0
@@ -5279,6 +5409,7 @@ MonoBehaviour:
   freezeFrame: 2
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &3777059033251437560
 GameObject:
   m_ObjectHideFlags: 0
@@ -5352,6 +5483,7 @@ MonoBehaviour:
   freezeFrame: 3
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &3781560266059834644
 GameObject:
   m_ObjectHideFlags: 0
@@ -5509,7 +5641,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &3865319516705684156
@@ -5521,7 +5653,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7538931655824111191}
-  - component: {fileID: 1358064440123759956}
+  - component: {fileID: 8175544992738514575}
   m_Layer: 0
   m_Name: UpSmash3
   m_TagString: Hitbox
@@ -5544,7 +5676,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1358064440123759956
+--- !u!114 &8175544992738514575
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5553,10 +5685,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3865319516705684156}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &4073569052472209594
 GameObject:
   m_ObjectHideFlags: 0
@@ -5650,7 +5782,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &4079990115193738332
@@ -5662,7 +5794,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6977535575128563853}
-  - component: {fileID: 7803297232612821801}
+  - component: {fileID: 7425556470782470920}
   m_Layer: 0
   m_Name: GetupAttackBack
   m_TagString: Hitbox
@@ -5685,7 +5817,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 29
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7803297232612821801
+--- !u!114 &7425556470782470920
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5694,10 +5826,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4079990115193738332}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &4194286479558654906
 GameObject:
   m_ObjectHideFlags: 0
@@ -5793,7 +5925,7 @@ CapsuleCollider2D:
   m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.05312501, y: 0.10687503}
@@ -5812,7 +5944,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &4245398754792179026
@@ -5908,7 +6040,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.011249999, y: -0.16249996}
@@ -5927,7 +6059,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &4288160783416291142
@@ -6023,7 +6155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &4425518364445302640
@@ -6099,6 +6231,7 @@ MonoBehaviour:
   freezeFrame: 10
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &4509124371347885407
 GameObject:
   m_ObjectHideFlags: 0
@@ -6108,7 +6241,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2143564591857699592}
-  - component: {fileID: 7203400013756243938}
+  - component: {fileID: 4730923234609699346}
   m_Layer: 0
   m_Name: SideSpecial2
   m_TagString: Hitbox
@@ -6131,7 +6264,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7203400013756243938
+--- !u!114 &4730923234609699346
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6140,11 +6273,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4509124371347885407}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cda74904da44ffa4d8c84b87bf33a47f, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
-  passive: {fileID: 0}
+  Victims: []
 --- !u!1 &4552858976711801243
 GameObject:
   m_ObjectHideFlags: 0
@@ -6237,7 +6369,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.029375002, y: -0.1125}
@@ -6256,7 +6388,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &4637660705588139252
@@ -6332,6 +6464,7 @@ MonoBehaviour:
   freezeFrame: 5
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &4639004513087166188
 GameObject:
   m_ObjectHideFlags: 0
@@ -6405,6 +6538,7 @@ MonoBehaviour:
   freezeFrame: 3
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &4657687258768846890
 GameObject:
   m_ObjectHideFlags: 0
@@ -6516,7 +6650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &4892695445621071824
@@ -6632,7 +6766,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &4898372312008699305
@@ -6644,7 +6778,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9116943581412348359}
-  - component: {fileID: 2740205575623507370}
+  - component: {fileID: 7648238276084831877}
   m_Layer: 0
   m_Name: NeutralSpecial
   m_TagString: Hitbox
@@ -6667,7 +6801,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2740205575623507370
+--- !u!114 &7648238276084831877
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6676,12 +6810,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4898372312008699305}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e22d1b4a2e08424383e27d0fb496257, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
-  numberOfHits: 5
-  passive: {fileID: 0}
+  Victims: []
 --- !u!1 &4952769278712069528
 GameObject:
   m_ObjectHideFlags: 0
@@ -6773,7 +6905,7 @@ CapsuleCollider2D:
   m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.033750027, y: -0.16437507}
@@ -6792,7 +6924,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &5018254700223899318
@@ -6905,7 +7037,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &5105289820628171491
@@ -7003,7 +7135,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.018749997, y: 0.134375}
@@ -7022,7 +7154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &5149908873489173880
@@ -7165,7 +7297,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &5338313613829132317
@@ -7178,7 +7310,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1724615208203517808}
   - component: {fileID: 1891482208082375785}
-  - component: {fileID: 1746260629131904450}
+  - component: {fileID: 2519096699377888761}
   m_Layer: 21
   m_Name: ForwardThrow
   m_TagString: Hitbox
@@ -7216,7 +7348,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.3
---- !u!114 &1746260629131904450
+--- !u!114 &2519096699377888761
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7225,7 +7357,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5338313613829132317}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be3229d0281b6d84791786c4e318b053, type: 3}
+  m_Script: {fileID: 11500000, guid: db9c4e8301c64c343a988f34977f8406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
@@ -7238,9 +7370,11 @@ MonoBehaviour:
   angle: 45
   baseKnockback: 60
   knockbackGrowth: 65
-  freezeFrame: 3
+  freezeFrame: 0
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
+  releaseOnHit: 1
 --- !u!1 &5350684374275727734
 GameObject:
   m_ObjectHideFlags: 0
@@ -7250,7 +7384,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6385095483326223695}
-  - component: {fileID: 3596251746001059943}
+  - component: {fileID: 124107397841644483}
   m_Layer: 0
   m_Name: Jab1
   m_TagString: Hitbox
@@ -7274,7 +7408,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3596251746001059943
+--- !u!114 &124107397841644483
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7283,10 +7417,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5350684374275727734}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &5361005010348739560
 GameObject:
   m_ObjectHideFlags: 0
@@ -7380,7 +7514,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &5378432031339086915
@@ -7474,7 +7608,7 @@ CapsuleCollider2D:
   m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.057499997, y: -0.014374942}
@@ -7493,7 +7627,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &5494766992683035847
@@ -7569,6 +7703,7 @@ MonoBehaviour:
   freezeFrame: 2
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &5526980468674009182
 GameObject:
   m_ObjectHideFlags: 0
@@ -7642,6 +7777,7 @@ MonoBehaviour:
   freezeFrame: 10
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &5621029247824344541
 GameObject:
   m_ObjectHideFlags: 0
@@ -7715,6 +7851,7 @@ MonoBehaviour:
   freezeFrame: 2
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &5641126466490198451
 GameObject:
   m_ObjectHideFlags: 0
@@ -7724,7 +7861,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6860406468707261449}
-  - component: {fileID: 6827595873416186582}
   m_Layer: 12
   m_Name: SpriteParent
   m_TagString: Untagged
@@ -7749,19 +7885,6 @@ Transform:
   m_Father: {fileID: 179608326160442946}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6827595873416186582
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5641126466490198451}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d54adbc2a1dcf846bf25f72ee06a8f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  layer: 0
 --- !u!1 &5994407485478002557
 GameObject:
   m_ObjectHideFlags: 0
@@ -7835,6 +7958,7 @@ MonoBehaviour:
   freezeFrame: 5
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &6020248681221139530
 GameObject:
   m_ObjectHideFlags: 0
@@ -7970,6 +8094,7 @@ MonoBehaviour:
   freezeFrame: 10
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &6096929108076164200
 GameObject:
   m_ObjectHideFlags: 0
@@ -7979,7 +8104,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 510793434592512372}
-  - component: {fileID: 6611056235281146393}
+  - component: {fileID: 4316952649251311567}
   m_Layer: 0
   m_Name: UpSpecial1
   m_TagString: Hitbox
@@ -8002,7 +8127,7 @@ Transform:
   m_Father: {fileID: 3979425423151584956}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6611056235281146393
+--- !u!114 &4316952649251311567
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8011,10 +8136,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6096929108076164200}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &6153037260759033868
 GameObject:
   m_ObjectHideFlags: 0
@@ -8024,7 +8149,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7361859230831994837}
-  - component: {fileID: 5587053427635594905}
+  - component: {fileID: 5609422898260090142}
   m_Layer: 0
   m_Name: DownThrow
   m_TagString: Hitbox
@@ -8047,7 +8172,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5587053427635594905
+--- !u!114 &5609422898260090142
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8056,11 +8181,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6153037260759033868}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db6fee3125354bc429ab24b3ae9e11a8, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
-  releaseOnHit: 1
+  Victims: []
 --- !u!1 &6238505361528127982
 GameObject:
   m_ObjectHideFlags: 0
@@ -8156,7 +8280,7 @@ CapsuleCollider2D:
   m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.05312501, y: 0.10687503}
@@ -8175,7 +8299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &6249504288241791616
@@ -8232,9 +8356,10 @@ MonoBehaviour:
   angle: 80
   baseKnockback: 20
   knockbackGrowth: 0
-  freezeFrame: 5
+  freezeFrame: 2
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!70 &1727034805251589348
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -8260,7 +8385,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 696212403572089009}
-  - component: {fileID: 2031016456162696173}
+  - component: {fileID: 8049628871756213407}
   m_Layer: 0
   m_Name: NeutralAir
   m_TagString: Hitbox
@@ -8280,10 +8405,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1684550991729385422}
+  - {fileID: 3942671609723315130}
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2031016456162696173
+--- !u!114 &8049628871756213407
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8292,10 +8418,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6274515344984121071}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &6333319857964409417
 GameObject:
   m_ObjectHideFlags: 0
@@ -8406,7 +8532,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &6336895001674003621
@@ -8502,7 +8628,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &6363772667964276649
@@ -8578,6 +8704,7 @@ MonoBehaviour:
   freezeFrame: 2
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &6404584390716387692
 GameObject:
   m_ObjectHideFlags: 0
@@ -8646,11 +8773,12 @@ MonoBehaviour:
   hitStun: 1
   minimumHitStunFrame: 15
   angle: 75
-  baseKnockback: 50
+  baseKnockback: 100
   knockbackGrowth: 0
   freezeFrame: 0
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 1
 --- !u!1 &6422056020708234723
 GameObject:
   m_ObjectHideFlags: 0
@@ -8719,11 +8847,12 @@ MonoBehaviour:
   hitStun: 1
   minimumHitStunFrame: 15
   angle: 105
-  baseKnockback: 50
+  baseKnockback: 100
   knockbackGrowth: 0
   freezeFrame: 0
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 1
 --- !u!1 &6464961198316528906
 GameObject:
   m_ObjectHideFlags: 0
@@ -8733,7 +8862,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8125551406868778133}
-  - component: {fileID: 1466405548540969420}
+  - component: {fileID: 7653672500519327541}
   m_Layer: 0
   m_Name: ForwardTilt
   m_TagString: Hitbox
@@ -8756,7 +8885,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1466405548540969420
+--- !u!114 &7653672500519327541
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8765,10 +8894,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6464961198316528906}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &6669799590123366811
 GameObject:
   m_ObjectHideFlags: 0
@@ -8842,6 +8971,7 @@ MonoBehaviour:
   freezeFrame: 0
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &6697534464172363530
 GameObject:
   m_ObjectHideFlags: 0
@@ -8992,7 +9122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &6710024653921972827
@@ -9004,7 +9134,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7742039314046587806}
-  - component: {fileID: 8936146569973425327}
+  - component: {fileID: 6391838489282037051}
   m_Layer: 0
   m_Name: DownSmash1
   m_TagString: Hitbox
@@ -9028,7 +9158,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8936146569973425327
+--- !u!114 &6391838489282037051
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9037,10 +9167,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6710024653921972827}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &6876413012127280724
 GameObject:
   m_ObjectHideFlags: 0
@@ -9134,7 +9264,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.01875, y: -0.055624995}
@@ -9153,7 +9283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &6952658418331554665
@@ -9166,7 +9296,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2970248417045025999}
   - component: {fileID: 5095719727951590140}
-  - component: {fileID: 5285649673523726167}
+  - component: {fileID: 2867626936046991977}
   m_Layer: 21
   m_Name: SideSpecial2
   m_TagString: Hitbox
@@ -9204,7 +9334,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1.1, y: 0.8}
   m_Direction: 1
---- !u!114 &5285649673523726167
+--- !u!114 &2867626936046991977
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9213,7 +9343,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6952658418331554665}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be3229d0281b6d84791786c4e318b053, type: 3}
+  m_Script: {fileID: 11500000, guid: 07dc67aa883ba7b4b890b88feca101b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
@@ -9229,6 +9359,12 @@ MonoBehaviour:
   freezeFrame: 12
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
+  multihitIntervalFrame: 0
+  hitIntervalFrameLeft: 0
+  isFrozen: 0
+  freezeFrameLeft: 0
+  passive: {fileID: 0}
 --- !u!1 &7036609117114035519
 GameObject:
   m_ObjectHideFlags: 0
@@ -9283,9 +9419,10 @@ MonoBehaviour:
   angle: 361
   baseKnockback: 20
   knockbackGrowth: 0
-  freezeFrame: 5
+  freezeFrame: 2
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!70 &7431766900147842270
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -9372,7 +9509,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2867853870005948352}
   - component: {fileID: 9184188976274305519}
-  - component: {fileID: 730272037477448967}
+  - component: {fileID: 1513218456852170226}
   m_Layer: 21
   m_Name: UpThrow
   m_TagString: Hitbox
@@ -9410,7 +9547,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.3
---- !u!114 &730272037477448967
+--- !u!114 &1513218456852170226
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9419,7 +9556,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7263703120495871394}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be3229d0281b6d84791786c4e318b053, type: 3}
+  m_Script: {fileID: 11500000, guid: db9c4e8301c64c343a988f34977f8406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
@@ -9432,9 +9569,11 @@ MonoBehaviour:
   angle: 90
   baseKnockback: 70
   knockbackGrowth: 72
-  freezeFrame: 3
+  freezeFrame: 0
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
+  releaseOnHit: 1
 --- !u!1 &7308484364259144023
 GameObject:
   m_ObjectHideFlags: 0
@@ -9489,9 +9628,10 @@ MonoBehaviour:
   angle: 80
   baseKnockback: 20
   knockbackGrowth: 0
-  freezeFrame: 5
+  freezeFrame: 2
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!70 &5649464084605260224
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -9608,7 +9748,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.059374996, y: 0.125625}
@@ -9627,7 +9767,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &7395910331939068458
@@ -9639,7 +9779,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4262094699399604609}
-  - component: {fileID: 6231496200860497896}
+  - component: {fileID: 8700778544465717259}
   m_Layer: 0
   m_Name: UpSpecial2
   m_TagString: Hitbox
@@ -9662,7 +9802,7 @@ Transform:
   m_Father: {fileID: 3979425423151584956}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6231496200860497896
+--- !u!114 &8700778544465717259
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9671,10 +9811,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7395910331939068458}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &7450214919359711205
 GameObject:
   m_ObjectHideFlags: 0
@@ -9748,6 +9888,7 @@ MonoBehaviour:
   freezeFrame: 3
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &7822486170923109221
 GameObject:
   m_ObjectHideFlags: 0
@@ -9821,6 +9962,7 @@ MonoBehaviour:
   freezeFrame: 7
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &7910794860563366195
 GameObject:
   m_ObjectHideFlags: 0
@@ -9830,7 +9972,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4199339177792594012}
-  - component: {fileID: 6160852469556991068}
+  - component: {fileID: 7922850983675290907}
   m_Layer: 0
   m_Name: UpAir
   m_TagString: Hitbox
@@ -9853,7 +9995,7 @@ Transform:
   m_Father: {fileID: 8806557844335133466}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6160852469556991068
+--- !u!114 &7922850983675290907
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9862,10 +10004,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7910794860563366195}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &8048071135937155042
 GameObject:
   m_ObjectHideFlags: 0
@@ -9959,7 +10101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &8051864103755848953
@@ -10053,7 +10195,7 @@ CapsuleCollider2D:
   m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.051459163, y: 0.13192306}
@@ -10072,7 +10214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &8156775130051504695
@@ -10247,7 +10389,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &8341736413463883719
@@ -10343,7 +10485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &8355241397424631713
@@ -10355,7 +10497,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2643028760045373227}
-  - component: {fileID: 8837895534311021753}
+  - component: {fileID: 7522409925925355347}
   m_Layer: 0
   m_Name: GrabRelease
   m_TagString: Hitbox
@@ -10378,7 +10520,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8837895534311021753
+--- !u!114 &7522409925925355347
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10387,11 +10529,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8355241397424631713}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db6fee3125354bc429ab24b3ae9e11a8, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
-  releaseOnHit: 1
+  Victims: []
 --- !u!1 &8425494407582752082
 GameObject:
   m_ObjectHideFlags: 0
@@ -10486,7 +10627,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.053125005, y: -0.08125}
@@ -10505,7 +10646,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &8714766023072395489
@@ -10517,7 +10658,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3723735511848234318}
-  - component: {fileID: 2163442019909810237}
+  - component: {fileID: 8581963144648652125}
   m_Layer: 0
   m_Name: UpTilt
   m_TagString: Hitbox
@@ -10540,7 +10681,7 @@ Transform:
   m_Father: {fileID: 7558205743816913144}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2163442019909810237
+--- !u!114 &8581963144648652125
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10549,10 +10690,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8714766023072395489}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3b77ec093e8a6f4c97c27f124d6da5c, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
+  Victims: []
 --- !u!1 &8839953728043855286
 GameObject:
   m_ObjectHideFlags: 0
@@ -10663,7 +10804,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &8874793723675609027
@@ -10739,6 +10880,7 @@ MonoBehaviour:
   freezeFrame: 3
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0
 --- !u!1 &8933522854690177738
 GameObject:
   m_ObjectHideFlags: 0
@@ -10831,7 +10973,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.032499984, y: -0.112500004}
@@ -10850,7 +10992,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &9034948799086588439
@@ -10948,7 +11090,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.0325, y: -0.1125}
@@ -10967,7 +11109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &9063650871745532066
@@ -11063,7 +11205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &9065069137798005859
@@ -11075,7 +11217,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6710516807396685451}
-  - component: {fileID: 5071839120122283252}
+  - component: {fileID: 2736307373914015212}
   m_Layer: 0
   m_Name: UpThrow
   m_TagString: Hitbox
@@ -11098,7 +11240,7 @@ Transform:
   m_Father: {fileID: 9012654661287889972}
   m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5071839120122283252
+--- !u!114 &2736307373914015212
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11107,11 +11249,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 9065069137798005859}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db6fee3125354bc429ab24b3ae9e11a8, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f14f9372e413b47a8e4feee2ecbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activated: 0
-  releaseOnHit: 1
+  Victims: []
 --- !u!1 &9115056681864801557
 GameObject:
   m_ObjectHideFlags: 0
@@ -11205,7 +11346,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  manager: {fileID: 0}
+  container: {fileID: 0}
   hurtbox: {fileID: 0}
   material: {fileID: 0}
 --- !u!1 &9177348199273278696
@@ -11281,3 +11422,4 @@ MonoBehaviour:
   freezeFrame: 5
   faceOwnerWhenHit: 0
   shieldStunMultiplier: 0
+  weightIndependentKnockback: 0

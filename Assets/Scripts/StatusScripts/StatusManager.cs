@@ -11,6 +11,12 @@ public class StatusManager : FreezeBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        Initialize();
+    }
+
+    protected override void Initialize() {
+        base.Initialize();
+        
         statuses = new List<IStatus>();
         toRemoveStatuses = new List<IStatus>();
         EventManager.instance.StartListeningToOnDeathEvent(this.gameObject, new UnityAction<GameObject>(OnDeath));

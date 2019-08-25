@@ -62,6 +62,9 @@ public static class SmashCalculator
     }
 
     public static float KnockbackValue(IAttackHitbox hitbox, IDamageable damageable) {
+        if (hitbox.Stats.WeightIndependentKnockback) {
+            return (((damageable.Percentage / 10.0f + damageable.Percentage * hitbox.Stats.Damage / 20) * 1.4f) + 18.0f) * hitbox.Stats.KnockbackGrowth * 0.01f + hitbox.Stats.BaseKnockback;
+        }
         return (((damageable.Percentage / 10.0f + damageable.Percentage * hitbox.Stats.Damage / 20) * (200 / (100 + damageable.Weight)) * 1.4f) + 18.0f) * hitbox.Stats.KnockbackGrowth * 0.01f + hitbox.Stats.BaseKnockback;
     }
 

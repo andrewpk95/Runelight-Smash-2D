@@ -83,7 +83,7 @@ public class GameRuleManager : MonoBehaviour
             foreach (Player player in gameRule.GetCurrentWinners()) {
                 log = log + player.playerName + " ";
             }
-            Debug.Log(log);
+            //Debug.Log(log);
             interval = CHECK_WINNER_INTERVAL;
         }
     }

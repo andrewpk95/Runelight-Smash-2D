@@ -10,6 +10,7 @@ public class EventManager : MonoBehaviour
     public OnCharacterSelectEvent onCharacterSelectEvent;
     public OnCharacterDeSelectEvent onCharacterDeSelectEvent;
     public OnHitEvent onHitEvent;
+    public OnFreezeEvent onFreezeEvent;
     public OnGrabEvent onGrabEvent;
     public OnDamageEvent onDamageEvent;
     public OnHitStunEvent onHitStunEvent;
@@ -42,6 +43,7 @@ public class EventManager : MonoBehaviour
         onCharacterSelectEvent = new OnCharacterSelectEvent();
         onCharacterDeSelectEvent = new OnCharacterDeSelectEvent();
         onHitEvent = new OnHitEvent();
+        onFreezeEvent = new OnFreezeEvent();
         onGrabEvent = new OnGrabEvent();
         onDamageEvent = new OnDamageEvent();
         onHitStunEvent = new OnHitStunEvent();
@@ -181,6 +183,30 @@ public class EventManager : MonoBehaviour
     public void StopListeningToOnHitEvent(GameObject listener, UnityAction<IAttackHitbox, GameObject> method) {
         Debug.Log(string.Format("{0}'s {1} method unsubscribed to OnHitEvent", listener.name, method.Method.Name));
         onHitEvent.RemoveListener(method);
+    }
+
+    public void InvokeOnFreezeEvent(GameObject entity, int freezeFrame) {
+        Debug.Log("OnFreezeEvent Invoked: " + entity.name + " " + freezeFrame);
+        onFreezeEvent.Invoke(entity, freezeFrame);
+    }
+
+    public void StartListeningToOnFreezeEvent(GameObject listener, UnityAction<GameObject, int> method) {
+        Debug.Log(string.Format("{0}'s {1} method subscribed to OnFreezeEvent", listener.name, method.Method.Name));
+        onFreezeEvent.AddListener(method);
+        EventCleaner eventCleanerMethod;
+        if (EventCleanerDictionary.TryGetValue(listener, out eventCleanerMethod)) {
+            eventCleanerMethod += () => StopListeningToOnFreezeEvent(listener, method);
+            EventCleanerDictionary[listener] = eventCleanerMethod;
+        }
+        else {
+            eventCleanerMethod += () => StopListeningToOnFreezeEvent(listener, method);
+            EventCleanerDictionary.Add(listener, eventCleanerMethod);
+        }
+    }
+
+    public void StopListeningToOnFreezeEvent(GameObject listener, UnityAction<GameObject, int> method) {
+        Debug.Log(string.Format("{0}'s {1} method unsubscribed to OnFreezeEvent", listener.name, method.Method.Name));
+        onFreezeEvent.RemoveListener(method);
     }
 
     public void InvokeOnGrabEvent(GameObject entity, GameObject target) {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterMovement : MonoBehaviour
+public class CharacterMovement : FreezeBehaviour
 {
     protected Rigidbody2D rb;
     protected CapsuleCollider2D col;
@@ -82,10 +82,25 @@ public class CharacterMovement : MonoBehaviour
         Initialize();
     }
 
-    protected virtual void Initialize() {
+    protected override void Initialize() {
+        base.Initialize();
+        
         InitializeComponents();
+        InitializeColliders();
         InitializeStats();
         InitializeVariables();
+    }
+
+    protected virtual void InitializeColliders() {
+        Collider2D[] childrenColliders = GetComponentsInChildren<Collider2D>();
+        foreach (Collider2D collider in childrenColliders){
+            // checking if it is our collider, then skip it, 
+            if (collider != col){
+                // if it is not our collider then ignore collision between our collider and childs collider
+                Debug.Log(collider.gameObject.name);
+                Physics2D.IgnoreCollision(collider, col);
+            }
+        }
     }
 
     protected virtual void InitializeComponents() {
@@ -154,7 +169,8 @@ public class CharacterMovement : MonoBehaviour
         Tick();
     }
 
-    protected virtual void Tick() {
+    protected override void UpdateOtherBehaviour() {
+        base.UpdateOtherBehaviour();
         if (movementEnabled) {
             GroundCheck();
             if (overrideVelocity) {
@@ -400,13 +416,13 @@ public class CharacterMovement : MonoBehaviour
     public void IgnoreInput(bool ignore) {
         ignoreInput.Switch(ignore);
         mainJoystick = Vector2.zero;
-        Debug.Log("IgnoreInput: " + ignoreInput.stat + ", Count: " + ignoreInput.setCount);
+        //Debug.Log("IgnoreInput: " + ignoreInput.stat + ", Count: " + ignoreInput.setCount);
     }
 
     public void IgnoreMainJoystick(bool ignore) {
         ignoreMainJoystick.Switch(ignore);
         mainJoystick = Vector2.zero;
-        Debug.Log("ignoreMainJoystick: " + ignoreMainJoystick.stat + ", Count: " + ignoreMainJoystick.setCount);
+        //Debug.Log("ignoreMainJoystick: " + ignoreMainJoystick.stat + ", Count: " + ignoreMainJoystick.setCount);
     }
 
     public void PreventWalkOffLedge() {

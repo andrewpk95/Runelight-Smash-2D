@@ -5,8 +5,11 @@ using UnityEngine;
 public interface IHitbox
 {   
     int ID {get; set;}
+    GameObject GameObject {get;}
     
     void OnHit(GameObject target);
+
+    void OnClash(int clashFrame);
 
     string GetName();
 
@@ -17,6 +20,12 @@ public interface IHitbox
     void SetOwner(GameObject newOwner);
 
     List<GameObject> GetCollisionList();
+
+    List<GameObject> GetVictimList();
+
+    void AddToVictimList(GameObject victim);
+
+    void Enable();
     
     void Reset();
 }

@@ -7334,6 +7334,36 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
+    path: SpriteParent/SpriteGroup/UpperBody
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.y
+    path: SpriteParent/SpriteGroup/UpperBody
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
+    path: SpriteParent/SpriteGroup/UpperBody
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.z
     path: SpriteParent/SpriteGroup/UpperBody/LeftUpperArm
     classID: 4
     script: {fileID: 0}
@@ -7394,7 +7424,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/SpriteGroup/UpperBody/LeftUpperArm/LeftLowerArm/LeftHand
+    path: SpriteParent/SpriteGroup/UpperBody/Neck
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -7404,7 +7434,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/SpriteGroup/UpperBody/LeftUpperArm/LeftLowerArm/LeftHand
+    path: SpriteParent/SpriteGroup/UpperBody/Neck
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -7414,7 +7444,37 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/SpriteGroup/UpperBody/LeftUpperArm/LeftLowerArm/LeftHand
+    path: SpriteParent/SpriteGroup/UpperBody/Neck
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.z
+    path: SpriteParent/SpriteGroup/UpperBody/RightUpperArm
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.y
+    path: SpriteParent/SpriteGroup/UpperBody/RightUpperArm
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
+    path: SpriteParent/SpriteGroup/UpperBody/RightUpperArm
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -7454,36 +7514,6 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/SpriteGroup/LowerBody
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.y
-    path: SpriteParent/SpriteGroup/LowerBody
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: SpriteParent/SpriteGroup/LowerBody
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
     path: SpriteParent/SpriteGroup/UpperBody/Neck/Face/BackHair
     classID: 4
     script: {fileID: 0}
@@ -7514,7 +7544,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/SpriteGroup/UpperBody/Neck/Face/FrontHair
+    path: SpriteParent/SpriteGroup/UpperBody/LeftUpperArm/LeftLowerArm/LeftHand
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -7524,7 +7554,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/SpriteGroup/UpperBody/Neck/Face/FrontHair
+    path: SpriteParent/SpriteGroup/UpperBody/LeftUpperArm/LeftLowerArm/LeftHand
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -7534,7 +7564,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/SpriteGroup/UpperBody/Neck/Face/FrontHair
+    path: SpriteParent/SpriteGroup/UpperBody/LeftUpperArm/LeftLowerArm/LeftHand
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -7544,7 +7574,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/SpriteGroup/UpperBody/Neck
+    path: SpriteParent/SpriteGroup/UpperBody/Neck/Face/LeftSideHair
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -7554,7 +7584,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/SpriteGroup/UpperBody/Neck
+    path: SpriteParent/SpriteGroup/UpperBody/Neck/Face/LeftSideHair
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -7564,7 +7594,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/SpriteGroup/UpperBody/Neck
+    path: SpriteParent/SpriteGroup/UpperBody/Neck/Face/LeftSideHair
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -7604,7 +7634,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/SpriteGroup/UpperBody/RightUpperArm
+    path: SpriteParent/SpriteGroup/LowerBody
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -7614,7 +7644,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/SpriteGroup/UpperBody/RightUpperArm
+    path: SpriteParent/SpriteGroup/LowerBody
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -7624,7 +7654,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/SpriteGroup/UpperBody/RightUpperArm
+    path: SpriteParent/SpriteGroup/LowerBody
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -7814,7 +7844,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: SpriteParent/SpriteGroup/UpperBody
+    path: SpriteParent/SpriteGroup/UpperBody/Neck/Face/FrontHair
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -7824,7 +7854,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: SpriteParent/SpriteGroup/UpperBody
+    path: SpriteParent/SpriteGroup/UpperBody/Neck/Face/FrontHair
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -7834,37 +7864,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: SpriteParent/SpriteGroup/UpperBody
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
-    path: SpriteParent/SpriteGroup/UpperBody/Neck/Face/LeftSideHair
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.y
-    path: SpriteParent/SpriteGroup/UpperBody/Neck/Face/LeftSideHair
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: SpriteParent/SpriteGroup/UpperBody/Neck/Face/LeftSideHair
+    path: SpriteParent/SpriteGroup/UpperBody/Neck/Face/FrontHair
     classID: 4
     script: {fileID: 0}
   - curve:

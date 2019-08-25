@@ -11509,21 +11509,21 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.33333334
-    functionName: ActivateHitboxGroup
+    functionName: ActivateHitbox
     data: GetupAttackFront
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.36666667
-    functionName: DeactivateHitboxGroup
+    functionName: DeactivateHitbox
     data: GetupAttackFront
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.46666667
-    functionName: ActivateHitboxGroup
+    functionName: ActivateHitbox
     data: GetupAttackBack
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -11537,7 +11537,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.5
-    functionName: DeactivateHitboxGroup
+    functionName: DeactivateHitbox
     data: GetupAttackBack
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

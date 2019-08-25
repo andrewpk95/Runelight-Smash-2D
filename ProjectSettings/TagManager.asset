@@ -16,6 +16,7 @@ TagManager:
   - Wall
   - Canvas
   - SpawnPoint
+  - GrabHitbox
   layers:
   - Default
   - TransparentFX

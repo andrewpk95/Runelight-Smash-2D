@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HurtboxManager : MonoBehaviour
+public class HurtboxContainer : MonoBehaviour
 {
     public List<IHurtbox> hurtboxes;
     public int layer;
@@ -20,7 +20,7 @@ public class HurtboxManager : MonoBehaviour
         }
     }
 
-    public void SetIntangible(bool intangible) {
+    public void SetIntangibility(bool intangible) {
         if (intangible) {
             if (layer == LayerMask.NameToLayer("IntangibleHurtbox")) return;
             SetHurtboxLayer(LayerMask.NameToLayer("IntangibleHurtbox"));

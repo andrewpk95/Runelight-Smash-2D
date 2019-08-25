@@ -12184,14 +12184,14 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.4
-    functionName: ActivateHitboxGroup
+    functionName: ActivateHitbox
     data: EdgeGetupAttack
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.45
-    functionName: DeactivateHitboxGroup
+    functionName: DeactivateHitbox
     data: EdgeGetupAttack
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

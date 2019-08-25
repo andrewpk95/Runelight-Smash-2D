@@ -5199,7 +5199,14 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0
-    functionName: ActivateHitboxGroup
+    functionName: ActivateHitbox
+    data: NeutralSpecial
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.41666666
+    functionName: DeactivateHitbox
     data: NeutralSpecial
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
